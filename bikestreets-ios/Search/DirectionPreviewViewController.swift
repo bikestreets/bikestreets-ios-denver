@@ -15,7 +15,7 @@ final class DirectionPreviewViewController: UIViewController {
   private let stackView = UIStackView()
   private let scrollView: UIScrollView = {
     let scrollView = UIScrollView()
-    scrollView.translatesAutoresizingMaskIntoConstraints = false
+    scrollView.disableTranslatesAutoresizingMaskIntoConstraints()
     return scrollView
   }()
 
@@ -51,7 +51,6 @@ final class DirectionPreviewViewController: UIViewController {
     }
 
     let titleLabel = UILabel()
-    titleLabel.translatesAutoresizingMaskIntoConstraints = false
     titleLabel.text = "Directions"
     titleLabel.font = .preferredFont(forTextStyle: .largeTitle, weight: .bold)
 
@@ -66,7 +65,6 @@ final class DirectionPreviewViewController: UIViewController {
     placesStackView.backgroundColor = .tertiarySystemBackground
 
     let routesLabel = UILabel()
-    routesLabel.translatesAutoresizingMaskIntoConstraints = false
     routesLabel.text = "Routes"
     routesLabel.font = .preferredFont(forTextStyle: .title2, weight: .bold)
 
@@ -77,11 +75,6 @@ final class DirectionPreviewViewController: UIViewController {
     possibleRoutesView.backgroundColor = .tertiarySystemBackground
 
     let spacerView = UIView()
-    spacerView.translatesAutoresizingMaskIntoConstraints = false
-    NSLayoutConstraint.activate([
-      spacerView.heightAnchor.constraint(greaterThanOrEqualToConstant: 16)
-    ])
-
     let stackView = UIStackView(arrangedSubviews: [
       titleContainer,
       placesStackView,
@@ -89,17 +82,25 @@ final class DirectionPreviewViewController: UIViewController {
       possibleRoutesView,
       spacerView
     ])
-    stackView.translatesAutoresizingMaskIntoConstraints = false
     stackView.axis = .vertical
     stackView.spacing = 16
 
     scrollView.addSubview(stackView)
 
-    NSLayoutConstraint.activate([
+    [
+      titleLabel,
+      routesLabel,
+      spacerView,
+      stackView,
+    ].disableTranslatesAutoresizingMaskIntoConstraints()
+
+    [
+      spacerView.heightAnchor.constraint(greaterThanOrEqualToConstant: 16),
+
       stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
       stackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 16),
       stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-    ])
+    ].activate()
   }
 
   // MARK: -- Helpers

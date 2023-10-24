@@ -37,56 +37,59 @@ final class SearchViewController: UIViewController {
     view.backgroundColor = .systemBackground
 
     let insetView = UIView()
-    insetView.translatesAutoresizingMaskIntoConstraints = false
-    view.addSubview(insetView)
-    NSLayoutConstraint.activate([
-      insetView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-      insetView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 16),
-      insetView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -16),
-      insetView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-    ])
 
     let vamosLabel = UILabel()
-    vamosLabel.translatesAutoresizingMaskIntoConstraints = false
     vamosLabel.text = "Find a route with VAMOS"
     vamosLabel.font = .preferredFont(forTextStyle: .title1)
-    view.addSubview(vamosLabel)
-
-    NSLayoutConstraint.activate([
-      vamosLabel.topAnchor.constraint(equalTo: insetView.topAnchor),
-      vamosLabel.leftAnchor.constraint(equalTo: insetView.leftAnchor),
-      vamosLabel.rightAnchor.constraint(equalTo: insetView.rightAnchor),
-    ])
 
     let stackView = UIStackView()
-    stackView.translatesAutoresizingMaskIntoConstraints = false
     stackView.axis = .vertical
     stackView.spacing = 8
-    view.addSubview(stackView)
-    NSLayoutConstraint.activate([
-      vamosLabel.bottomAnchor.constraint(equalTo: stackView.topAnchor),
-      view.bottomAnchor.constraint(equalTo: stackView.bottomAnchor),
-      view.leftAnchor.constraint(equalTo: stackView.leftAnchor),
-      view.rightAnchor.constraint(equalTo: stackView.rightAnchor),
-    ])
 
     searchViewController.willMove(toParent: self)
     addChild(searchViewController)
 
     let searchBarHolder = UIView()
-    searchBarHolder.translatesAutoresizingMaskIntoConstraints = false
     searchBarHolder.addSubview(searchViewController.searchController.searchBar)
-    NSLayoutConstraint.activate([
-      searchBarHolder.topAnchor.constraint(equalTo: searchViewController.searchController.searchBar.topAnchor),
-      searchBarHolder.heightAnchor.constraint(equalToConstant: 56),
-      searchBarHolder.leftAnchor.constraint(equalTo: searchViewController.searchController.searchBar.leftAnchor),
-      searchBarHolder.rightAnchor.constraint(equalTo: searchViewController.searchController.searchBar.rightAnchor),
-    ])
     stackView.addArrangedSubview(searchBarHolder)
 
     stackView.addArrangedSubview(searchViewController.view)
 
     searchViewController.didMove(toParent: self)
+
+    view.addSubviews(
+      insetView,
+      vamosLabel,
+      stackView
+    )
+
+    [
+      insetView,
+      vamosLabel,
+      stackView,
+      searchBarHolder
+    ].disableTranslatesAutoresizingMaskIntoConstraints()
+
+    [
+      insetView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+      insetView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 16),
+      insetView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -16),
+      insetView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+
+      vamosLabel.topAnchor.constraint(equalTo: insetView.topAnchor),
+      vamosLabel.leftAnchor.constraint(equalTo: insetView.leftAnchor),
+      vamosLabel.rightAnchor.constraint(equalTo: insetView.rightAnchor),
+
+      vamosLabel.bottomAnchor.constraint(equalTo: stackView.topAnchor),
+      view.bottomAnchor.constraint(equalTo: stackView.bottomAnchor),
+      view.leftAnchor.constraint(equalTo: stackView.leftAnchor),
+      view.rightAnchor.constraint(equalTo: stackView.rightAnchor),
+
+      searchBarHolder.topAnchor.constraint(equalTo: searchViewController.searchController.searchBar.topAnchor),
+      searchBarHolder.heightAnchor.constraint(equalToConstant: 56),
+      searchBarHolder.leftAnchor.constraint(equalTo: searchViewController.searchController.searchBar.leftAnchor),
+      searchBarHolder.rightAnchor.constraint(equalTo: searchViewController.searchController.searchBar.rightAnchor),
+    ].activate()
   }
 }
 

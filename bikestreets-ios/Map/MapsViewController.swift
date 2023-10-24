@@ -28,14 +28,14 @@ class MapsViewController: UIViewController, ExampleController {
 
     view.addSubview(mapView)
 
-    mapView.translatesAutoresizingMaskIntoConstraints = false
-    NSLayoutConstraint.activate([
+    mapView.disableTranslatesAutoresizingMaskIntoConstraints()
+    [
       view.leftAnchor.constraint(equalTo: mapView.leftAnchor),
       view.rightAnchor.constraint(equalTo: mapView.rightAnchor),
 
       view.topAnchor.constraint(equalTo: mapView.topAnchor),
       view.bottomAnchor.constraint(equalTo: mapView.bottomAnchor),
-    ])
+    ].activate()
 
     // Start with map in Denver.
     let cameraOptions = CameraOptions(

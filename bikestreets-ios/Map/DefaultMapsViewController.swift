@@ -55,10 +55,10 @@ final class DefaultMapsViewController: MapsViewController {
     super.viewDidLoad()
 
     view.addSubview(mapControlView)
-    NSLayoutConstraint.activate([
+    [
       mapControlView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
       mapControlView.bottomAnchor.constraint(equalTo: mapView.ornaments.logoView.topAnchor, constant: -16)
-    ])
+    ].activate()
 
     mapView.viewport.addStatusObserver(self)
 
@@ -80,12 +80,12 @@ final class DefaultMapsViewController: MapsViewController {
   private func attachHeightInspectorIfNeccessary() {
     if !attachedHeightInspector {
       // Set up sheet height tracker.
-      NSLayoutConstraint.activate([
+      [
         sheetHeightInspectionView.leftAnchor.constraint(equalTo: view.leftAnchor),
         sheetHeightInspectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         sheetHeightInspectionView.rightAnchor.constraint(equalTo: view.rightAnchor),
         // Height is tracked on a per-sheet basis.
-      ])
+      ].activate()
 
       attachedHeightInspector = true
     }

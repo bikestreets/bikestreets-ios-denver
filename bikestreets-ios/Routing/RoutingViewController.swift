@@ -35,14 +35,14 @@ final class RoutingViewController: UIViewController {
     stopRoutingButton.addTarget(self, action: #selector(endRoute), for: .touchUpInside)
 
     let stackView = UIStackView(arrangedSubviews: [stopRoutingButton])
-    stackView.translatesAutoresizingMaskIntoConstraints = false
+    stackView.disableTranslatesAutoresizingMaskIntoConstraints()
     view.addSubview(stackView)
-    NSLayoutConstraint.activate([
+    [
       view.safeAreaLayoutGuide.topAnchor.constraint(equalTo: stackView.topAnchor, constant: -16),
       view.safeAreaLayoutGuide.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: -16),
       view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: 16),
       view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: stackView.bottomAnchor),
-    ])
+    ].activate()
   }
 
   @objc

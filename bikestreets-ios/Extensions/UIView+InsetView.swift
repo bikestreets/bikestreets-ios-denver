@@ -12,7 +12,7 @@ extension UIView {
   convenience init(insetView child: UIView, insets: UIEdgeInsets) {
     self.init(frame: .zero)
 
-    translatesAutoresizingMaskIntoConstraints = false
+    disableTranslatesAutoresizingMaskIntoConstraints()
     addSubview(child)
     matchAutolayoutSize(child, insets: insets)
   }

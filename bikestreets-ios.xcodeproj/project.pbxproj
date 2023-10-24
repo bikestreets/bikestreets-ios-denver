@@ -52,6 +52,7 @@
 		35A482A62A37B279001035BB /* MapboxMaps in Frameworks */ = {isa = PBXBuildFile; productRef = 35A482A52A37B279001035BB /* MapboxMaps */; };
 		35A482A92A37BD4C001035BB /* MapboxDirections in Frameworks */ = {isa = PBXBuildFile; productRef = 35A482A82A37BD4C001035BB /* MapboxDirections */; };
 		35D13F762AE7FF3400A31CB0 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 35D13F752AE7FF3400A31CB0 /* Settings.bundle */; };
+		9AA97B2D2AE87E9C00C59426 /* UIView+Subview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA97B2C2AE87E9C00C59426 /* UIView+Subview.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -94,6 +95,7 @@
 		35A482AF2A37C02E001035BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		35D13F752AE7FF3400A31CB0 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		35F04BCD2A61C5D1008083A1 /* Denver, CO.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Denver, CO.gpx"; sourceTree = "<group>"; };
+		9AA97B2C2AE87E9C00C59426 /* UIView+Subview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Subview.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,6 +159,7 @@
 				351645192A81CC73001EDC99 /* UIView+Constraints.swift */,
 				351645212A827FD9001EDC99 /* UIView+InsetView.swift */,
 				351645232A8288D6001EDC99 /* UIFont+Preferred.swift */,
+				9AA97B2C2AE87E9C00C59426 /* UIView+Subview.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -392,6 +395,7 @@
 				35065CBD2A803BFC00C7CCAF /* RoutingViewController.swift in Sources */,
 				35065C9C2A7C69E600C7CCAF /* AppDelegate.swift in Sources */,
 				3550D96B2A9CFBAC00C70EE5 /* MapControlView.swift in Sources */,
+				9AA97B2D2AE87E9C00C59426 /* UIView+Subview.swift in Sources */,
 				35065CBA2A803A4000C7CCAF /* UISheetPresentationController+Configuration.swift in Sources */,
 				35A2F0BF2A4F7957002BF520 /* MapsViewController.swift in Sources */,
 				35065CC22A8043E900C7CCAF /* ScreenManager.swift in Sources */,

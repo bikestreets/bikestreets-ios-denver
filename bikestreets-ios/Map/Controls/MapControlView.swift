@@ -29,11 +29,11 @@ private final class MapControlButton: UIButton {
 
     imageView?.tintColor = .white
 
-    translatesAutoresizingMaskIntoConstraints = false
-    NSLayoutConstraint.activate([
+    disableTranslatesAutoresizingMaskIntoConstraints()
+    [
       heightAnchor.constraint(equalToConstant: 40),
       widthAnchor.constraint(equalToConstant: 40),
-    ])
+    ].activate()
 
     backgroundColor = .vamosBlue
     clipsToBounds = true
@@ -58,10 +58,10 @@ final class MapControlView: UIStackView {
 
     mapCameraManager.add(listener: self)
 
-    translatesAutoresizingMaskIntoConstraints = false
-    NSLayoutConstraint.activate([
+    disableTranslatesAutoresizingMaskIntoConstraints()
+    [
       widthAnchor.constraint(equalToConstant: 40)
-    ])
+    ].activate()
 
     axis = .vertical
     spacing = 8

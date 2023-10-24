@@ -18,31 +18,36 @@ final class RoutePlaceRowView: UIStackView {
 
   init(originName: String, destinationName: String) {
     let fromTitle = UILabel()
-    fromTitle.translatesAutoresizingMaskIntoConstraints = false
     fromTitle.text = "From"
     fromTitle.font = .preferredFont(forTextStyle: .body, weight: .bold)
 
     let fromName = UILabel()
     fromName.text = originName
-    fromName.translatesAutoresizingMaskIntoConstraints = false
     fromName.font = .preferredFont(forTextStyle: .body)
 
     let toTitle = UILabel()
-    toTitle.translatesAutoresizingMaskIntoConstraints = false
     toTitle.text = "To"
     toTitle.font = .preferredFont(forTextStyle: .body, weight: .bold)
 
     let toName = UILabel()
     toName.text = destinationName
-    toName.translatesAutoresizingMaskIntoConstraints = false
     toName.font = .preferredFont(forTextStyle: .body)
+
+    [
+      fromTitle,
+      fromName,
+      toTitle,
+      toName,
+    ].disableTranslatesAutoresizingMaskIntoConstraints()
 
     super.init(frame: .zero)
 
-    addArrangedSubview(.init(insetView: fromTitle, insets: .init(top: 0, left: 16, bottom: 0, right: 16)))
-    addArrangedSubview(.init(insetView: fromName, insets: .init(top: 0, left: 16, bottom: 0, right: 16)))
-    addArrangedSubview(.init(insetView: toTitle, insets: .init(top: 0, left: 16, bottom: 0, right: 16)))
-    addArrangedSubview(.init(insetView: toName, insets: .init(top: 0, left: 16, bottom: 0, right: 16)))
+    addArrangedSubviews(
+      .init(insetView: fromTitle, insets: .init(top: 0, left: 16, bottom: 0, right: 16)),
+      .init(insetView: fromName, insets: .init(top: 0, left: 16, bottom: 0, right: 16)),
+      .init(insetView: toTitle, insets: .init(top: 0, left: 16, bottom: 0, right: 16)),
+      .init(insetView: toName, insets: .init(top: 0, left: 16, bottom: 0, right: 16))
+    )
 
     axis = .vertical
     spacing = 8

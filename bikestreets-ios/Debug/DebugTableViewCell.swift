@@ -17,23 +17,11 @@ final class DebugTableViewCell: UITableViewCell {
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-    titleLabel.translatesAutoresizingMaskIntoConstraints = false
-    contentView.addSubview(titleLabel)
+    contentView.addSubviews(titleLabel, mapView)
 
-    mapView.translatesAutoresizingMaskIntoConstraints = false
     mapView.isUserInteractionEnabled = false
-    contentView.addSubview(mapView)
 
-    NSLayoutConstraint.activate([
-      contentView.topAnchor.constraint(equalTo: titleLabel.topAnchor, constant: -15),
-      contentView.leftAnchor.constraint(equalTo: titleLabel.leftAnchor, constant: -15),
-      contentView.rightAnchor.constraint(equalTo: titleLabel.rightAnchor, constant: 15),
-
-      titleLabel.bottomAnchor.constraint(equalTo: mapView.topAnchor, constant: -15),
-      contentView.bottomAnchor.constraint(equalTo: mapView.bottomAnchor, constant: 15),
-      contentView.leftAnchor.constraint(equalTo: mapView.leftAnchor, constant: -15),
-      contentView.rightAnchor.constraint(equalTo: mapView.rightAnchor, constant: 15),
-    ])
+    installConstraints()
 
     // Trigger zoom on load if configuration happens before map is loaded
     // on first configuration.
@@ -45,6 +33,24 @@ final class DebugTableViewCell: UITableViewCell {
 
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+
+  private func installConstraints() {
+    [
+      titleLabel,
+      mapView,
+    ].disableTranslatesAutoresizingMaskIntoConstraints()
+
+    [
+      contentView.topAnchor.constraint(equalTo: titleLabel.topAnchor, constant: -15),
+      contentView.leftAnchor.constraint(equalTo: titleLabel.leftAnchor, constant: -15),
+      contentView.rightAnchor.constraint(equalTo: titleLabel.rightAnchor, constant: 15),
+
+      titleLabel.bottomAnchor.constraint(equalTo: mapView.topAnchor, constant: -15),
+      contentView.bottomAnchor.constraint(equalTo: mapView.bottomAnchor, constant: 15),
+      contentView.leftAnchor.constraint(equalTo: mapView.leftAnchor, constant: -15),
+      contentView.rightAnchor.constraint(equalTo: mapView.rightAnchor, constant: 15),
+    ].activate()
   }
 
   // MARK: -- Annotations

@@ -54,35 +54,23 @@ final class PossibleRoutesView: UIStackView {
 
     for (index, route) in routes.enumerated() {
       let titleLabel = UILabel()
-      titleLabel.translatesAutoresizingMaskIntoConstraints = false
       titleLabel.text = "Route \(index + 1)"
       titleLabel.font = .preferredFont(forTextStyle: .body, weight: .bold)
 
       let distanceLabel = UILabel()
-      distanceLabel.translatesAutoresizingMaskIntoConstraints = false
       distanceLabel.text = distanceString(for: route.distance)
       distanceLabel.font = .preferredFont(forTextStyle: .callout)
 
       let leftInsetView = UIView()
-      leftInsetView.translatesAutoresizingMaskIntoConstraints = false
-      NSLayoutConstraint.activate([
-        leftInsetView.widthAnchor.constraint(equalToConstant: 16),
-      ])
 
       let labelStack = UIStackView(arrangedSubviews: [titleLabel, distanceLabel])
       labelStack.axis = .vertical
       labelStack.spacing = 4
 
       let spacerView = UIView()
-      spacerView.translatesAutoresizingMaskIntoConstraints = false
 
       let button = UIButton(type: .roundedRect)
       button.backgroundColor = .systemGreen
-      button.translatesAutoresizingMaskIntoConstraints = false
-      NSLayoutConstraint.activate([
-        button.heightAnchor.constraint(equalToConstant: 60),
-        button.widthAnchor.constraint(equalToConstant: 60),
-      ])
       button.layer.cornerRadius = 8
       button.clipsToBounds = true
       button.setTitle("GO", for: .normal)
@@ -93,10 +81,24 @@ final class PossibleRoutesView: UIStackView {
       button.addTarget(self, action: #selector(didTapRouteGo(sender:)), for: .touchUpInside)
 
       let rightInsetView = UIView()
-      rightInsetView.translatesAutoresizingMaskIntoConstraints = false
-      NSLayoutConstraint.activate([
+
+      [
+        titleLabel,
+        distanceLabel,
+        leftInsetView,
+        spacerView,
+        button,
+        rightInsetView,
+      ].disableTranslatesAutoresizingMaskIntoConstraints()
+
+      [
+        leftInsetView.widthAnchor.constraint(equalToConstant: 16),
+
+        button.heightAnchor.constraint(equalToConstant: 60),
+        button.widthAnchor.constraint(equalToConstant: 60),
+
         rightInsetView.widthAnchor.constraint(equalToConstant: 16),
-      ])
+      ].activate()
 
       let routeStack = UIStackView(arrangedSubviews: [
         leftInsetView,
@@ -115,9 +117,7 @@ final class PossibleRoutesView: UIStackView {
       let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapRouteStack(recognizer:)))
       routeStack.addGestureRecognizer(tapGestureRecognizer)
 
-      addArrangedSubview(
-        routeStack
-      )
+      addArrangedSubview(routeStack)
     }
   }
 

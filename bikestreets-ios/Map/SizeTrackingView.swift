@@ -20,7 +20,7 @@ final class SizeTrackingView: UIView {
   init() {
     super.init(frame: .zero)
     isHidden = true
-    translatesAutoresizingMaskIntoConstraints = false
+    disableTranslatesAutoresizingMaskIntoConstraints()
   }
 
   required init?(coder: NSCoder) {
