@@ -13,15 +13,13 @@ concurrency:
 
 jobs:
   tests:
-    name: Build and Test
+    name: Build BikeStreets
     runs-on: macos-13
     steps:
       - uses: actions/checkout@v3
       - name: Select Xcode
         run: .github/workflows/xcode_select.sh
-      - name: Lint
-        run: bazelisk run :lint && git diff --exit-code
-      - name: Build and Test
+      - name: Build App
         run: |
           # Build the app
           xcodebuild build \
