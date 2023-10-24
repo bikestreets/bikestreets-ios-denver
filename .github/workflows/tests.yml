@@ -1,0 +1,30 @@
+name: Tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+# One active job per PR, cancel older ones on push
+concurrency:
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    name: Build and Test
+    runs-on: macos-13
+    steps:
+      - uses: actions/checkout@v3
+      - name: Select Xcode
+        run: .github/workflows/xcode_select.sh
+      - name: Lint
+        run: bazelisk run :lint && git diff --exit-code
+      - name: Build and Test
+        run: |
+          # Build the app
+          xcodebuild build \
+            -project 'bikestreets-ios.xcodeproj' \
+            -scheme 'BikeStreets' \
+            -destination 'platform=iOS Simulator,name=iPhone 15'
