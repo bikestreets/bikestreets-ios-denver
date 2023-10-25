@@ -19,7 +19,8 @@ jobs:
       - uses: actions/checkout@v3
       - name: Select Xcode
         run: .github/workflows/xcode_select.sh
-      - shell: bash
+      - name: Configure .netrc
+        shell: bash
         env:
           MAPBOX_API_KEY: ${{ secrets.MAPBOX_API_KEY }}
         run: |
