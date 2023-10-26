@@ -30,4 +30,5 @@ jobs:
           xcodebuild build \
             -project 'bikestreets-ios.xcodeproj' \
             -scheme 'BikeStreets' \
-            -destination 'platform=iOS Simulator,name=iPhone 15'
+            -destination 'platform=iOS Simulator,name=iPhone 15' \
+            CODE_SIGN_IDENTITY=""
