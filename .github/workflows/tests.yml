@@ -19,13 +19,11 @@ jobs:
       - uses: actions/checkout@v3
       - name: Select Xcode
         run: .github/workflows/xcode_select.sh
-      - name: Configure .netrc
-        shell: bash
-        env:
-          MAPBOX_API_KEY: ${{ secrets.MAPBOX_API_KEY }}
-        run: |
-          echo "machine api.mapbox.com\n  login mapbox\n  password $MAPBOX_API_KEY" > ~/.netrc
-          chmod 0600 ~/.netrc
+      - uses: extractions/netrc@v1
+        with:
+          machine: api.mapbox.com
+          username: mapbox
+          password: ${{ secrets.MAPBOX_API_KEY }}
       - name: Build App
         run: |
           # Build the app
