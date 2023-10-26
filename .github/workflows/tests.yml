@@ -25,6 +25,7 @@ jobs:
           MAPBOX_API_KEY: ${{ secrets.MAPBOX_API_KEY }}
         run: |
           echo "machine api.mapbox.com\n  login mapbox\n  password $MAPBOX_API_KEY" > ~/.netrc
+          chmod 0600 ~/.netrc
       - name: Build App
         run: |
           # Build the app
