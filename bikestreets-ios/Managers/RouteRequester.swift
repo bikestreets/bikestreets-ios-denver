@@ -31,7 +31,7 @@ final class RouteRequester {
     var components = URLComponents()
     components.scheme = "http"
     components.host = "206.189.205.9"
-    components.percentEncodedPath = "/route/v1/driving/\(startPoint.longitude),\(startPoint.latitude);\(endPoint.longitude),\(endPoint.latitude)"
+    components.percentEncodedPath = "/route/v1/bike/\(startPoint.longitude),\(startPoint.latitude);\(endPoint.longitude),\(endPoint.latitude)"
 
     print("""
     OSRM REQUEST:
@@ -86,8 +86,52 @@ final class RouteRequester {
 
         let result = try decoder.decode(RouteResponse.self, from: data)
 
-        // Return parsed response
-        completion(.success(result))
+        // Request Mapbox route
+        //
+        // Copied from: https://docs.mapbox.com/ios/navigation/examples/custom-server/
+        let originalRouteCoordinates = result.routes?[0].shape?.coordinates ?? []
+
+        var tolerance: Float = 0.00001
+        var simplifiedRouteCoordinates = originalRouteCoordinates
+        while simplifiedRouteCoordinates.count > 500 {
+          simplifiedRouteCoordinates = Simplify.simplify(originalRouteCoordinates, tolerance: tolerance, highQuality: true)
+          tolerance += 0.000005
+        }
+
+        print("""
+
+        ROUTE SIMPLIFICATION
+        Before: \(originalRouteCoordinates.count)
+        After:  \(simplifiedRouteCoordinates.count)
+
+
+        """)
+
+        //
+        // ❗️IMPORTANT❗️
+        // Use `Directions.calculateRoutes(matching:completionHandler:)` for navigating on a map matching response.
+        //
+        let matchOptions = NavigationMatchOptions(coordinates: simplifiedRouteCoordinates, profileIdentifier: .cycling)
+        matchOptions.includesSpokenInstructions = true
+        matchOptions.includesVisualInstructions = true
+
+        // By default, each waypoint separates two legs, so the user stops at each waypoint.
+        // We want the user to navigate from the first coordinate to the last coordinate without any stops in between.
+        // You can specify more intermediate waypoints here if you’d like.
+        for waypoint in matchOptions.waypoints.dropFirst().dropLast() {
+          waypoint.separatesLegs = false
+        }
+
+        Directions.shared.calculateRoutes(matching: matchOptions) { _, mapboxResult in
+          switch mapboxResult {
+          case .failure(let error):
+            print(error.localizedDescription)
+          case .success(let response):
+            // Return parsed response
+            completion(.success(response))
+          }
+        }
+
       } catch {
         completion(.failure(error))
       }
