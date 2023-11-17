@@ -537,6 +537,12 @@ extension DefaultMapsViewController: SheetManagerDelegate {
 
 extension DefaultMapsViewController {
   override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+    /// Intentionally avoid showing the debug TVC when routing. Having the phone
+    /// on the handlebars generates lots of shakes that cause the app to crash.
+    if case .routing = stateManager.state {
+      return
+    }
+
     if motion == .motionShake {
       let files = try! DebugLogHandler().files()
       sheetManager.present(DebugTableViewController(entries: files), animated: true)
