@@ -235,7 +235,7 @@ extension DefaultMapsViewController: StateListener {
       sheetManager.present(
         searchViewController,
         animated: true,
-        options: .init(presentationControllerWillDismiss: { [weak self] in
+        options: .init(presentationControllerDidDismiss: { [weak self] in
           guard let self else { return }
           self.stateManager.state = .previewDirections(preview: preview)
         })
@@ -250,7 +250,7 @@ extension DefaultMapsViewController: StateListener {
       sheetManager.present(
         searchViewController,
         animated: true,
-        options: .init(presentationControllerWillDismiss: { [weak self] in
+        options: .init(presentationControllerDidDismiss: { [weak self] in
           guard let self else { return }
           self.stateManager.state = .previewDirections(preview: preview)
         })

@@ -121,7 +121,7 @@ extension SearchViewController: LocationSearchDelegate {
           selectedDetentIdentifier: .medium
         ),
         options: .init(
-          presentationControllerWillDismiss: { [weak self] in
+          presentationControllerDidDismiss: { [weak self] in
             guard let self else { return }
             self.stateManager.state = .initial
           }

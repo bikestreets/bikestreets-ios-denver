@@ -26,7 +26,7 @@ final class SheetManager: NSObject, UISheetPresentationControllerDelegate {
 
   struct Options {
     let shouldDismiss: Bool
-    let presentationControllerWillDismiss: (() -> Void)?
+    let presentationControllerDidDismiss: (() -> Void)?
 
     static var `default`: Options {
       Options(shouldDismiss: true)
@@ -34,10 +34,10 @@ final class SheetManager: NSObject, UISheetPresentationControllerDelegate {
 
     init(
       shouldDismiss: Bool = true,
-      presentationControllerWillDismiss: (() -> Void)? = nil
+      presentationControllerDidDismiss: (() -> Void)? = nil
     ) {
       self.shouldDismiss = shouldDismiss
-      self.presentationControllerWillDismiss = presentationControllerWillDismiss
+      self.presentationControllerDidDismiss = presentationControllerDidDismiss
     }
   }
 
@@ -139,7 +139,7 @@ final class SheetManager: NSObject, UISheetPresentationControllerDelegate {
 
   private func findPresentationControllerOptions(_ presentationController: UIPresentationController) -> Options? {
     return presentedViewControllers.first {
-      return $0.viewController?.sheetPresentationController === presentationController
+      return $0.viewController === presentationController.presentedViewController
     }?.options
   }
 
@@ -148,15 +148,18 @@ final class SheetManager: NSObject, UISheetPresentationControllerDelegate {
   }
 
   func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
-    findPresentationControllerOptions(presentationController)?.presentationControllerWillDismiss?()
-    presentedViewControllers = presentedViewControllers.filter {
-      return $0.viewController?.sheetPresentationController !== presentationController
-    }
+    /*
+     no-op, this is fired when a dismissal isn't necessarily going to happen
+     */
   }
 
   func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-    if let previousViewController {
-      delegate?.didUpdatePresentedViewController(previousViewController)
+    findPresentationControllerOptions(presentationController)?.presentationControllerDidDismiss?()
+    
+    delegate?.didUpdatePresentedViewController(presentationController.presentingViewController)
+
+    presentedViewControllers = presentedViewControllers.filter {
+      return $0.viewController?.sheetPresentationController !== presentationController
     }
   }
 }
