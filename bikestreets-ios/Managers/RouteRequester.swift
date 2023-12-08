@@ -111,7 +111,10 @@ final class RouteRequester {
         // ❗️IMPORTANT❗️
         // Use `Directions.calculateRoutes(matching:completionHandler:)` for navigating on a map matching response.
         //
-        let matchOptions = NavigationMatchOptions(coordinates: simplifiedRouteCoordinates, profileIdentifier: .cycling)
+        let matchOptions = NavigationMatchOptions(
+          coordinates: simplifiedRouteCoordinates,
+          profileIdentifier: .walking
+        )
         matchOptions.includesSpokenInstructions = true
         matchOptions.includesVisualInstructions = true
 
