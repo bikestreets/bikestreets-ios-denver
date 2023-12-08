@@ -330,6 +330,9 @@ extension DefaultMapsViewController: StateListener {
         )
         navigationViewController?.modalPresentationStyle = .fullScreen
         navigationViewController?.delegate = self
+        /// Disable "Report Problem" sheet that shows while navigating.
+        navigationViewController?.showsReportFeedback = false
+        navigationViewController?.showsEndOfRouteFeedback = true
 
         sheetManager.dismissAllSheets(animated: false) {
           self.present(self.navigationViewController!, animated: true, completion: nil)
@@ -644,6 +647,13 @@ extension DefaultMapsViewController: NavigationViewControllerDelegate {
   ) {
     self.navigationViewController = nil
     stateManager.state = .initial
+  }
+
+  func navigationViewController(
+    _ navigationViewController: NavigationViewController,
+    didSubmitArrivalFeedback feedback: EndOfRouteFeedback
+  ) {
+    // TODO: (@mattrobmattrob) Upload this feedback
   }
 }
 
