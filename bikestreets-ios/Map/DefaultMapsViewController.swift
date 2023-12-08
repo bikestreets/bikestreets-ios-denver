@@ -21,6 +21,8 @@ final class DefaultMapsViewController: MapsViewController {
   }
   private let liveRoutingConfiguration: LiveRoutingConfiguration = .mapbox
 
+  private let locationManager = CLLocationManager()
+
   private lazy var mapControlView: MapControlView = {
     return MapControlView(mapCameraManager: mapCameraManager)
   }()
@@ -62,6 +64,7 @@ final class DefaultMapsViewController: MapsViewController {
 
     mapView.viewport.addStatusObserver(self)
 
+    locationManager.delegate = self
     sheetManager.delegate = self
 
     sheetHeightInspectionView.delegate = self
@@ -229,7 +232,7 @@ extension DefaultMapsViewController: StateListener {
             .accept(text: "Accept Terms", callback: { [weak self] presentedViewController in
               guard let self else { return }
               presentedViewController.dismiss(animated: true)
-              self.stateManager.state = CLLocationManager().shouldPresentShareLocationView ? .initialShareLocation : .initial
+              self.stateManager.state = self.locationManager.shouldPresentShareLocationView ? .initialShareLocation : .initial
             }),
           ]
         )
@@ -244,7 +247,8 @@ extension DefaultMapsViewController: StateListener {
             .accept(text: "Share Location", callback: { [weak self] presentedViewController in
               guard let self else { return }
               presentedViewController.dismiss(animated: true)
-              self.stateManager.state = .initial
+              // Make the request for location with the system.
+              locationManager.requestWhenInUseAuthorization()
             }),
           ]
         )
@@ -353,9 +357,10 @@ extension DefaultMapsViewController: StateListener {
     // Sync up camera position/focus.
     mapCameraManager.state = {
       switch newState {
-      case .initialTerms, 
-          .initialShareLocation,
-          .initial,
+      case .initialTerms,
+          .initialShareLocation:
+        return .showDenver
+      case .initial,
           .requestingRoutes:
         return .followUserPosition
       case .previewDirections(let preview),
@@ -507,7 +512,26 @@ extension DefaultMapsViewController: MapCameraStateListener {
   func syncCameraState(bottomInset: CGFloat) {
     let newState: ViewportState?
 
+    // Show puck in all cases except when showing Denver
+    // since it requests location permissions as part of
+    // setting this value.
     switch mapCameraManager.state {
+    case .showDenver: break
+    default:
+      // Show user location puck
+      mapView.location.options.puckType = .puck2D()
+    }
+
+    switch mapCameraManager.state {
+    case .showDenver:
+      let cameraOptions = CameraOptions(
+        center: .denver,
+        zoom: 15.5
+      )
+      mapView.mapboxMap.setCamera(to: cameraOptions)
+
+      /// No new camera state.
+      newState = nil
     case .followUserPosition:
       newState = mapView.viewport.makeFollowPuckViewportState(
         options: FollowPuckViewportStateOptions(
@@ -620,5 +644,23 @@ extension DefaultMapsViewController: NavigationViewControllerDelegate {
   ) {
     self.navigationViewController = nil
     stateManager.state = .initial
+  }
+}
+
+// MARK: -- CLLocationManagerDelegate
+
+extension DefaultMapsViewController: CLLocationManagerDelegate {
+  public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+    // Only change state if location granted.
+    switch stateManager.state {
+    case .initialShareLocation: break
+    default: return
+    }
+
+    if manager.shouldPresentShareLocationView {
+      // TODO: (@mattrobmattrob) Handle kicking the user to setting to enable location permissions.
+    } else {
+      stateManager.state = .initial
+    }
   }
 }
