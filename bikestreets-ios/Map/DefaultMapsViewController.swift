@@ -11,6 +11,7 @@ import MapboxNavigation
 import MapboxMaps
 import MapboxSearchUI
 import MapKit
+import MessageUI
 import SwiftUI
 import UIKit
 
@@ -257,7 +258,7 @@ extension DefaultMapsViewController: StateListener {
     case .initial:
       let shouldPresentSearchViewController: Bool = {
         switch oldState {
-        case .routing, .initialTerms, .initialShareLocation: return true
+        case .initialTerms, .initialShareLocation, .routing, .routingFeedback: return true
         default: return false
         }
       }()
@@ -355,6 +356,12 @@ extension DefaultMapsViewController: StateListener {
         // Update route polyline display.
         updateMapAnnotations(isRouting: true, selectedRoute: routing.selectedRoute, potentialRoutes: [])
       }
+    case .routingFeedback(let feedback):
+      // Can only present mail controller when sheets are dismissed.
+      sheetManager.dismissAllSheets(animated: true)
+
+      let vc = FeedbackEmailViewController(stateManager: stateManager, feedback: feedback)
+      present(vc, animated: true)
     }
 
     // Sync up camera position/focus.
@@ -364,7 +371,8 @@ extension DefaultMapsViewController: StateListener {
           .initialShareLocation:
         return .showDenver
       case .initial,
-          .requestingRoutes:
+          .requestingRoutes,
+          .routingFeedback:
         return .followUserPosition
       case .previewDirections(let preview),
           .updateOrigin(let preview),
@@ -646,14 +654,19 @@ extension DefaultMapsViewController: NavigationViewControllerDelegate {
     byCanceling canceled: Bool
   ) {
     self.navigationViewController = nil
-    stateManager.state = .initial
+
+    // If still in routing state, transition back to initial.
+    if case .routing = stateManager.state {
+      stateManager.state = .initial
+    }
   }
 
   func navigationViewController(
     _ navigationViewController: NavigationViewController,
     didSubmitArrivalFeedback feedback: EndOfRouteFeedback
   ) {
-    // TODO: (@mattrobmattrob) Upload this feedback
+    guard MFMailComposeViewController.canSendMail() else { return }
+    stateManager.state = .routingFeedback(feedback: feedback)
   }
 }
 

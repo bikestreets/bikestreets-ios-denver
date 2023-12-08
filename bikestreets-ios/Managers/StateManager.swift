@@ -9,6 +9,7 @@ import Foundation
 import CoreLocation
 import MapKit
 import MapboxDirections
+import MapboxCoreNavigation
 
 // TODO: Convert to Combine if you're smarter than I am.
 protocol StateListener: AnyObject {
@@ -69,6 +70,8 @@ final class StateManager {
     case updateOrigin(preview: DirectionsPreview)
     case updateDestination(preview: DirectionsPreview)
     case routing(routing: Routing)
+    /// Live routing just finished and user is trying to provide feedback.
+    case routingFeedback(feedback: EndOfRouteFeedback)
   }
 
   var state: State = .initial {

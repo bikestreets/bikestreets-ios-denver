@@ -54,6 +54,8 @@
 		35AEFC122B22D92000234813 /* CLLocationManager+AuthorizationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AEFC112B22D92000234813 /* CLLocationManager+AuthorizationState.swift */; };
 		35AEFC152B22DCC600234813 /* CustomAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AEFC142B22DCC600234813 /* CustomAlertViewController.swift */; };
 		35D13F762AE7FF3400A31CB0 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 35D13F752AE7FF3400A31CB0 /* Settings.bundle */; };
+		35F8C19A2B238C34007AF870 /* Bundle+AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F8C1992B238C34007AF870 /* Bundle+AppVersion.swift */; };
+		35F8C19D2B2396B8007AF870 /* FeedbackEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F8C19C2B2396B8007AF870 /* FeedbackEmailViewController.swift */; };
 		9AA97B2D2AE87E9C00C59426 /* UIView+Subview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA97B2C2AE87E9C00C59426 /* UIView+Subview.swift */; };
 /* End PBXBuildFile section */
 
@@ -99,6 +101,8 @@
 		35AEFC142B22DCC600234813 /* CustomAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertViewController.swift; sourceTree = "<group>"; };
 		35D13F752AE7FF3400A31CB0 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		35F04BCD2A61C5D1008083A1 /* Denver, CO.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Denver, CO.gpx"; sourceTree = "<group>"; };
+		35F8C1992B238C34007AF870 /* Bundle+AppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+AppVersion.swift"; sourceTree = "<group>"; };
+		35F8C19C2B2396B8007AF870 /* FeedbackEmailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackEmailViewController.swift; sourceTree = "<group>"; };
 		9AA97B2C2AE87E9C00C59426 /* UIView+Subview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Subview.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -165,6 +169,7 @@
 				351645232A8288D6001EDC99 /* UIFont+Preferred.swift */,
 				9AA97B2C2AE87E9C00C59426 /* UIView+Subview.swift */,
 				35AEFC112B22D92000234813 /* CLLocationManager+AuthorizationState.swift */,
+				35F8C1992B238C34007AF870 /* Bundle+AppVersion.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -273,15 +278,16 @@
 		35A482952A37B1E4001035BB /* bikestreets-ios */ = {
 			isa = PBXGroup;
 			children = (
-				35AEFC132B22DCAD00234813 /* RoadBlocks */,
 				35065C9B2A7C69E600C7CCAF /* AppDelegate.swift */,
 				35A4829A2A37B1E6001035BB /* Assets.xcassets */,
 				3547E6492AB7D090004FA7F7 /* Debug */,
 				35065CB82A803A3000C7CCAF /* Extensions */,
+				35F8C19B2B2395FF007AF870 /* Feedback */,
 				35A482AF2A37C02E001035BB /* Info.plist */,
 				35065CC02A8043D100C7CCAF /* Managers */,
 				35065CA92A7D45D000C7CCAF /* Map */,
 				350BDE392A7007F900D4DE31 /* Resources */,
+				35AEFC132B22DCAD00234813 /* RoadBlocks */,
 				35065CBB2A803BE800C7CCAF /* Routing */,
 				35065CA42A7D44B900C7CCAF /* Search */,
 				3550D96C2A9D001900C70EE5 /* Sheets */,
@@ -304,6 +310,14 @@
 				35F04BCD2A61C5D1008083A1 /* Denver, CO.gpx */,
 			);
 			path = GPX;
+			sourceTree = "<group>";
+		};
+		35F8C19B2B2395FF007AF870 /* Feedback */ = {
+			isa = PBXGroup;
+			children = (
+				35F8C19C2B2396B8007AF870 /* FeedbackEmailViewController.swift */,
+			);
+			path = Feedback;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -405,6 +419,7 @@
 				351645202A827F08001EDC99 /* PossibleRoutesView.swift in Sources */,
 				35065CB42A7DA3AB00C7CCAF /* DirectionPreviewViewController.swift in Sources */,
 				3516451A2A81CC73001EDC99 /* UIView+Constraints.swift in Sources */,
+				35F8C19A2B238C34007AF870 /* Bundle+AppVersion.swift in Sources */,
 				3547E64B2AB7D0AC004FA7F7 /* DebugTableViewController.swift in Sources */,
 				35065CBD2A803BFC00C7CCAF /* RoutingViewController.swift in Sources */,
 				35065C9C2A7C69E600C7CCAF /* AppDelegate.swift in Sources */,
@@ -424,6 +439,7 @@
 				351645222A827FD9001EDC99 /* UIView+InsetView.swift in Sources */,
 				35065CA12A7D24AD00C7CCAF /* DefaultMapsViewController.swift in Sources */,
 				350BDE462A700E0D00D4DE31 /* BikeStreetsStyles.swift in Sources */,
+				35F8C19D2B2396B8007AF870 /* FeedbackEmailViewController.swift in Sources */,
 				35AEFC122B22D92000234813 /* CLLocationManager+AuthorizationState.swift in Sources */,
 				35065CAB2A7D45E400C7CCAF /* SizeTrackingView.swift in Sources */,
 				35065CB22A7D9E5700C7CCAF /* PolylineAnnotation+ActiveRoute.swift in Sources */,
