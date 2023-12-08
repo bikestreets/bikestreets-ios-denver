@@ -21,12 +21,8 @@ final class FeedbackEmailViewController: MFMailComposeViewController {
 
     mailComposeDelegate = self
 
-//    let composeVC = MFMailComposeViewController()
-//    composeVC.mailComposeDelegate = self
-
-    // Configure the fields of the interface.
     setToRecipients(["as@bikestreets.com"])
-    setSubject("[\(Bundle.main.releaseVersionNumber) (\(Bundle.main.buildVersionNumber))] BikeStreets Feedback - iOS")
+    setSubject("[\(Bundle.main.releaseVersionNumber) (\(Bundle.main.buildVersionNumber))] BikeStreets App Feedback - iOS")
 
     let ratingString: String
     if let rating = feedback.rating {

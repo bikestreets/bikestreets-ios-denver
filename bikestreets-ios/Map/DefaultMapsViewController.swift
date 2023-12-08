@@ -679,7 +679,7 @@ extension DefaultMapsViewController: CLLocationManagerDelegate {
     case .initialShareLocation: break
     default: return
     }
-    
+
     if manager.shouldPresentShareLocationView {
       // TODO: (@mattrobmattrob) Handle kicking the user to setting to enable location permissions.
     } else {
