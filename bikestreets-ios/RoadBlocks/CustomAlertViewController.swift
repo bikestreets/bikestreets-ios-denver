@@ -25,6 +25,9 @@ final class CustomAlertViewController: UIViewController {
   init(configuration: Configuration) {
     self.configuration = configuration
     super.init(nibName: nil, bundle: nil)
+
+    // Block dismissal other than using the buttons on the alert.
+    isModalInPresentation = true
   }
 
   required init?(coder: NSCoder) {
