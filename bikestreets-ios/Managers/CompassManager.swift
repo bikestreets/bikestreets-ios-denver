@@ -15,6 +15,8 @@ protocol MapCameraStateListener: AnyObject {
 
 final class MapCameraManager {
   enum State {
+    /// Centered on Denver, used before location permissions granted.
+    case showDenver
     /// Centered on the user, no relation to direction of travel.
     case followUserPosition
     case followUserPositionIdle
@@ -26,7 +28,7 @@ final class MapCameraManager {
     case showRouteIdle(route: Route)
   }
 
-  var state: State = .followUserPosition {
+  var state: State = .showDenver {
     didSet {
       listeners.forEach {
         $0.value?.didUpdate(from: oldValue, to: state)
@@ -40,6 +42,8 @@ final class MapCameraManager {
   /// SF Symbols name to use based on the current state.
   var imageSystemName: String {
     switch state {
+    case .showDenver:
+      return "location"
     case .followUserPosition:
       return "location.fill"
     case .followUserPositionIdle:
@@ -68,6 +72,9 @@ final class MapCameraManager {
   /// Transition from current state to idle state of the same type.
   func toIdle() {
     switch state {
+    case .showDenver:
+      // Always idle
+      break
     case .followUserPosition:
       state = .followUserPositionIdle
     case .followUserHeading:
@@ -85,6 +92,9 @@ final class MapCameraManager {
   /// Transition from current state to non-idle state of the same type.
   func fromIdle() {
     switch state {
+    case .showDenver:
+      // Always idle
+      break
     case .followUserPositionIdle:
       state = .followUserPosition
     case .followUserHeadingIdle:

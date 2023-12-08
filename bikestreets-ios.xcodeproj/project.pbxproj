@@ -51,6 +51,8 @@
 		35A4829B2A37B1E6001035BB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 35A4829A2A37B1E6001035BB /* Assets.xcassets */; };
 		35A482A62A37B279001035BB /* MapboxMaps in Frameworks */ = {isa = PBXBuildFile; productRef = 35A482A52A37B279001035BB /* MapboxMaps */; };
 		35A482A92A37BD4C001035BB /* MapboxDirections in Frameworks */ = {isa = PBXBuildFile; productRef = 35A482A82A37BD4C001035BB /* MapboxDirections */; };
+		35AEFC122B22D92000234813 /* CLLocationManager+AuthorizationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AEFC112B22D92000234813 /* CLLocationManager+AuthorizationState.swift */; };
+		35AEFC152B22DCC600234813 /* CustomAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AEFC142B22DCC600234813 /* CustomAlertViewController.swift */; };
 		35D13F762AE7FF3400A31CB0 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 35D13F752AE7FF3400A31CB0 /* Settings.bundle */; };
 		9AA97B2D2AE87E9C00C59426 /* UIView+Subview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA97B2C2AE87E9C00C59426 /* UIView+Subview.swift */; };
 /* End PBXBuildFile section */
@@ -93,6 +95,8 @@
 		35A482932A37B1E4001035BB /* BikeStreets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BikeStreets.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		35A4829A2A37B1E6001035BB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		35A482AF2A37C02E001035BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		35AEFC112B22D92000234813 /* CLLocationManager+AuthorizationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocationManager+AuthorizationState.swift"; sourceTree = "<group>"; };
+		35AEFC142B22DCC600234813 /* CustomAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertViewController.swift; sourceTree = "<group>"; };
 		35D13F752AE7FF3400A31CB0 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		35F04BCD2A61C5D1008083A1 /* Denver, CO.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Denver, CO.gpx"; sourceTree = "<group>"; };
 		9AA97B2C2AE87E9C00C59426 /* UIView+Subview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Subview.swift"; sourceTree = "<group>"; };
@@ -160,6 +164,7 @@
 				351645212A827FD9001EDC99 /* UIView+InsetView.swift */,
 				351645232A8288D6001EDC99 /* UIFont+Preferred.swift */,
 				9AA97B2C2AE87E9C00C59426 /* UIView+Subview.swift */,
+				35AEFC112B22D92000234813 /* CLLocationManager+AuthorizationState.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -268,6 +273,7 @@
 		35A482952A37B1E4001035BB /* bikestreets-ios */ = {
 			isa = PBXGroup;
 			children = (
+				35AEFC132B22DCAD00234813 /* RoadBlocks */,
 				35065C9B2A7C69E600C7CCAF /* AppDelegate.swift */,
 				35A4829A2A37B1E6001035BB /* Assets.xcassets */,
 				3547E6492AB7D090004FA7F7 /* Debug */,
@@ -282,6 +288,14 @@
 				350BDE442A700E0400D4DE31 /* Styles */,
 			);
 			path = "bikestreets-ios";
+			sourceTree = "<group>";
+		};
+		35AEFC132B22DCAD00234813 /* RoadBlocks */ = {
+			isa = PBXGroup;
+			children = (
+				35AEFC142B22DCC600234813 /* CustomAlertViewController.swift */,
+			);
+			path = RoadBlocks;
 			sourceTree = "<group>";
 		};
 		35F04BCC2A61C5C1008083A1 /* GPX */ = {
@@ -397,6 +411,7 @@
 				3550D96B2A9CFBAC00C70EE5 /* MapControlView.swift in Sources */,
 				9AA97B2D2AE87E9C00C59426 /* UIView+Subview.swift in Sources */,
 				35065CBA2A803A4000C7CCAF /* UISheetPresentationController+Configuration.swift in Sources */,
+				35AEFC152B22DCC600234813 /* CustomAlertViewController.swift in Sources */,
 				35A2F0BF2A4F7957002BF520 /* MapsViewController.swift in Sources */,
 				35065CC22A8043E900C7CCAF /* ScreenManager.swift in Sources */,
 				35065CA82A7D451B00C7CCAF /* MKPlacemark+PrettyAddress.swift in Sources */,
@@ -409,6 +424,7 @@
 				351645222A827FD9001EDC99 /* UIView+InsetView.swift in Sources */,
 				35065CA12A7D24AD00C7CCAF /* DefaultMapsViewController.swift in Sources */,
 				350BDE462A700E0D00D4DE31 /* BikeStreetsStyles.swift in Sources */,
+				35AEFC122B22D92000234813 /* CLLocationManager+AuthorizationState.swift in Sources */,
 				35065CAB2A7D45E400C7CCAF /* SizeTrackingView.swift in Sources */,
 				35065CB22A7D9E5700C7CCAF /* PolylineAnnotation+ActiveRoute.swift in Sources */,
 				3547E64D2AB7D209004FA7F7 /* DebugTableViewCell.swift in Sources */,
