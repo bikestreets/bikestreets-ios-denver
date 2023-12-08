@@ -69,6 +69,13 @@ final class DefaultMapsViewController: MapsViewController {
 
     stateManager.add(listener: self)
     mapCameraManager.add(listener: self)
+
+    // Configure initial state. Intentionally force
+    // user to accept terms on each launch until we
+    // decide otherwise.
+    DispatchQueue.main.async {
+      self.stateManager.state = .initialTerms
+    }
   }
 
   override func viewWillAppear(_ animated: Bool) {
@@ -103,6 +110,12 @@ final class DefaultMapsViewController: MapsViewController {
   }
 
   private func presentInitialSearchViewController() {
+    // Only show search sheet after terms and location accepted.
+    switch stateManager.state {
+    case .initialTerms, .initialShareLocation: return
+    default: break
+    }
+
     let searchViewController = SearchViewController(
       configuration: .initialDestination,
       stateManager: stateManager,
@@ -207,9 +220,46 @@ extension DefaultMapsViewController: StateListener {
 
   func didUpdate(from oldState: StateManager.State, to newState: StateManager.State) {
     switch newState {
+    case .initialTerms:
+      let alertViewController = CustomAlertViewController(
+        configuration: .init(
+          body: "You must accept the VAMOS Routes terms of use before you use the app.",
+          buttons: [
+            .openURL(text: "Full Terms", url: URL(string: "https://www.bikestreets.com/terms")!),
+            .accept(text: "Accept Terms", callback: { [weak self] presentedViewController in
+              guard let self else { return }
+              presentedViewController.dismiss(animated: true)
+              self.stateManager.state = CLLocationManager().shouldPresentShareLocationView ? .initialShareLocation : .initial
+            }),
+          ]
+        )
+      )
+      present(alertViewController, animated: true)
+    case .initialShareLocation:
+      let alertViewController = CustomAlertViewController(
+        configuration: .init(
+          body: "Get low-stress bike routes to any destination in Denver. Share your location so we can help you plan your route.",
+          buttons: [
+            .openURL(text: "Learn More", url: URL(string: "https://www.bikestreets.com")!),
+            .accept(text: "Share Location", callback: { [weak self] presentedViewController in
+              guard let self else { return }
+              presentedViewController.dismiss(animated: true)
+              self.stateManager.state = .initial
+            }),
+          ]
+        )
+      )
+      present(alertViewController, animated: true)
     case .initial:
-      // Assume routing was canceled. Restart from the initial launch state.
-      if case .routing = oldState {
+      let shouldPresentSearchViewController: Bool = {
+        switch oldState {
+        case .routing, .initialTerms, .initialShareLocation: return true
+        default: return false
+        }
+      }()
+
+      // Restart from the initial launch state.
+      if shouldPresentSearchViewController {
         sheetManager.dismissAllSheets(animated: true) {
           self.presentInitialSearchViewController()
         }
@@ -303,7 +353,11 @@ extension DefaultMapsViewController: StateListener {
     // Sync up camera position/focus.
     mapCameraManager.state = {
       switch newState {
-      case .initial, .requestingRoutes: return .followUserPosition
+      case .initialTerms, 
+          .initialShareLocation,
+          .initial,
+          .requestingRoutes:
+        return .followUserPosition
       case .previewDirections(let preview),
           .updateOrigin(let preview),
           .updateDestination(let preview):
