@@ -53,20 +53,12 @@ final class PossibleRoutesView: UIStackView {
     }
 
     for (index, route) in routes.enumerated() {
-      let titleLabel = UILabel()
-      titleLabel.text = "Route \(index + 1)"
-      titleLabel.font = .preferredFont(forTextStyle: .body, weight: .bold)
-
       let distanceLabel = UILabel()
       distanceLabel.text = distanceString(for: route.distance)
       distanceLabel.font = .preferredFont(forTextStyle: .callout)
 
       let leftInsetView = UIView()
-
-      let labelStack = UIStackView(arrangedSubviews: [titleLabel, distanceLabel])
-      labelStack.axis = .vertical
-      labelStack.spacing = 4
-
+      
       let spacerView = UIView()
 
       let button = UIButton(type: .roundedRect)
@@ -83,7 +75,6 @@ final class PossibleRoutesView: UIStackView {
       let rightInsetView = UIView()
 
       [
-        titleLabel,
         distanceLabel,
         leftInsetView,
         spacerView,
@@ -102,7 +93,7 @@ final class PossibleRoutesView: UIStackView {
 
       let routeStack = UIStackView(arrangedSubviews: [
         leftInsetView,
-        labelStack,
+        distanceLabel,
         spacerView,
         button,
         rightInsetView

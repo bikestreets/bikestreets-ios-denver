@@ -94,7 +94,7 @@
 		3550D96D2A9D002E00C70EE5 /* SheetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetManager.swift; sourceTree = "<group>"; };
 		3550D96F2A9D351300C70EE5 /* CompassManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassManager.swift; sourceTree = "<group>"; };
 		35A2F0BE2A4F7957002BF520 /* MapsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapsViewController.swift; sourceTree = "<group>"; };
-		35A482932A37B1E4001035BB /* BikeStreets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BikeStreets.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		35A482932A37B1E4001035BB /* VAMOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VAMOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		35A4829A2A37B1E6001035BB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		35A482AF2A37C02E001035BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		35AEFC112B22D92000234813 /* CLLocationManager+AuthorizationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocationManager+AuthorizationState.swift"; sourceTree = "<group>"; };
@@ -270,7 +270,7 @@
 		35A482942A37B1E4001035BB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				35A482932A37B1E4001035BB /* BikeStreets.app */,
+				35A482932A37B1E4001035BB /* VAMOS.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -323,9 +323,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		35A482922A37B1E4001035BB /* BikeStreets */ = {
+		35A482922A37B1E4001035BB /* VAMOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 35A482A12A37B1E6001035BB /* Build configuration list for PBXNativeTarget "BikeStreets" */;
+			buildConfigurationList = 35A482A12A37B1E6001035BB /* Build configuration list for PBXNativeTarget "VAMOS" */;
 			buildPhases = (
 				35A4828F2A37B1E4001035BB /* Sources */,
 				35A482902A37B1E4001035BB /* Frameworks */,
@@ -335,7 +335,7 @@
 			);
 			dependencies = (
 			);
-			name = BikeStreets;
+			name = VAMOS;
 			packageProductDependencies = (
 				35A482A52A37B279001035BB /* MapboxMaps */,
 				35A482A82A37BD4C001035BB /* MapboxDirections */,
@@ -348,7 +348,7 @@
 				359CB5D02AD9BC53004560A2 /* MapboxNavigation */,
 			);
 			productName = MapboxTester;
-			productReference = 35A482932A37B1E4001035BB /* BikeStreets.app */;
+			productReference = 35A482932A37B1E4001035BB /* VAMOS.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -386,7 +386,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				35A482922A37B1E4001035BB /* BikeStreets */,
+				35A482922A37B1E4001035BB /* VAMOS */,
 			);
 		};
 /* End PBXProject section */
@@ -578,9 +578,9 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "bikestreets-ios/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Bike Streets";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Your current location will be displayed on the map and used for directions and estimated travel times.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your current location will be displayed on the map and used for directions and estimated travel times.";
+				INFOPLIST_KEY_CFBundleDisplayName = VAMOS;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "VAMOS provides low-stress bike routes to any destination in Denver. You must enable permissions to use the app.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "VAMOS provides low-stress bike routes to any destination in Denver. You must enable permissions to use the app.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -608,9 +608,9 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "bikestreets-ios/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Bike Streets";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Your current location will be displayed on the map and used for directions and estimated travel times.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your current location will be displayed on the map and used for directions and estimated travel times.";
+				INFOPLIST_KEY_CFBundleDisplayName = VAMOS;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "VAMOS provides low-stress bike routes to any destination in Denver. You must enable permissions to use the app.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "VAMOS provides low-stress bike routes to any destination in Denver. You must enable permissions to use the app.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -639,7 +639,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		35A482A12A37B1E6001035BB /* Build configuration list for PBXNativeTarget "BikeStreets" */ = {
+		35A482A12A37B1E6001035BB /* Build configuration list for PBXNativeTarget "VAMOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				35A482A22A37B1E6001035BB /* Debug */,

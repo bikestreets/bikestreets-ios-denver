@@ -38,10 +38,6 @@ final class SearchViewController: UIViewController {
 
     let insetView = UIView()
 
-    let vamosLabel = UILabel()
-    vamosLabel.text = "Find a route with VAMOS"
-    vamosLabel.font = .preferredFont(forTextStyle: .title1)
-
     let stackView = UIStackView()
     stackView.axis = .vertical
     stackView.spacing = 8
@@ -59,13 +55,11 @@ final class SearchViewController: UIViewController {
 
     view.addSubviews(
       insetView,
-      vamosLabel,
       stackView
     )
 
     [
       insetView,
-      vamosLabel,
       stackView,
       searchBarHolder
     ].disableTranslatesAutoresizingMaskIntoConstraints()
@@ -76,11 +70,7 @@ final class SearchViewController: UIViewController {
       insetView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -16),
       insetView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
 
-      vamosLabel.topAnchor.constraint(equalTo: insetView.topAnchor),
-      vamosLabel.leftAnchor.constraint(equalTo: insetView.leftAnchor),
-      vamosLabel.rightAnchor.constraint(equalTo: insetView.rightAnchor),
-
-      vamosLabel.bottomAnchor.constraint(equalTo: stackView.topAnchor),
+      insetView.topAnchor.constraint(equalTo: stackView.topAnchor),
       view.bottomAnchor.constraint(equalTo: stackView.bottomAnchor),
       view.leftAnchor.constraint(equalTo: stackView.leftAnchor),
       view.rightAnchor.constraint(equalTo: stackView.rightAnchor),

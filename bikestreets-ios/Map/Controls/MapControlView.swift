@@ -48,7 +48,6 @@ private final class MapControlButton: UIButton {
 final class MapControlView: UIStackView {
   private let mapCameraManager: MapCameraManager
 
-  private let infoButton = MapControlButton()
   private let locationButton = MapControlButton()
 
   init(mapCameraManager: MapCameraManager) {
@@ -66,14 +65,7 @@ final class MapControlView: UIStackView {
     axis = .vertical
     spacing = 8
 
-    [
-      infoButton,
-      locationButton
-    ].forEach {
-      addArrangedSubview($0)
-    }
-
-    infoButton.imageSystemName = "info"
+    addArrangedSubview(locationButton)
 
     locationButton.addTarget(self, action: #selector(fromIdle), for: .touchUpInside)
     syncLocationButtonImage()

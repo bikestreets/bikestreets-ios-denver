@@ -239,9 +239,16 @@ extension PointAnnotation {
   }
 }
 
-// MARK: -
+// MARK: - Locations
 
 extension CLLocationCoordinate2D {
-  static let sanFrancisco = CLLocationCoordinate2D(latitude: 37.7911551, longitude: -122.3966103)
-  static let denver = CLLocationCoordinate2D(latitude: 39.753580116073685, longitude: -105.04056378182935)
+  /// Union Station
+  static let denver = CLLocationCoordinate2D(
+    latitude: 39.75318695812184,
+    longitude: -105.00017364813098
+  )
+}
+
+struct MapZoomOptions {
+  static let defaultZoomLevel = 14.5
 }
