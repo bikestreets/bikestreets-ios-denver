@@ -116,7 +116,9 @@ final class DefaultMapsViewController: MapsViewController {
   private func presentInitialSearchViewController() {
     // Only show search sheet after terms and location accepted.
     switch stateManager.state {
-    case .initialTerms, .initialShareLocation: return
+    case .initialTerms,
+        .requestingLocationPermissions,
+        .insufficientLocationPermissions: return
     default: break
     }
 
@@ -236,23 +238,37 @@ extension DefaultMapsViewController: StateListener {
             .accept(text: "Accept Terms", callback: { [weak self] presentedViewController in
               guard let self else { return }
               presentedViewController.dismiss(animated: true)
-              self.stateManager.state = self.locationManager.shouldPresentShareLocationView ? .initialShareLocation : .initial
+
+              self.stateManager.state = {
+                switch self.locationManager.internalAuthorizationStatus {
+                case .requestPermissions:
+                  return .requestingLocationPermissions
+                case .insufficientAuthorization:
+                  return .insufficientLocationPermissions
+                case .granted:
+                  return .initial
+                }
+              }()
             }),
           ]
         )
       )
       present(alertViewController, animated: true)
-    case .initialShareLocation:
+    case .requestingLocationPermissions:
+      // Make the request for location with the system.
+      locationManager.requestWhenInUseAuthorization()
+    case .insufficientLocationPermissions:
       let alertViewController = CustomAlertViewController(
         configuration: .init(
-          body: "Get low-stress bike routes to any destination in Denver. Share your location so we can help you plan your route.",
+          body: "To use the VAMOS app, you need to share your location.",
           buttons: [
-            .openURL(text: "Learn More", url: URL(string: "https://www.bikestreets.com")!),
-            .accept(text: "Share Location", callback: { [weak self] presentedViewController in
-              guard let self else { return }
-              presentedViewController.dismiss(animated: true)
-              // Make the request for location with the system.
-              locationManager.requestWhenInUseAuthorization()
+            .accept(text: "Open Settings", callback: { [weak self] presentedViewController in
+              guard let url = URL(string: UIApplication.openSettingsURLString) else {
+                 return
+              }
+              if UIApplication.shared.canOpenURL(url) {
+                 UIApplication.shared.open(url, options: [:])
+              }
             }),
           ]
         )
@@ -261,8 +277,14 @@ extension DefaultMapsViewController: StateListener {
     case .initial:
       let shouldPresentSearchViewController: Bool = {
         switch oldState {
-        case .initialTerms, .initialShareLocation, .routing, .routingFeedback: return true
-        default: return false
+        case .initialTerms,
+            .requestingLocationPermissions,
+            .insufficientLocationPermissions,
+            .routing,
+            .routingFeedback:
+          return true
+        default:
+          return false
         }
       }()
 
@@ -371,7 +393,8 @@ extension DefaultMapsViewController: StateListener {
     mapCameraManager.state = {
       switch newState {
       case .initialTerms,
-          .initialShareLocation:
+          .requestingLocationPermissions,
+          .insufficientLocationPermissions:
         return .showDenver
       case .initial,
           .requestingRoutes,
@@ -681,13 +704,19 @@ extension DefaultMapsViewController: CLLocationManagerDelegate {
   public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
     // Only change state if location granted.
     switch stateManager.state {
-    case .initialShareLocation: break
+    case .requestingLocationPermissions, .insufficientLocationPermissions: break
     default: return
     }
 
-    if manager.shouldPresentShareLocationView {
-      // TODO: (@mattrobmattrob) Handle kicking the user to setting to enable location permissions.
-    } else {
+    switch manager.internalAuthorizationStatus {
+    case .requestPermissions:
+      // This happens when the user selects "Ask Next Time Or When I Share"
+      // but the setting should just be updated in the Settings so redirect
+      // them back to the permission screen.
+      break
+    case .insufficientAuthorization:
+      stateManager.state = .insufficientLocationPermissions
+    case .granted:
       stateManager.state = .initial
     }
   }
