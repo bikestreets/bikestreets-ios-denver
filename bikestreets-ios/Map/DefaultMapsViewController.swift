@@ -537,7 +537,7 @@ extension DefaultMapsViewController: MapCameraStateListener {
     case .showDenver:
       let cameraOptions = CameraOptions(
         center: .denver,
-        zoom: 15.5
+        zoom: MapZoomOptions.defaultZoomLevel
       )
       mapView.mapboxMap.setCamera(to: cameraOptions)
 
@@ -547,6 +547,7 @@ extension DefaultMapsViewController: MapCameraStateListener {
       newState = mapView.viewport.makeFollowPuckViewportState(
         options: FollowPuckViewportStateOptions(
           padding: UIEdgeInsets(top: 200, left: 0, bottom: bottomInset, right: 0),
+          zoom: MapZoomOptions.defaultZoomLevel,
           // Intentionally avoid bearing sync in search mode.
           bearing: .none,
           pitch: 0
