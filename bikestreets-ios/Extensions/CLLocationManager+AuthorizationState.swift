@@ -9,15 +9,21 @@ import Foundation
 import CoreLocation
 
 extension CLLocationManager {
-  /// Should the system request location permissions?
-  var shouldPresentShareLocationView: Bool {
+  enum InternalAuthorizationStatus {
+    /// Application has not request permissions yet.
+    case requestPermissions
+    /// Application permissions need changed.
+    case insufficientAuthorization
+    /// Application permissions are acceptable.
+    case granted
+  }
+
+  var internalAuthorizationStatus: InternalAuthorizationStatus {
     switch authorizationStatus {
-    case .notDetermined, .restricted, .denied:
-      return true
-    case .authorizedWhenInUse, .authorizedAlways:
-      return false
-    @unknown default:
-      return false
+    case .notDetermined: return .requestPermissions
+    case .restricted, .denied: return .insufficientAuthorization
+    case .authorizedAlways, .authorizedWhenInUse: return .granted
+    @unknown default: return .insufficientAuthorization
     }
   }
 }

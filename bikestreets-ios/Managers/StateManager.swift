@@ -63,7 +63,9 @@ final class StateManager {
     /// Accept Terms of Service before using the app.
     case initialTerms
     /// Accept location sharing before using the app.
-    case initialShareLocation
+    case requestingLocationPermissions
+    /// Location permissions need changed to use the app.
+    case insufficientLocationPermissions
     case initial
     case requestingRoutes(request: RouteRequest)
     case previewDirections(preview: DirectionsPreview)
