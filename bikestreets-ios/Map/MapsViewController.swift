@@ -45,7 +45,9 @@ class MapsViewController: UIViewController, ExampleController {
     mapView.mapboxMap.setCamera(to: cameraOptions)
 
     // Hide Mapbox 'i' button
-      mapView.ornaments.options.attributionButton.margins = .init(x: -10000, y: 0)
+    mapView.ornaments.options.attributionButton.margins = .init(x: -10000, y: 0)
+    // Move Mapbox compass
+    mapView.ornaments.options.compass.position = .bottomRight
 
     // Show Mapbox styles
     updateMapStyle()
