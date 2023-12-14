@@ -9,6 +9,7 @@ import Foundation
 import CoreLocation
 
 extension CLLocationManager {
+  /// Should the system request location permissions?
   var shouldPresentShareLocationView: Bool {
     switch authorizationStatus {
     case .notDetermined, .restricted, .denied:

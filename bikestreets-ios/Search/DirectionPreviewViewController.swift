@@ -52,7 +52,7 @@ final class DirectionPreviewViewController: UIViewController {
 
     let titleLabel = UILabel()
     titleLabel.text = "Directions"
-    titleLabel.font = .preferredFont(forTextStyle: .largeTitle, weight: .bold)
+    titleLabel.font = .preferredFont(forTextStyle: .title1, weight: .bold)
 
     let titleContainer = UIView()
     titleContainer.addSubview(titleLabel)
@@ -63,10 +63,6 @@ final class DirectionPreviewViewController: UIViewController {
     placesStackView.layer.cornerRadius = 16
     placesStackView.clipsToBounds = true
     placesStackView.backgroundColor = .tertiarySystemBackground
-
-    let routesLabel = UILabel()
-    routesLabel.text = "Routes"
-    routesLabel.font = .preferredFont(forTextStyle: .title2, weight: .bold)
 
     let possibleRoutesView = PossibleRoutesView(routes: routes)
     possibleRoutesView.delegate = self
