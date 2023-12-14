@@ -59,8 +59,8 @@ final class DefaultMapsViewController: MapsViewController {
 
     view.addSubview(mapControlView)
     [
-      mapControlView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
-      mapControlView.bottomAnchor.constraint(equalTo: mapView.ornaments.logoView.topAnchor, constant: -16)
+      mapControlView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -8),
+      mapControlView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8)
     ].activate()
 
     mapView.viewport.addStatusObserver(self)
@@ -410,9 +410,10 @@ extension DefaultMapsViewController: SizeTrackingListener {
       // Update map camera.
       syncCameraState(bottomInset: frame.height)
 
-      // Update Mapbox attribution.
+      // Update Mapbox ornaments.
       let mapboxOrnamentYInset = frame.height - 8
       mapView.ornaments.options.logo.margins = .init(x: 8.0, y: mapboxOrnamentYInset)
+      mapView.ornaments.options.compass.margins = .init(x: 8.0, y: mapboxOrnamentYInset)
     }
   }
 }
