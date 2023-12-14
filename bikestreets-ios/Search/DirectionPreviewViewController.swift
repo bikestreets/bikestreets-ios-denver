@@ -74,7 +74,6 @@ final class DirectionPreviewViewController: UIViewController {
     let stackView = UIStackView(arrangedSubviews: [
       titleContainer,
       placesStackView,
-      routesLabel,
       possibleRoutesView,
       spacerView
     ])
@@ -85,7 +84,6 @@ final class DirectionPreviewViewController: UIViewController {
 
     [
       titleLabel,
-      routesLabel,
       spacerView,
       stackView,
     ].disableTranslatesAutoresizingMaskIntoConstraints()
