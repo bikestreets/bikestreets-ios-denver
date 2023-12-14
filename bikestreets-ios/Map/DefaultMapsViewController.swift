@@ -130,6 +130,9 @@ final class DefaultMapsViewController: MapsViewController {
     sheetManager.present(
       searchViewController,
       animated: true,
+      sheetOptions: .init(
+        detents: [.tiny(), .medium(), .large()]
+      ),
       options: .init(shouldDismiss: false)
     )
   }
