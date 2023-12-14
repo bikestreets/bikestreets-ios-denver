@@ -426,21 +426,17 @@ extension DefaultMapsViewController: SizeTrackingListener {
     // This is only valuable for the height, if it's 0, ignore.
     guard frame.height != 0 else { return }
 
-    // Find the likely selected sheet detent identifier.
-    let selectedSheetDetentIdentifier: UISheetPresentationController.Detent.Identifier = (
-      heightInspectionViewController?.sheetPresentationController?.selectedDetentIdentifier ?? .medium
-    )
+    // Ensure the sheet size isn't hiding most of the screen.
+    let screenHeight = UIScreen.main.bounds.size.height
+    guard frame.height < screenHeight * 0.8 else { return }
 
-    // Adjust the map if we're not in the large selected detent.
-    if selectedSheetDetentIdentifier != .large {
-      // Update map camera.
-      syncCameraState(bottomInset: frame.height)
+    // Update map camera.
+    syncCameraState(bottomInset: frame.height)
 
-      // Update Mapbox ornaments.
-      let mapboxOrnamentYInset = frame.height - 8
-      mapView.ornaments.options.logo.margins = .init(x: 8.0, y: mapboxOrnamentYInset)
-      mapView.ornaments.options.compass.margins = .init(x: 8.0, y: mapboxOrnamentYInset)
-    }
+    // Update Mapbox ornaments.
+    let mapboxOrnamentYInset = frame.height - 8
+    mapView.ornaments.options.logo.margins = .init(x: 8.0, y: mapboxOrnamentYInset)
+    mapView.ornaments.options.compass.margins = .init(x: 8.0, y: mapboxOrnamentYInset)
   }
 }
 
