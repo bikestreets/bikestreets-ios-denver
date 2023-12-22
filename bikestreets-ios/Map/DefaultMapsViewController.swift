@@ -343,6 +343,13 @@ extension DefaultMapsViewController: StateListener {
           routeResponse: routing.response,
           routeIndex: 0
         )
+
+        // Intentionally choose to NOT request any alternative routes since this,
+        // generally, isn't a BikeStreets supported outcome and it drastically
+        // increases battery drain by making constant requests to Mapbox despite
+        // being unused/always failing.
+        NavigationSettings.shared.initialize(with: .init(alternativeRouteDetectionStrategy: nil))
+
         let navigationService = MapboxNavigationService(
           indexedRouteResponse: indexedRouteResponse,
           customRoutingProvider: NavigationSettings.shared.directions,
