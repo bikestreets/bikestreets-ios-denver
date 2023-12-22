@@ -158,19 +158,47 @@ final class DefaultMapsViewController: MapsViewController {
     selectedRoute: MapboxDirections.Route,
     potentialRoutes: [MapboxDirections.Route]
   ) {
-    let selectedRouteAnnotations: [PolylineAnnotation] = selectedRoute.legs.flatMap { leg -> [MapboxDirections.RouteStep] in
-      leg.steps
-    }.map { step -> PolylineAnnotation in
-      return .activeRouteAnnotation(
-        coordinates: step.shape?.coordinates ?? [],
-        isRouting: isRouting,
-        isHikeABike: step.transportType == .walking
-      )
+    let geoJSONDataSourceIdentifier = "current-route"
+
+    func removeLayer(withId identifier: String) {
+      if mapView.mapboxMap.style.layerExists(withId: identifier) {
+        try! mapView.mapboxMap.style.removeLayer(withId: identifier)
+        try! mapView.mapboxMap.style.removeSource(withId: identifier)
+      }
     }
 
-    polylineAnnotationManager.annotations = selectedRouteAnnotations + potentialRoutes.map {
-      .potentialRouteAnnotation(coordinates: $0.shape?.coordinates ?? [])
+    guard let routeGeometry = selectedRoute.shape?.geometry else {
+      removeLayer(withId: geoJSONDataSourceIdentifier)
+      return
     }
+
+    // Create a GeoJSON data source.
+    var geoJSONSource = GeoJSONSource()
+    geoJSONSource.data = .geometry(routeGeometry)
+
+    let lineLayer = BikeStreetsStyles.style(
+      forLayer: geoJSONDataSourceIdentifier,
+      source: geoJSONDataSourceIdentifier,
+      lineColor: StyleColor(.vamosYellow),
+      lineWidth: .expression(
+        Exp(.interpolate) {
+          Exp(.linear)
+          Exp(.zoom)
+          14
+          6
+          18
+          12
+        }
+      )
+    )
+
+    // Add the source and style layer to the map style.
+    removeLayer(withId: geoJSONDataSourceIdentifier)
+    try! mapView.mapboxMap.style.addSource(geoJSONSource, id: geoJSONDataSourceIdentifier)
+    try! mapView.mapboxMap.style.addLayer(
+      lineLayer,
+      layerPosition: .at(BikeStreetsMapOrdering.vamosNetwork - 1)
+    )
   }
 
   // MARK: - State Handling

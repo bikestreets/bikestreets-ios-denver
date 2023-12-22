@@ -9,9 +9,7 @@ import MapboxMaps
 import MapboxSearch
 import MapKit
 
-protocol ExampleController: UIViewController {}
-
-class MapsViewController: UIViewController, ExampleController {
+class MapsViewController: UIViewController {
   let mapView = MapView(frame: .zero)
   lazy var polylineAnnotationManager = mapView.annotations.makePolylineAnnotationManager()
   lazy var annotationsManager = mapView.annotations.makePointAnnotationManager()
@@ -51,10 +49,6 @@ class MapsViewController: UIViewController, ExampleController {
 
     // Show Mapbox styles
     updateMapStyle()
-    DispatchQueue.main.async {
-      // Initially, always load the BikeStreets map layers.
-      self.loadMapFromShippedResources()
-    }
   }
 
   // MARK: -- Annotations
@@ -141,7 +135,7 @@ extension MapsViewController {
     if traitCollection.userInterfaceStyle == .dark {
       style = .dark
     } else {
-      style = .streets
+      style = .vamosStreets
     }
 
     // Only update anything if style is different.
@@ -209,13 +203,18 @@ extension MapsViewController {
       var geoJSONSource = GeoJSONSource()
       geoJSONSource.data = .featureCollection(featureCollection)
       geoJSONSource.lineMetrics = true // MUST be `true` in order to use `lineGradient` expression
-      
+
       // Create a line layer
-      let lineLayer = BikeStreetsStyles.style(forLayer: geoJSONDataSourceIdentifier, source: geoJSONDataSourceIdentifier)
-      
+      let lineColor = BikeStreetsStyles.mapLayerColor(forLayer: geoJSONDataSourceIdentifier)
+      let lineLayer = BikeStreetsStyles.style(
+        forLayer: geoJSONDataSourceIdentifier,
+        source: geoJSONDataSourceIdentifier,
+        lineColor: lineColor
+      )
+
       // Add the source and style layer to the map style.
       try! mapView.mapboxMap.style.addSource(geoJSONSource, id: geoJSONDataSourceIdentifier)
-      try! mapView.mapboxMap.style.addLayer(lineLayer, layerPosition: nil)
+      try! mapView.mapboxMap.style.addLayer(lineLayer, layerPosition: .at(BikeStreetsMapOrdering.vamosNetwork))
     }
   }
 }

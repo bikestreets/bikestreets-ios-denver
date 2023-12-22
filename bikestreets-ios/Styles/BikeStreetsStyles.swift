@@ -9,6 +9,21 @@ import Foundation
 import MapboxMaps
 import UIKit
 
+/// Used for adding layers above/below the Vamos network on the map.
+struct BikeStreetsMapOrdering {
+  static let vamosNetwork: Int = 100
+}
+
+// MARK: - Map Styles
+
+extension StyleURI {
+  /// Avi's custom map style designed to minimize highway prevalence.
+  /// This style started out as `.streets` with customizations.
+  static let vamosStreets = StyleURI(
+    rawValue: "mapbox://styles/mkbitbucket/clqgwgexa007s01rjhxpwcpaw"
+  )!
+}
+
 // MARK: -
 
 extension UIColor {
@@ -95,7 +110,12 @@ enum BikeStreetsStyles {
   )
 
   /// From: https://docs.mapbox.com/ios/maps/examples/line-gradient/
-  static func style(forLayer layerName: String, source: String) -> LineLayer {
+  static func style(
+    forLayer layerName: String,
+    source: String,
+    lineColor: StyleColor,
+    lineWidth: Value<Double> = BikeStreetsStyles.lineWidth
+  ) -> LineLayer {
     var lineLayer = LineLayer(id: layerName /* "line-layer" */ )
     lineLayer.filter = Exp(.eq) {
       "$type"
@@ -108,9 +128,6 @@ enum BikeStreetsStyles {
     // Set the line join and cap to a rounded end.
     lineLayer.lineJoin = .constant(.round)
     lineLayer.lineCap = .constant(.round)
-
-    // Get the line color for this layer
-    let lineColor = mapLayerColor(forLayer: layerName)
 
     lineLayer.lineColor = .constant(lineColor)
     lineLayer.lineWidth = lineWidth
