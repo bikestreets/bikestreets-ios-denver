@@ -262,7 +262,7 @@ extension DefaultMapsViewController: StateListener {
         configuration: .init(
           body: "To use the VAMOS app, you need to share your location.",
           buttons: [
-            .accept(text: "Open Settings", callback: { [weak self] presentedViewController in
+            .accept(text: "Open Settings", callback: { presentedViewController in
               guard let url = URL(string: UIApplication.openSettingsURLString) else {
                  return
               }
