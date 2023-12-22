@@ -232,10 +232,10 @@ extension DefaultMapsViewController: StateListener {
     case .initialTerms:
       let alertViewController = CustomAlertViewController(
         configuration: .init(
-          body: "You must accept the terms of use before you use the app.",
+          body: "You must accept our Release and Waiver, Terms of Service, and Privacy Policy to use the app.",
           buttons: [
-            .openURL(text: "View Terms", url: URL(string: "https://www.bikestreets.com/terms")!),
-            .accept(text: "Accept Terms", callback: { [weak self] presentedViewController in
+            .openURL(text: "View", url: URL(string: "https://www.bikestreets.com/terms")!),
+            .accept(text: "Accept", callback: { [weak self] presentedViewController in
               guard let self else { return }
               presentedViewController.dismiss(animated: true)
 
