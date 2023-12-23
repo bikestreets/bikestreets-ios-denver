@@ -177,7 +177,7 @@ extension MapsViewController {
     guard let featureCollection = try? spec.decodeGeoJSON() else { return }
 
     // Only reload if not currently present since these layers don't change.
-    if mapView.mapboxMap.style.layerExists(withId: spec.geoJSONDataSourceIdentifier) {
+    if mapView.mapboxMap.style.layerExists(withId: spec.identifier) {
       // Remove layers in the future, if desired
       //  try! mapView.mapboxMap.style.removeLayer(withId: geoJSONDataSourceIdentifier)
       //  try! mapView.mapboxMap.style.removeSource(withId: geoJSONDataSourceIdentifier)
@@ -189,15 +189,15 @@ extension MapsViewController {
 
       // Create a line layer
       let lineLayer = BikeStreetsStyles.style(
-        forLayer: spec.geoJSONDataSourceIdentifier,
-        source: spec.geoJSONDataSourceIdentifier,
+        forLayer: spec.identifier,
+        source: spec.identifier,
         lineColor: spec.mapLayerColor
       )
 
       // Add the source and style layer to the map style.
       try! mapView.mapboxMap.style.addSource(
         geoJSONSource,
-        id: spec.geoJSONDataSourceIdentifier
+        id: spec.identifier
       )
       try! mapView.mapboxMap.style.addPersistentLayer(lineLayer)
     }

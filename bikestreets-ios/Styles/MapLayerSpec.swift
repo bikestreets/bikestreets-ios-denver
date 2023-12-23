@@ -45,12 +45,12 @@ enum MapLayerSpec: String, CaseIterable {
   // MARK: - Helpers
 
   /// Identifier for the layer.
-  var geoJSONDataSourceIdentifier: String {
+  var identifier: String {
     rawValue
   }
 
   /// File URL for the GeoJSON file in the main bundle.
-  var fileURL: URL {
+  private var fileURL: URL {
     guard let url = Bundle.main.url(forResource: rawValue, withExtension: "geojson") else {
       fatalError("Unable to find GeoJSON file for '\(self)'")
     }

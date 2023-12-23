@@ -197,7 +197,7 @@ final class DefaultMapsViewController: MapsViewController {
     try! mapView.mapboxMap.style.addSource(geoJSONSource, id: geoJSONDataSourceIdentifier)
     try! mapView.mapboxMap.style.addPersistentLayer(
       lineLayer,
-      layerPosition: .below(MapLayerSpec.allCases.first!.geoJSONDataSourceIdentifier)
+      layerPosition: .below(MapLayerSpec.allCases.first!.identifier)
     )
   }
 
