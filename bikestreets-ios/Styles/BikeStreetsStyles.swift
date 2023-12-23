@@ -9,11 +9,6 @@ import Foundation
 import MapboxMaps
 import UIKit
 
-/// Used for adding layers above/below the Vamos network on the map.
-struct BikeStreetsMapOrdering {
-  static let vamosNetwork: Int = 100
-}
-
 // MARK: - Map Styles
 
 extension StyleURI {
@@ -67,36 +62,6 @@ enum BikeStreetsMapTypes {
  * Style elements for Bike Streets
  */
 enum BikeStreetsStyles {
-  private static let bikeStreetLayer = MapLayerSpec("bikestreets", rgb: 0x345AA8, description: "Bike Street")
-  private static let trailLayer = MapLayerSpec("trails", rgb: 0x7A8A47, description: "Trail")
-  private static let bikeLaneLayer = MapLayerSpec("bikelanes", rgb: 0x58595B, description: "Bike Lane")
-  private static let bikeSidewalkLayer = MapLayerSpec("bikesidewalks", rgb: 0xE82E8B, description: "Bike on Sidewalk")
-  private static let walkBikeLayer = MapLayerSpec("walk", rgb: 0xD8282C, description: "Walk your Bike")
-
-  static let mapLayerSpecs: [MapLayerSpec] = [
-    bikeStreetLayer,
-    trailLayer,
-    bikeLaneLayer,
-    bikeSidewalkLayer,
-    walkBikeLayer,
-  ]
-
-  static func mapLayerSpec(forLayer layerName: String) -> MapLayerSpec? {
-    for layerSpec in mapLayerSpecs {
-      if layerSpec.name == layerName {
-        return layerSpec
-      }
-    }
-    return nil
-  }
-
-  static func mapLayerColor(forLayer layerName: String) -> StyleColor {
-    guard let layerSpec = mapLayerSpec(forLayer: layerName) else {
-      fatalError("Cannot find map layer spec for layer id \(layerName)")
-    }
-    return StyleColor(layerSpec.color)
-  }
-
   // Use `NSExpression` to smoothly adjust the line width from 2pt to 20pt between zoom levels 14 and 18. The `interpolationBase` parameter allows the values to interpolate along an exponential curve.
   private static let lineWidth: Value<Double> = .expression(
     Exp(.interpolate) {
@@ -133,19 +98,5 @@ enum BikeStreetsStyles {
     lineLayer.lineWidth = lineWidth
 
     return lineLayer
-  }
-}
-
-struct MapLayerSpec {
-  private static let bikeStreetAlpha: CGFloat = 1.0
-
-  let name: String
-  let color: UIColor
-  let description: String
-
-  init(_ name: String, rgb: Int, description: String) {
-    self.name = name
-    color = UIColor(rgb: rgb, alpha: MapLayerSpec.bikeStreetAlpha)
-    self.description = NSLocalizedString(description, comment: "")
   }
 }
