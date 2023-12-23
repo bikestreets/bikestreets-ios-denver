@@ -33,6 +33,7 @@
 		351645222A827FD9001EDC99 /* UIView+InsetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 351645212A827FD9001EDC99 /* UIView+InsetView.swift */; };
 		351645242A8288D6001EDC99 /* UIFont+Preferred.swift in Sources */ = {isa = PBXBuildFile; fileRef = 351645232A8288D6001EDC99 /* UIFont+Preferred.swift */; };
 		351645262A86DAC2001EDC99 /* BikeStreetsColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 351645252A86DAC2001EDC99 /* BikeStreetsColors.swift */; };
+		353497AD2B3726FF00DFB05B /* MapLayerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 353497AC2B3726FF00DFB05B /* MapLayerSpec.swift */; };
 		3547E64B2AB7D0AC004FA7F7 /* DebugTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3547E64A2AB7D0AC004FA7F7 /* DebugTableViewController.swift */; };
 		3547E64D2AB7D209004FA7F7 /* DebugTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3547E64C2AB7D209004FA7F7 /* DebugTableViewCell.swift */; };
 		3547E64F2AB88E8A004FA7F7 /* DebugLogHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3547E64E2AB88E8A004FA7F7 /* DebugLogHandler.swift */; };
@@ -86,6 +87,7 @@
 		351645212A827FD9001EDC99 /* UIView+InsetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+InsetView.swift"; sourceTree = "<group>"; };
 		351645232A8288D6001EDC99 /* UIFont+Preferred.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Preferred.swift"; sourceTree = "<group>"; };
 		351645252A86DAC2001EDC99 /* BikeStreetsColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BikeStreetsColors.swift; sourceTree = "<group>"; };
+		353497AC2B3726FF00DFB05B /* MapLayerSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLayerSpec.swift; sourceTree = "<group>"; };
 		3547E64A2AB7D0AC004FA7F7 /* DebugTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugTableViewController.swift; sourceTree = "<group>"; };
 		3547E64C2AB7D209004FA7F7 /* DebugTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugTableViewCell.swift; sourceTree = "<group>"; };
 		3547E64E2AB88E8A004FA7F7 /* DebugLogHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogHandler.swift; sourceTree = "<group>"; };
@@ -196,12 +198,12 @@
 		350BDE392A7007F900D4DE31 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				35D13F752AE7FF3400A31CB0 /* Settings.bundle */,
 				350BDE3A2A7007F900D4DE31 /* 1-bikestreets-master-v0.3.geojson */,
-				350BDE3B2A7007F900D4DE31 /* 4-bikesidewalks-master-v0.3.geojson */,
 				350BDE3C2A7007F900D4DE31 /* 2-trails-master-v0.3.geojson */,
-				350BDE3D2A7007F900D4DE31 /* 5-walk-master-v0.3.geojson */,
 				350BDE3E2A7007F900D4DE31 /* 3-bikelanes-master-v0.3.geojson */,
+				350BDE3B2A7007F900D4DE31 /* 4-bikesidewalks-master-v0.3.geojson */,
+				350BDE3D2A7007F900D4DE31 /* 5-walk-master-v0.3.geojson */,
+				35D13F752AE7FF3400A31CB0 /* Settings.bundle */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -211,6 +213,7 @@
 			children = (
 				350BDE452A700E0D00D4DE31 /* BikeStreetsStyles.swift */,
 				351645252A86DAC2001EDC99 /* BikeStreetsColors.swift */,
+				353497AC2B3726FF00DFB05B /* MapLayerSpec.swift */,
 			);
 			path = Styles;
 			sourceTree = "<group>";
@@ -442,6 +445,7 @@
 				35F8C19D2B2396B8007AF870 /* FeedbackEmailViewController.swift in Sources */,
 				35AEFC122B22D92000234813 /* CLLocationManager+AuthorizationState.swift in Sources */,
 				35065CAB2A7D45E400C7CCAF /* SizeTrackingView.swift in Sources */,
+				353497AD2B3726FF00DFB05B /* MapLayerSpec.swift in Sources */,
 				35065CB22A7D9E5700C7CCAF /* PolylineAnnotation+ActiveRoute.swift in Sources */,
 				3547E64D2AB7D209004FA7F7 /* DebugTableViewCell.swift in Sources */,
 				3550D9702A9D351300C70EE5 /* CompassManager.swift in Sources */,

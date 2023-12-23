@@ -45,9 +45,9 @@ final class DefaultMapsViewController: MapsViewController {
     (sheetHeightInspectionView.lastFrameBroadcast?.height ?? 0) + 24
   }
 
-  init() {
+  override init() {
     screenManager = ScreenManager(stateManager: stateManager)
-    super.init(nibName: nil, bundle: nil)
+    super.init()
   }
 
   required init?(coder: NSCoder) {
@@ -195,9 +195,9 @@ final class DefaultMapsViewController: MapsViewController {
     // Add the source and style layer to the map style.
     removeLayer(withId: geoJSONDataSourceIdentifier)
     try! mapView.mapboxMap.style.addSource(geoJSONSource, id: geoJSONDataSourceIdentifier)
-    try! mapView.mapboxMap.style.addLayer(
+    try! mapView.mapboxMap.style.addPersistentLayer(
       lineLayer,
-      layerPosition: .at(BikeStreetsMapOrdering.vamosNetwork - 1)
+      layerPosition: .below(MapLayerSpec.allCases.first!.identifier)
     )
   }
 
@@ -442,15 +442,6 @@ extension DefaultMapsViewController: StateListener {
       case .routing: return .followUserHeading
       }
     }()
-
-    // Disable BikeStreets network when routing.
-    // TODO: Figure out if this is desired
-    switch newState {
-    case .routing:
-      isBikeStreetsNetworkEnabled = false
-    default:
-      isBikeStreetsNetworkEnabled = true
-    }
   }
 }
 

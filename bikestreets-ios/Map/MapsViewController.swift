@@ -10,17 +10,29 @@ import MapboxSearch
 import MapKit
 
 class MapsViewController: UIViewController {
-  let mapView = MapView(frame: .zero)
+  private(set) lazy var mapView: MapView = {
+    return MapView(
+      frame: .zero,
+      mapInitOptions: .init(styleURI: currentMapboxStyle)
+    )
+  }()
+
   lazy var polylineAnnotationManager = mapView.annotations.makePolylineAnnotationManager()
   lazy var annotationsManager = mapView.annotations.makePointAnnotationManager()
   lazy var circleAnnotationsManager = mapView.annotations.makeCircleAnnotationManager()
+  
+  init() {
+    super.init(nibName: nil, bundle: nil)
 
-  var isBikeStreetsNetworkEnabled: Bool = true {
-    didSet {
-      loadMapFromShippedResources()
+    mapView.mapboxMap.onNext(event: .mapLoaded) { _ in
+      self.loadMapFromShippedResources()
     }
   }
-
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
   override func viewDidLoad() {
     super.viewDidLoad()
 
@@ -46,9 +58,6 @@ class MapsViewController: UIViewController {
     mapView.ornaments.options.attributionButton.margins = .init(x: -10000, y: 0)
     // Move Mapbox compass
     mapView.ornaments.options.compass.position = .bottomRight
-
-    // Show Mapbox styles
-    updateMapStyle()
   }
 
   // MARK: -- Annotations
@@ -130,23 +139,23 @@ extension MapsViewController {
     }
   }
 
-  private func updateMapStyle() {
-    let style: StyleURI
+  private var currentMapboxStyle: StyleURI {
     if traitCollection.userInterfaceStyle == .dark {
-      style = .dark
+      return .dark
     } else {
-      style = .vamosStreets
+      return .vamosStreets
     }
+  }
+
+  private func updateMapStyle() {
+    let style: StyleURI = currentMapboxStyle
 
     // Only update anything if style is different.
     guard mapView.mapboxMap.style.uri != style else {
       return
     }
 
-    mapView.mapboxMap.loadStyleURI(style) { _ in
-      // Resetting the style URI will unload the BikeStreets layers.
-      self.loadMapFromShippedResources()
-    }
+    mapView.mapboxMap.loadStyleURI(style, completion: nil)
   }
 }
 
@@ -157,47 +166,21 @@ extension MapsViewController {
    * Load the default Bike Streets map from KML resources files bundled into the app
    */
   private func loadMapFromShippedResources() {
-    // TODO: Versioning scheme for the geojson data
-    // TODO: Do we have a cached/downloaded version of the geojson data?
-    // TODO: Is our cached version of geojson the latest & greatest?
-    if let fileURLs = Bundle.main.urls(forResourcesWithExtension: "geojson", subdirectory: nil) {
-      for fileURL in fileURLs {
-        loadMapLayerFrom(fileURL)
-      }
+    MapLayerSpec.allCases.forEach { spec in
+      loadMapLayer(from: spec)
     }
   }
 
-  /// Load GeoJSON file from local bundle and decode into a `FeatureCollection`.
-  ///
   /// From: https://docs.mapbox.com/ios/maps/examples/line-gradient/
-  private func decodeGeoJSON(from filePath: URL) throws -> FeatureCollection? {
-    var featureCollection: FeatureCollection?
-    do {
-      let data = try Data(contentsOf: filePath)
-      featureCollection = try JSONDecoder().decode(FeatureCollection.self, from: data)
-    } catch {
-      print("Error parsing data: \(error)")
-    }
-    return featureCollection
-  }
-
-  /// From: https://docs.mapbox.com/ios/maps/examples/line-gradient/
-  private func loadMapLayerFrom(_ fileURL: URL) {
+  private func loadMapLayer(from spec: MapLayerSpec) {
     // Attempt to decode GeoJSON from file bundled with application.
-    guard let featureCollection = try? decodeGeoJSON(from: fileURL /* "GradientLine" */ ) else { return }
-
-    //    let geoJSONDataSourceIdentifier = "geoJSON-data-source"
-    // Get the layer name from the file name. We'll use it in a couple of places
-    guard let geoJSONDataSourceIdentifier = fileURL.lastPathComponent.layerName() else {
-      fatalError("Unable to locate layer name in file name \(fileURL.lastPathComponent)")
-    }
+    guard let featureCollection = try? spec.decodeGeoJSON() else { return }
 
     // Only reload if not currently present since these layers don't change.
-    if mapView.mapboxMap.style.layerExists(withId: geoJSONDataSourceIdentifier) {
-      if !isBikeStreetsNetworkEnabled {
-        try! mapView.mapboxMap.style.removeLayer(withId: geoJSONDataSourceIdentifier)
-        try! mapView.mapboxMap.style.removeSource(withId: geoJSONDataSourceIdentifier)
-      }
+    if mapView.mapboxMap.style.layerExists(withId: spec.identifier) {
+      // Remove layers in the future, if desired
+      //  try! mapView.mapboxMap.style.removeLayer(withId: geoJSONDataSourceIdentifier)
+      //  try! mapView.mapboxMap.style.removeSource(withId: geoJSONDataSourceIdentifier)
     } else {
       // Create a GeoJSON data source.
       var geoJSONSource = GeoJSONSource()
@@ -205,16 +188,18 @@ extension MapsViewController {
       geoJSONSource.lineMetrics = true // MUST be `true` in order to use `lineGradient` expression
 
       // Create a line layer
-      let lineColor = BikeStreetsStyles.mapLayerColor(forLayer: geoJSONDataSourceIdentifier)
       let lineLayer = BikeStreetsStyles.style(
-        forLayer: geoJSONDataSourceIdentifier,
-        source: geoJSONDataSourceIdentifier,
-        lineColor: lineColor
+        forLayer: spec.identifier,
+        source: spec.identifier,
+        lineColor: spec.mapLayerColor
       )
 
       // Add the source and style layer to the map style.
-      try! mapView.mapboxMap.style.addSource(geoJSONSource, id: geoJSONDataSourceIdentifier)
-      try! mapView.mapboxMap.style.addLayer(lineLayer, layerPosition: .at(BikeStreetsMapOrdering.vamosNetwork))
+      try! mapView.mapboxMap.style.addSource(
+        geoJSONSource,
+        id: spec.identifier
+      )
+      try! mapView.mapboxMap.style.addPersistentLayer(lineLayer)
     }
   }
 }
