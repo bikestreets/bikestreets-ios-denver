@@ -34,6 +34,7 @@
 		351645242A8288D6001EDC99 /* UIFont+Preferred.swift in Sources */ = {isa = PBXBuildFile; fileRef = 351645232A8288D6001EDC99 /* UIFont+Preferred.swift */; };
 		351645262A86DAC2001EDC99 /* BikeStreetsColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 351645252A86DAC2001EDC99 /* BikeStreetsColors.swift */; };
 		353497AD2B3726FF00DFB05B /* MapLayerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 353497AC2B3726FF00DFB05B /* MapLayerSpec.swift */; };
+		353497AF2B3DB5F000DFB05B /* SearchLegendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 353497AE2B3DB5F000DFB05B /* SearchLegendViewController.swift */; };
 		3547E64B2AB7D0AC004FA7F7 /* DebugTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3547E64A2AB7D0AC004FA7F7 /* DebugTableViewController.swift */; };
 		3547E64D2AB7D209004FA7F7 /* DebugTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3547E64C2AB7D209004FA7F7 /* DebugTableViewCell.swift */; };
 		3547E64F2AB88E8A004FA7F7 /* DebugLogHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3547E64E2AB88E8A004FA7F7 /* DebugLogHandler.swift */; };
@@ -88,6 +89,7 @@
 		351645232A8288D6001EDC99 /* UIFont+Preferred.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Preferred.swift"; sourceTree = "<group>"; };
 		351645252A86DAC2001EDC99 /* BikeStreetsColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BikeStreetsColors.swift; sourceTree = "<group>"; };
 		353497AC2B3726FF00DFB05B /* MapLayerSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLayerSpec.swift; sourceTree = "<group>"; };
+		353497AE2B3DB5F000DFB05B /* SearchLegendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchLegendViewController.swift; sourceTree = "<group>"; };
 		3547E64A2AB7D0AC004FA7F7 /* DebugTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugTableViewController.swift; sourceTree = "<group>"; };
 		3547E64C2AB7D209004FA7F7 /* DebugTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugTableViewCell.swift; sourceTree = "<group>"; };
 		3547E64E2AB88E8A004FA7F7 /* DebugLogHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogHandler.swift; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 				35065CA52A7D44C700C7CCAF /* LocationSearchTableViewController.swift */,
 				35065CB32A7DA3AB00C7CCAF /* DirectionPreviewViewController.swift */,
 				3550D9672A98ECC200C70EE5 /* SearchConfiguration.swift */,
+				353497AE2B3DB5F000DFB05B /* SearchLegendViewController.swift */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -446,6 +449,7 @@
 				35AEFC122B22D92000234813 /* CLLocationManager+AuthorizationState.swift in Sources */,
 				35065CAB2A7D45E400C7CCAF /* SizeTrackingView.swift in Sources */,
 				353497AD2B3726FF00DFB05B /* MapLayerSpec.swift in Sources */,
+				353497AF2B3DB5F000DFB05B /* SearchLegendViewController.swift in Sources */,
 				35065CB22A7D9E5700C7CCAF /* PolylineAnnotation+ActiveRoute.swift in Sources */,
 				3547E64D2AB7D209004FA7F7 /* DebugTableViewCell.swift in Sources */,
 				3550D9702A9D351300C70EE5 /* CompassManager.swift in Sources */,

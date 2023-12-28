@@ -67,6 +67,8 @@ final class StateManager {
     /// Location permissions need changed to use the app.
     case insufficientLocationPermissions
     case initial
+    /// User has chosen to begin searching for a destination/route.
+    case searchDestination
     case requestingRoutes(request: RouteRequest)
     case previewDirections(preview: DirectionsPreview)
     case updateOrigin(preview: DirectionsPreview)

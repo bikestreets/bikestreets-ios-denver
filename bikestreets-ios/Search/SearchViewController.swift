@@ -45,6 +45,17 @@ final class SearchViewController: UIViewController {
     searchViewController.willMove(toParent: self)
     addChild(searchViewController)
 
+    let label = UILabel()
+    label.text = configuration.sheetTitle
+    label.font = .preferredFont(forTextStyle: .title2, weight: .bold)
+    label.disableTranslatesAutoresizingMaskIntoConstraints()
+
+    let labelContainer = UIView()
+    labelContainer.addSubview(label)
+    labelContainer.disableTranslatesAutoresizingMaskIntoConstraints()
+    labelContainer.matchAutolayoutSize(label, insets: .init(top: 0, left: 16, bottom: 0, right: -8))
+    stackView.addArrangedSubview(labelContainer)
+
     let searchBarHolder = UIView()
     searchBarHolder.addSubview(searchViewController.searchController.searchBar)
     stackView.addArrangedSubview(searchBarHolder)
@@ -80,6 +91,18 @@ final class SearchViewController: UIViewController {
       searchBarHolder.leftAnchor.constraint(equalTo: searchViewController.searchController.searchBar.leftAnchor),
       searchBarHolder.rightAnchor.constraint(equalTo: searchViewController.searchController.searchBar.rightAnchor),
     ].activate()
+  }
+
+  private var hasBeenPresented = false
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    if !hasBeenPresented {
+      hasBeenPresented = true
+      // Doing this after this run loop finishes allows it to work.
+      DispatchQueue.main.async {
+        self.searchViewController.searchController.searchBar.becomeFirstResponder()
+      }
+    }
   }
 }
 

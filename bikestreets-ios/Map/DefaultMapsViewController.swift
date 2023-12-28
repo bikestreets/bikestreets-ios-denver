@@ -122,12 +122,9 @@ final class DefaultMapsViewController: MapsViewController {
     default: break
     }
 
-    let searchViewController = SearchViewController(
-      configuration: .initialDestination,
-      stateManager: stateManager,
-      sheetManager: sheetManager
+    let searchViewController = SearchLegendViewController(
+      stateManager: stateManager
     )
-    searchViewController.delegate = self
 
     sheetManager.present(
       searchViewController,
@@ -308,6 +305,7 @@ extension DefaultMapsViewController: StateListener {
         case .initialTerms,
             .requestingLocationPermissions,
             .insufficientLocationPermissions,
+            .searchDestination,
             .routing,
             .routingFeedback:
           return true
@@ -325,6 +323,21 @@ extension DefaultMapsViewController: StateListener {
 
       // Clean any annotations.
       polylineAnnotationManager.annotations = []
+    case .searchDestination:
+      let searchViewController = SearchViewController(
+        configuration: .initialDestination,
+        stateManager: stateManager,
+        sheetManager: sheetManager
+      )
+      searchViewController.delegate = self
+
+      sheetManager.present(
+        searchViewController,
+        animated: true,
+        sheetOptions: .init(
+          detents: [.tiny(), .medium(), .large()]
+        )
+      )
     case .requestingRoutes(let request):
       // Potentially show destination on map
       // showAnnotation(.init(item: mapItem), cameraShouldFollow: false)
@@ -432,6 +445,7 @@ extension DefaultMapsViewController: StateListener {
           .insufficientLocationPermissions:
         return .showDenver
       case .initial,
+          .searchDestination,
           .requestingRoutes,
           .routingFeedback:
         return .followUserPosition

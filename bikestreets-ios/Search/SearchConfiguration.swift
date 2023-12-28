@@ -14,10 +14,17 @@ enum SearchConfiguration {
 
   // MARK: -- Helpers
 
+  var sheetTitle: String {
+    switch self {
+    case .initialDestination, .newDestination: return "Set Your Destination"
+    case .newOrigin: return "Set Your Starting Point"
+    }
+  }
+
   var searchBarPlaceholder: String {
     switch self {
-    case .initialDestination, .newDestination: return "Search for a destination"
-    case .newOrigin: return "Search for a starting point"
+    case .initialDestination, .newDestination: return "Find Destination"
+    case .newOrigin: return "Find Starting Point"
     }
   }
 }
