@@ -37,9 +37,28 @@ enum MapLayerSpec: String, CaseIterable {
     }
   }
 
+  var color: UIColor {
+    UIColor(rgb: rgb, alpha: MapLayerSpec.bikeStreetAlpha)
+  }
+
   var mapLayerColor: StyleColor {
-    let color = UIColor(rgb: rgb, alpha: MapLayerSpec.bikeStreetAlpha)
     return StyleColor(color)
+  }
+
+  /// String for user presentation that lays out the purpose of this layer.
+  var visualDescription: String {
+    switch self {
+    case .bikestreets:
+      return "Neighborhood Streets/Protected Bike Lanes"
+    case .trails:
+      return "Trails & Parks"
+    case .bikelanes:
+      return "Unprotected Bike Lanes, Sharrows, Busier Streets"
+    case .bikesidewalks:
+      return "Ride Your Bike on the Sidewalk"
+    case .walk:
+      return "Walk Your Bike on the Sidewalk"
+    }
   }
 
   // MARK: - Helpers
