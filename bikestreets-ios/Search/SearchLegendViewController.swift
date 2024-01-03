@@ -44,11 +44,34 @@ final class SearchLegendViewController: UIViewController {
 
     let bars: [UIView] = MapLayerSpec.allCases.map(createLegendBar(_:))
 
-    let stackView = UIStackView(arrangedSubviews: [searchBar, legendTitleLabel] + bars)
+    /*
+     Align internal UISearchBarTextField left/right with rest of legend content:
+
+     |------ Sheet
+     |                |----------- UIStackView (internal overall stack)
+     |            |--------------- _UISearchBarSearchContainerView (UIKit)
+     |                    |------- UISearchBarTextField (UIKit)
+     |                    ^ default inset of UISearchBar within itself (8 pt)
+     |
+     |            |--------------- UIStackView (internal legend stack)
+     |                    |------- UILabel (internal legend label)
+     |                    ^ mimic default inset of UISearchBar
+     |------
+     */
+
+    let legendStackView = UIStackView(arrangedSubviews: [legendTitleLabel] + bars)
+    legendStackView.axis = .vertical
+    legendStackView.spacing = 16
+    legendStackView.layoutMargins = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+    legendStackView.isLayoutMarginsRelativeArrangement = true
+
+    let stackView = UIStackView(arrangedSubviews: [searchBar, legendStackView])
     stackView.axis = .vertical
     stackView.spacing = 16
     stackView.disableTranslatesAutoresizingMaskIntoConstraints()
     stackView.setCustomSpacing(20, after: searchBar)
+    stackView.layoutMargins = UIEdgeInsets(top: 0, left: -4, bottom: 0, right: -4)
+    stackView.isLayoutMarginsRelativeArrangement = true
 
     scrollView.addSubview(stackView)
 
