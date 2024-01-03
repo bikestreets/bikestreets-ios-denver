@@ -91,6 +91,9 @@ final class SearchViewController: UIViewController {
       searchBarHolder.leftAnchor.constraint(equalTo: searchViewController.searchController.searchBar.leftAnchor),
       searchBarHolder.rightAnchor.constraint(equalTo: searchViewController.searchController.searchBar.rightAnchor),
     ].activate()
+
+    // Link up delegates
+    searchViewController.searchController.searchBar.delegate = self
   }
 
   private var hasBeenPresented = false
@@ -102,6 +105,21 @@ final class SearchViewController: UIViewController {
       DispatchQueue.main.async {
         self.searchViewController.searchController.searchBar.becomeFirstResponder()
       }
+    }
+  }
+}
+
+// MARK: - UISearchBarDelegate
+
+extension SearchViewController: UISearchBarDelegate {
+  func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+    switch configuration {
+    case .initialDestination:
+      // It's possible this is confusing WRT dismissing the keyboard
+      // vs. the entire sheet. Reevaluate if that's the case.
+      sheetManager.dismiss(viewController: self, animated: true)
+    default:
+      break
     }
   }
 }
