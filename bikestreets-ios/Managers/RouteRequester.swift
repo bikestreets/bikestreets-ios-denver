@@ -16,6 +16,16 @@ import SimplifySwift
 struct CombinedRoute {
   let osrm: Route
   let mapbox: Route
+
+  // MARK: -- Coordinates
+
+  var osrmCoordinates: [CLLocationCoordinate2D] {
+    osrm.shape?.coordinates ?? []
+  }
+
+  var mapboxCoordinates: [CLLocationCoordinate2D] {
+    mapbox.shape?.coordinates ?? []
+  }
 }
 
 /// Representation of the route response from the BikeStreets internal OSRM API

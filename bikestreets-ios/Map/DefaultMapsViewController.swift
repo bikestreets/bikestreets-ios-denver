@@ -198,24 +198,34 @@ final class DefaultMapsViewController: MapsViewController {
       geoJSONDataSourceIdentifierOSRM
     ].forEach(removeLayer(withId:))
 
-    addLayer(
-      withIdentifier: geoJSONDataSourceIdentifier,
-      color: .vamosYellow,
-      route: combinedRoute.mapbox,
-      layerPosition: .below(MapLayerSpec.allCases.first!.identifier)
-    )
-
     switch GlobalSettings.directionsPreviewConfiguration {
     case .combined:
+      addLayer(
+        withIdentifier: geoJSONDataSourceIdentifier,
+        color: .vamosYellow,
+        route: combinedRoute.mapbox,
+        layerPosition: .below(MapLayerSpec.bottomLayerIdentifier)
+      )
       addLayer(
         withIdentifier: geoJSONDataSourceIdentifierOSRM,
         color: .magenta.withAlphaComponent(0.8),
         route: combinedRoute.osrm,
         layerPosition: .below(geoJSONDataSourceIdentifier)
       )
+    case .osrm:
+      addLayer(
+        withIdentifier: geoJSONDataSourceIdentifierOSRM,
+        color: .vamosYellow,
+        route: combinedRoute.osrm,
+        layerPosition: .below(MapLayerSpec.bottomLayerIdentifier)
+      )
     case .mapbox:
-      // Mapbox route already added
-      break
+      addLayer(
+        withIdentifier: geoJSONDataSourceIdentifier,
+        color: .vamosYellow,
+        route: combinedRoute.mapbox,
+        layerPosition: .below(MapLayerSpec.bottomLayerIdentifier)
+      )
     }
   }
 
@@ -649,14 +659,13 @@ extension DefaultMapsViewController: MapCameraStateListener {
       // TODO: Add handling for "possible routes" vs. just the selected route.
       // preview.response.routes.map(\.geometry.coordinates).flatMap { $0 }
       let coordinates: [CLLocationCoordinate2D] = {
-        let mapboxCoordinates: [CLLocationCoordinate2D] = route.mapbox.shape?.coordinates ?? []
-
         switch GlobalSettings.directionsPreviewConfiguration {
         case .combined:
-          let osrmCoordinates = route.osrm.shape?.coordinates ?? []
-          return osrmCoordinates + mapboxCoordinates
+          return route.osrmCoordinates + route.mapboxCoordinates
+        case .osrm:
+          return route.osrmCoordinates
         case .mapbox:
-          return mapboxCoordinates
+          return route.mapboxCoordinates
         }
       }()
 
