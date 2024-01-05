@@ -14,6 +14,8 @@ struct GlobalSettings {
   enum DirectionsPreviewConfiguration {
     /// Show just the Mapbox Directions result on the directions preview screen.
     case mapbox
+    /// Show just the OSRM result on the directions preview screen.
+    case osrm
     /// Show both the OSRM and Mapbox result on the directions preview screen.
     case combined
   }

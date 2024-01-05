@@ -20,6 +20,11 @@ enum MapLayerSpec: String, CaseIterable {
 
   private static let bikeStreetAlpha: CGFloat = 1.0
 
+  /// The lowest layer of the `MapLayerSpec` cases.
+  static var bottomLayerIdentifier: String {
+    MapLayerSpec.allCases.first!.identifier
+  }
+
   // MARK: - Attributes
 
   private var rgb: Int {
