@@ -12,6 +12,29 @@ import MapboxNavigation
 import MapboxDirections
 import SimplifySwift
 
+/// Combination of the generated OSRM and Mapbox routes.
+struct CombinedRoute {
+  let osrm: Route
+  let mapbox: Route
+}
+
+/// Representation of the route response from the BikeStreets internal OSRM API
+/// and the external Mapbox API.
+struct CombinedRouteResponse {
+  let osrm: RouteResponse
+  let mapbox: RouteResponse
+
+  /// An array of `Route` objects based on the choice ot use the OSRM or Mapbox backend.
+  public var routes: [Route]? {
+    switch GlobalSettings.liveRoutingConfiguration {
+    case .mapbox:
+      return mapbox.routes
+    case .custom:
+      return osrm.routes
+    }
+  }
+}
+
 final class RouteRequester {
   enum RequestError: Error {
     case emptyData
@@ -23,7 +46,7 @@ final class RouteRequester {
     startPoint: CLLocationCoordinate2D,
     destinationName: String,
     endPoint: CLLocationCoordinate2D,
-    completion: @escaping (Result<RouteResponse, Error>) -> Void
+    completion: @escaping (Result<CombinedRouteResponse, Error>) -> Void
   ) {
     // BIKESTREETS DIRECTIONS
 
@@ -84,12 +107,12 @@ final class RouteRequester {
           .credentials: Directions.shared.credentials,
         ]
 
-        let result = try decoder.decode(RouteResponse.self, from: data)
+        let osrmResponse = try decoder.decode(RouteResponse.self, from: data)
 
         // Request Mapbox route
         //
         // Copied from: https://docs.mapbox.com/ios/navigation/examples/custom-server/
-        let originalRouteCoordinates = result.routes?[0].shape?.coordinates ?? []
+        let originalRouteCoordinates = osrmResponse.routes?[0].shape?.coordinates ?? []
 
         var tolerance: Float = 0.00001
         var simplifiedRouteCoordinates = originalRouteCoordinates
@@ -129,9 +152,9 @@ final class RouteRequester {
           switch mapboxResult {
           case .failure(let error):
             print(error.localizedDescription)
-          case .success(let response):
+          case .success(let mapboxResponse):
             // Return parsed response
-            completion(.success(response))
+            completion(.success(.init(osrm: osrmResponse, mapbox: mapboxResponse)))
           }
         }
 

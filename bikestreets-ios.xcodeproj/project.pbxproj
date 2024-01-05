@@ -58,6 +58,7 @@
 		35D13F762AE7FF3400A31CB0 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 35D13F752AE7FF3400A31CB0 /* Settings.bundle */; };
 		35F8C19A2B238C34007AF870 /* Bundle+AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F8C1992B238C34007AF870 /* Bundle+AppVersion.swift */; };
 		35F8C19D2B2396B8007AF870 /* FeedbackEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F8C19C2B2396B8007AF870 /* FeedbackEmailViewController.swift */; };
+		35FE5FF62B486792002A4472 /* GlobalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FE5FF52B486792002A4472 /* GlobalSettings.swift */; };
 		9AA97B2D2AE87E9C00C59426 /* UIView+Subview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA97B2C2AE87E9C00C59426 /* UIView+Subview.swift */; };
 /* End PBXBuildFile section */
 
@@ -108,6 +109,7 @@
 		35F8C19C2B2396B8007AF870 /* FeedbackEmailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackEmailViewController.swift; sourceTree = "<group>"; };
 		35FE5FF32B485FE3002A4472 /* Washington Park - Denver, CO.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Washington Park - Denver, CO.gpx"; sourceTree = "<group>"; };
 		35FE5FF42B485FE3002A4472 /* Sloan's Neighborhood - Denver, CO.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Sloan's Neighborhood - Denver, CO.gpx"; sourceTree = "<group>"; };
+		35FE5FF52B486792002A4472 /* GlobalSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSettings.swift; sourceTree = "<group>"; };
 		9AA97B2C2AE87E9C00C59426 /* UIView+Subview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Subview.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -195,6 +197,7 @@
 				35065CAE2A7D9B8300C7CCAF /* RouteRequester.swift */,
 				35065CC12A8043E900C7CCAF /* ScreenManager.swift */,
 				35065CAC2A7D9A8F00C7CCAF /* StateManager.swift */,
+				35FE5FF52B486792002A4472 /* GlobalSettings.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -434,6 +437,7 @@
 				3550D96B2A9CFBAC00C70EE5 /* MapControlView.swift in Sources */,
 				9AA97B2D2AE87E9C00C59426 /* UIView+Subview.swift in Sources */,
 				35065CBA2A803A4000C7CCAF /* UISheetPresentationController+Configuration.swift in Sources */,
+				35FE5FF62B486792002A4472 /* GlobalSettings.swift in Sources */,
 				35AEFC152B22DCC600234813 /* CustomAlertViewController.swift in Sources */,
 				35A2F0BF2A4F7957002BF520 /* MapsViewController.swift in Sources */,
 				35065CC22A8043E900C7CCAF /* ScreenManager.swift in Sources */,
