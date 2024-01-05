@@ -182,10 +182,13 @@ extension DirectionPreviewViewController: RouteSelectable {
   func didStart(route: MapboxDirections.Route) {
     switch stateManager.state {
     case .previewDirections(let preview):
+      guard let osrmRoute = preview.response.routes?.first else {
+        fatalError("Unable to determine initial OSRM route")
+      }
       stateManager.state = .routing(routing: .init(
         request: preview.request,
         response: preview.response,
-        selectedRoute: route
+        selectedRoute: .init(osrm: osrmRoute, mapbox: route)
       ))
     default:
       fatalError("State must be preview directions when route is selected")
