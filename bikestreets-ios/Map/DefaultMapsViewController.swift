@@ -144,7 +144,7 @@ final class DefaultMapsViewController: MapsViewController {
   // MARK: - Map Movement
 
   // TODO: Make this smarter using approach from https://docs.mapbox.com/ios/maps/examples/line-gradient/
-  private func updateMapAnnotations(combinedRoute: CombinedRoute) {
+  private func updateMapAnnotations(combinedRoute: CombinedRoute?) {
     let geoJSONDataSourceIdentifier = "current-route"
     let geoJSONDataSourceIdentifierOSRM = "current-route-osrm"
 
@@ -197,6 +197,8 @@ final class DefaultMapsViewController: MapsViewController {
       geoJSONDataSourceIdentifier,
       geoJSONDataSourceIdentifierOSRM
     ].forEach(removeLayer(withId:))
+
+    guard let combinedRoute else { return }
 
     switch GlobalSettings.directionsPreviewConfiguration {
     case .combined:
@@ -358,7 +360,7 @@ extension DefaultMapsViewController: StateListener {
       }
 
       // Clean any annotations.
-      polylineAnnotationManager.annotations = []
+      updateMapAnnotations(combinedRoute: nil)
     case .searchDestination:
       let searchViewController = SearchViewController(
         configuration: .initialDestination,
