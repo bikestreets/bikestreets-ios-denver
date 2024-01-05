@@ -148,7 +148,7 @@ final class RouteRequester {
         //
         let matchOptions = NavigationMatchOptions(
           coordinates: simplifiedRouteCoordinates,
-          profileIdentifier: .walking
+          profileIdentifier: .cycling
         )
         matchOptions.includesSpokenInstructions = true
         matchOptions.includesVisualInstructions = true
