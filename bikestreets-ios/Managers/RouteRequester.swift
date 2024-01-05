@@ -36,11 +36,13 @@ struct CombinedRouteResponse {
 
   /// An array of `Route` objects based on the choice ot use the OSRM or Mapbox backend.
   public var routes: [Route]? {
+    // Intentionally just select the first route, adjust in the
+    // future if desired.
     switch GlobalSettings.liveRoutingConfiguration {
     case .mapbox:
-      return mapbox.routes
+      return mapbox.routes?.first.map { [$0] }
     case .custom:
-      return osrm.routes
+      return osrm.routes?.first.map { [$0] }
     }
   }
 }
