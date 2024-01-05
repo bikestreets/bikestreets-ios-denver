@@ -104,9 +104,10 @@
 		35AEFC112B22D92000234813 /* CLLocationManager+AuthorizationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocationManager+AuthorizationState.swift"; sourceTree = "<group>"; };
 		35AEFC142B22DCC600234813 /* CustomAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertViewController.swift; sourceTree = "<group>"; };
 		35D13F752AE7FF3400A31CB0 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
-		35F04BCD2A61C5D1008083A1 /* Denver, CO.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Denver, CO.gpx"; sourceTree = "<group>"; };
 		35F8C1992B238C34007AF870 /* Bundle+AppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+AppVersion.swift"; sourceTree = "<group>"; };
 		35F8C19C2B2396B8007AF870 /* FeedbackEmailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackEmailViewController.swift; sourceTree = "<group>"; };
+		35FE5FF32B485FE3002A4472 /* Washington Park - Denver, CO.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Washington Park - Denver, CO.gpx"; sourceTree = "<group>"; };
+		35FE5FF42B485FE3002A4472 /* Sloan's Neighborhood - Denver, CO.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Sloan's Neighborhood - Denver, CO.gpx"; sourceTree = "<group>"; };
 		9AA97B2C2AE87E9C00C59426 /* UIView+Subview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Subview.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -313,7 +314,8 @@
 		35F04BCC2A61C5C1008083A1 /* GPX */ = {
 			isa = PBXGroup;
 			children = (
-				35F04BCD2A61C5D1008083A1 /* Denver, CO.gpx */,
+				35FE5FF42B485FE3002A4472 /* Sloan's Neighborhood - Denver, CO.gpx */,
+				35FE5FF32B485FE3002A4472 /* Washington Park - Denver, CO.gpx */,
 			);
 			path = GPX;
 			sourceTree = "<group>";
