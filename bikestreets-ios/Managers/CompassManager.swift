@@ -23,6 +23,9 @@ final class MapCameraManager {
     /// Centered on the user, map orientation following direction of travel.
     case followUserHeading
     case followUserHeadingIdle
+    /// Centered on the user, harsher viewing anlge to look forward further.
+    case routing
+    case routingIdle
     /// Not oriented to anything. User could be free-scrolling the map.
     case showRoute(route: CombinedRoute)
     case showRouteIdle(route: CombinedRoute)
@@ -48,9 +51,9 @@ final class MapCameraManager {
       return "location.fill"
     case .followUserPositionIdle:
       return "location"
-    case .followUserHeading:
+    case .followUserHeading, .routing:
       return "location.north.line.fill"
-    case .followUserHeadingIdle:
+    case .followUserHeadingIdle, .routingIdle:
       return "location.north.line"
     case .showRoute:
       return "location.fill.viewfinder"
@@ -79,10 +82,13 @@ final class MapCameraManager {
       state = .followUserPositionIdle
     case .followUserHeading:
       state = .followUserHeadingIdle
+    case .routing:
+      state = .routingIdle
     case .showRoute(let route):
       state = .showRouteIdle(route: route)
     case .followUserPositionIdle,
         .followUserHeadingIdle,
+        .routingIdle,
         .showRouteIdle:
       // Already idle
       break
@@ -99,10 +105,13 @@ final class MapCameraManager {
       state = .followUserPosition
     case .followUserHeadingIdle:
       state = .followUserHeading
+    case .routingIdle:
+      state = .routing
     case .showRouteIdle(let route):
       state = .showRoute(route: route)
     case .followUserPosition,
         .followUserHeading,
+        .routing,
         .showRoute:
       // Already not idle
       break

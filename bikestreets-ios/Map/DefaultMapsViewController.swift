@@ -489,7 +489,11 @@ extension DefaultMapsViewController: StateListener {
           .updateOrigin(let preview),
           .updateDestination(let preview):
         return .showRoute(route: preview.selectedRoute)
-      case .routing: return .followUserHeading
+      case .routing:
+        switch GlobalSettings.liveRoutingConfiguration {
+        case .mapbox: return .followUserHeading
+        case .custom: return .routing
+        }
       }
     }()
   }
@@ -683,8 +687,26 @@ extension DefaultMapsViewController: MapCameraStateListener {
           pitch: 0
         )
       )
+    case .routing:
+      newState = mapView.viewport.makeFollowPuckViewportState(
+        options: FollowPuckViewportStateOptions(
+          padding: UIEdgeInsets(
+            // This ends up being the offset from the middle of the viewport.
+            top: (view.bounds.height - bottomInset) * 0.75,
+            left: 0,
+            bottom: bottomInset, 
+            right: 0
+          ),
+          // Higher is more zoomed in
+          zoom: 20,
+          bearing: .heading,
+          // Less is closer to the straight on view of 0°
+          pitch: 60
+        )
+      )
     case .followUserPositionIdle,
         .followUserHeadingIdle,
+        .routingIdle,
         .showRouteIdle:
       // Idle, no viewport transition
       newState = nil
