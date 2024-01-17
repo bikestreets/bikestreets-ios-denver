@@ -12,6 +12,22 @@ import MapboxNavigation
 import MapboxDirections
 import SimplifySwift
 
+/// Switchable mode for the backend type to use with Mapbox.
+enum InternalMapboxAPIMode {
+  /// Mapbox Directions API: https://docs.mapbox.com/ios/navigation/guides/turn-by-turn-navigation/route-generation/
+  case directions
+  /// Mapbox Map Matching API: https://docs.mapbox.com/api/navigation/map-matching/
+  case mapMatching
+
+  /// Maximum coordinates allowed by Mapbox in the given request.
+  var maximumCoordinates: Int {
+    switch self {
+    case .directions: return 200
+    case .mapMatching: return 500
+    }
+  }
+}
+
 /// Combination of the generated OSRM and Mapbox routes.
 struct CombinedRoute {
   let osrm: Route
@@ -48,6 +64,8 @@ struct CombinedRouteResponse {
 }
 
 final class RouteRequester {
+  private static let mode = InternalMapboxAPIMode.mapMatching
+
   enum RequestError: Error {
     case emptyData
     case unableToParse
@@ -126,11 +144,11 @@ final class RouteRequester {
         // Copied from: https://docs.mapbox.com/ios/navigation/examples/custom-server/
         let originalRouteCoordinates = osrmResponse.routes?[0].shape?.coordinates ?? []
 
-        var tolerance: Float = 0.00001
+        var tolerance: Float = 0.000001
         var simplifiedRouteCoordinates = originalRouteCoordinates
-        while simplifiedRouteCoordinates.count > 500 {
+        while simplifiedRouteCoordinates.count > mode.maximumCoordinates {
           simplifiedRouteCoordinates = Simplify.simplify(originalRouteCoordinates, tolerance: tolerance, highQuality: true)
-          tolerance += 0.000005
+          tolerance += 0.0000025
         }
 
         print("""
@@ -142,31 +160,46 @@ final class RouteRequester {
 
         """)
 
-        //
-        // ❗️IMPORTANT❗️
-        // Use `Directions.calculateRoutes(matching:completionHandler:)` for navigating on a map matching response.
-        //
-        let matchOptions = NavigationMatchOptions(
-          coordinates: simplifiedRouteCoordinates,
-          profileIdentifier: .cycling
-        )
-        matchOptions.includesSpokenInstructions = true
-        matchOptions.includesVisualInstructions = true
+        switch mode {
+        case .mapMatching:
+          //
+          // ❗️IMPORTANT❗️
+          // Use `Directions.calculateRoutes(matching:completionHandler:)` for navigating on a map matching response.
+          //
+          let matchOptions = NavigationMatchOptions(
+            coordinates: simplifiedRouteCoordinates,
+            profileIdentifier: .cycling
+          )
+          matchOptions.includesSpokenInstructions = true
+          matchOptions.includesVisualInstructions = true
+          matchOptions.waypoints.disableWaypointLegSeparation()
 
-        // By default, each waypoint separates two legs, so the user stops at each waypoint.
-        // We want the user to navigate from the first coordinate to the last coordinate without any stops in between.
-        // You can specify more intermediate waypoints here if you’d like.
-        for waypoint in matchOptions.waypoints.dropFirst().dropLast() {
-          waypoint.separatesLegs = false
-        }
+          Directions.shared.calculateRoutes(matching: matchOptions) { _, mapboxResult in
+            switch mapboxResult {
+            case .failure(let error):
+              print(error.localizedDescription)
+            case .success(let mapboxResponse):
+              // Return parsed response
+              completion(.success(.init(osrm: osrmResponse, mapbox: mapboxResponse)))
+            }
+          }
+        case .directions:
+          let routeOptions = NavigationRouteOptions(
+            coordinates: simplifiedRouteCoordinates,
+            profileIdentifier: .cycling
+          )
+          routeOptions.includesSpokenInstructions = true
+          routeOptions.includesVisualInstructions = true
+          routeOptions.waypoints.disableWaypointLegSeparation()
 
-        Directions.shared.calculateRoutes(matching: matchOptions) { _, mapboxResult in
-          switch mapboxResult {
-          case .failure(let error):
-            print(error.localizedDescription)
-          case .success(let mapboxResponse):
-            // Return parsed response
-            completion(.success(.init(osrm: osrmResponse, mapbox: mapboxResponse)))
+          Directions.shared.calculate(routeOptions) { _, mapboxResult in
+            switch mapboxResult {
+            case .failure(let error):
+              print(error.localizedDescription)
+            case .success(let mapboxResponse):
+              // Return parsed response
+              completion(.success(.init(osrm: osrmResponse, mapbox: mapboxResponse)))
+            }
           }
         }
 
@@ -175,5 +208,19 @@ final class RouteRequester {
       }
     }
     task.resume()
+  }
+}
+
+// MARK: -- Waypoint Mutation
+
+extension Array where Element == Waypoint {
+  /// By default, each waypoint separates two legs, so the user stops at each
+  /// waypoint. We want the user to navigate from the first coordinate to the
+  /// last coordinate without any stops in between. You can specify more
+  /// intermediate waypoints here if you’d like.
+  func disableWaypointLegSeparation() {
+    for waypoint in dropFirst().dropLast() {
+      waypoint.separatesLegs = false
+    }
   }
 }
