@@ -74,10 +74,10 @@
     {
       "identity" : "osrm-text-instructions.swift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/mattrobmattrob/osrm-text-instructions.swift",
+      "location" : "https://github.com/bikestreets/osrm-text-instructions.swift",
       "state" : {
-        "branch" : "mr/publish.spm.package.spec",
-        "revision" : "cce52a96688be6e7853dc962601eb47c41beef91"
+        "branch" : "bikestreets-fixes",
+        "revision" : "c76396e6bbb24cca986ad53d40355c2d88d5b370"
       }
     },
     {

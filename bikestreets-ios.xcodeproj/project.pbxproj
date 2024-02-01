@@ -45,6 +45,7 @@
 		355256F12A46295600A15512 /* SimplifySwift in Frameworks */ = {isa = PBXBuildFile; productRef = 355256F02A46295600A15512 /* SimplifySwift */; };
 		357FE2FD2A4F754400806743 /* MapboxSearch in Frameworks */ = {isa = PBXBuildFile; productRef = 357FE2FC2A4F754400806743 /* MapboxSearch */; };
 		357FE2FF2A4F754400806743 /* MapboxSearchUI in Frameworks */ = {isa = PBXBuildFile; productRef = 357FE2FE2A4F754400806743 /* MapboxSearchUI */; };
+		359B1DE02B6C552E006E1077 /* OSRMTextInstructions in Frameworks */ = {isa = PBXBuildFile; productRef = 359B1DDF2B6C552E006E1077 /* OSRMTextInstructions */; };
 		359CB5C52AD97FD9004560A2 /* MapboxCoreNavigation in Frameworks */ = {isa = PBXBuildFile; productRef = 359CB5C42AD97FD9004560A2 /* MapboxCoreNavigation */; };
 		359CB5C72AD97FD9004560A2 /* MapboxNavigation in Frameworks */ = {isa = PBXBuildFile; productRef = 359CB5C62AD97FD9004560A2 /* MapboxNavigation */; };
 		359CB5CF2AD9BC53004560A2 /* MapboxCoreNavigation in Frameworks */ = {isa = PBXBuildFile; productRef = 359CB5CE2AD9BC53004560A2 /* MapboxCoreNavigation */; };
@@ -59,7 +60,6 @@
 		35F8C19A2B238C34007AF870 /* Bundle+AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F8C1992B238C34007AF870 /* Bundle+AppVersion.swift */; };
 		35F8C19D2B2396B8007AF870 /* FeedbackEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F8C19C2B2396B8007AF870 /* FeedbackEmailViewController.swift */; };
 		35FE5FF62B486792002A4472 /* GlobalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FE5FF52B486792002A4472 /* GlobalSettings.swift */; };
-		44D9AD452B62D9B700D33DD8 /* OSRMTextInstructions in Frameworks */ = {isa = PBXBuildFile; productRef = 44D9AD442B62D9B700D33DD8 /* OSRMTextInstructions */; };
 		44D9AD472B6C391800D33DD8 /* InstructionGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D9AD462B6C391800D33DD8 /* InstructionGenerator.swift */; };
 		9AA97B2D2AE87E9C00C59426 /* UIView+Subview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA97B2C2AE87E9C00C59426 /* UIView+Subview.swift */; };
 /* End PBXBuildFile section */
@@ -128,7 +128,7 @@
 				357FE2FD2A4F754400806743 /* MapboxSearch in Frameworks */,
 				359CB5CF2AD9BC53004560A2 /* MapboxCoreNavigation in Frameworks */,
 				359CB5C52AD97FD9004560A2 /* MapboxCoreNavigation in Frameworks */,
-				44D9AD452B62D9B700D33DD8 /* OSRMTextInstructions in Frameworks */,
+				359B1DE02B6C552E006E1077 /* OSRMTextInstructions in Frameworks */,
 				35A482A92A37BD4C001035BB /* MapboxDirections in Frameworks */,
 				357FE2FF2A4F754400806743 /* MapboxSearchUI in Frameworks */,
 			);
@@ -362,7 +362,7 @@
 				359CB5C62AD97FD9004560A2 /* MapboxNavigation */,
 				359CB5CE2AD9BC53004560A2 /* MapboxCoreNavigation */,
 				359CB5D02AD9BC53004560A2 /* MapboxNavigation */,
-				44D9AD442B62D9B700D33DD8 /* OSRMTextInstructions */,
+				359B1DDF2B6C552E006E1077 /* OSRMTextInstructions */,
 			);
 			productName = MapboxTester;
 			productReference = 35A482932A37B1E4001035BB /* VAMOS.app */;
@@ -398,7 +398,7 @@
 				355256EF2A46295600A15512 /* XCRemoteSwiftPackageReference "Simplify-Swift" */,
 				357FE2FB2A4F754400806743 /* XCRemoteSwiftPackageReference "search-ios" */,
 				359CB5CD2AD9BC53004560A2 /* XCRemoteSwiftPackageReference "mapbox-navigation-ios" */,
-				44D9AD432B62D9B700D33DD8 /* XCRemoteSwiftPackageReference "osrm-text-instructions" */,
+				359B1DDE2B6C552E006E1077 /* XCRemoteSwiftPackageReference "osrm-text-instructions" */,
 			);
 			productRefGroup = 35A482942A37B1E4001035BB /* Products */;
 			projectDirPath = "";
@@ -691,6 +691,14 @@
 				version = "1.0.0-rc.6";
 			};
 		};
+		359B1DDE2B6C552E006E1077 /* XCRemoteSwiftPackageReference "osrm-text-instructions" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/bikestreets/osrm-text-instructions.swift";
+			requirement = {
+				branch = "bikestreets-fixes";
+				kind = branch;
+			};
+		};
 		359CB5CD2AD9BC53004560A2 /* XCRemoteSwiftPackageReference "mapbox-navigation-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mapbox/mapbox-navigation-ios.git";
@@ -715,14 +723,6 @@
 				version = 2.11.1;
 			};
 		};
-		44D9AD432B62D9B700D33DD8 /* XCRemoteSwiftPackageReference "osrm-text-instructions" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/mattrobmattrob/osrm-text-instructions.swift";
-			requirement = {
-				branch = mr/publish.spm.package.spec;
-				kind = branch;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -740,6 +740,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 357FE2FB2A4F754400806743 /* XCRemoteSwiftPackageReference "search-ios" */;
 			productName = MapboxSearchUI;
+		};
+		359B1DDF2B6C552E006E1077 /* OSRMTextInstructions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 359B1DDE2B6C552E006E1077 /* XCRemoteSwiftPackageReference "osrm-text-instructions" */;
+			productName = OSRMTextInstructions;
 		};
 		359CB5C42AD97FD9004560A2 /* MapboxCoreNavigation */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -768,11 +773,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 35A482A72A37BD4C001035BB /* XCRemoteSwiftPackageReference "mapbox-directions-swift" */;
 			productName = MapboxDirections;
-		};
-		44D9AD442B62D9B700D33DD8 /* OSRMTextInstructions */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 44D9AD432B62D9B700D33DD8 /* XCRemoteSwiftPackageReference "osrm-text-instructions" */;
-			productName = OSRMTextInstructions;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
