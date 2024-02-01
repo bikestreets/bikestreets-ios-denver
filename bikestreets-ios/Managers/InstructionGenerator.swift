@@ -40,7 +40,7 @@ enum InstructionGenerator {
         var modifiedSteps = steps
         
         func getInstructionText(for stepIndex: Int) -> String? {
-          instructionFormatter.string(for: routeResponse.routes?[routeIndex].legs[legIndex].steps[stepIndex], legIndex: 0, numberOfLegs: 1, modifyValueByKey: nil)
+          instructionFormatter.string(for: routeResponse.routes?[routeIndex].legs[legIndex].steps[stepIndex], legIndex: legIndex, numberOfLegs: legs.count, modifyValueByKey: nil)
         }
         
         for (stepIndex, step) in steps.enumerated() {
@@ -65,7 +65,7 @@ enum InstructionGenerator {
       modifiedRoutes[routeIndex]["legs"] = modifiedLegs
     }
     
-    jsonDict["routes"] = [modifiedRoutes.first]
+    jsonDict["routes"] = modifiedRoutes
     
     if let modifiedJsonData = try? JSONSerialization.data(withJSONObject: jsonDict, options: .prettyPrinted) {
       return modifiedJsonData
@@ -231,80 +231,79 @@ enum InstructionGenerator {
 }
 
 enum DistanceConverter {
-    static func convertToEnglishPhrase(from meters: Double) -> String {
-        let metersInAMile = 1609.34
-        let metersInAFeet = 0.3048
+  static func convertToEnglishPhrase(from meters: Double) -> String {
+    let metersMeasurement = Measurement(value: meters, unit: UnitLength.meters)
+    
+    let miles = metersMeasurement.converted(to: UnitLength.miles).value
+    let feet = metersMeasurement.converted(to: UnitLength.feet).value
 
-        let miles = meters / metersInAMile
-        let feet = meters / metersInAFeet
-
-        switch miles {
-        case let x where feet >= 1000:
-            return englishPhraseForMiles(x)
-        case _ where feet >= 600:
-            // Round to nearest 200 feet for distances over 600 feet
-            let roundedFeet = (feet / 200).rounded() * 200
-            return "\(Int(roundedFeet)) feet"
-        case _ where feet >= 200:
-            // Round to nearest 100 feet for distances over 200 feet
-            let roundedFeet = (feet / 100).rounded() * 100
-            return "\(Int(roundedFeet)) feet"
-        default:
-            return "\(Int(feet)) feet"
-        }
+    switch miles {
+    case let x where feet >= 1000:
+        return englishPhraseForMiles(x)
+    case _ where feet >= 600:
+        // Round to nearest 200 feet for distances over 600 feet
+        let roundedFeet = (feet / 200).rounded() * 200
+        return "\(Int(roundedFeet)) feet"
+    case _ where feet >= 200:
+        // Round to nearest 100 feet for distances over 200 feet
+        let roundedFeet = (feet / 100).rounded() * 100
+        return "\(Int(roundedFeet)) feet"
+    default:
+        return "\(Int(feet)) feet"
     }
-
-  private static func englishPhraseForMiles(_ miles: Double) -> String {
-      let wholeMiles = Int(miles)
-      let fraction = miles - Double(wholeMiles)
-      var fractionPhrase = ""
-
-      // Adjust these thresholds as needed for accuracy
-      let quarterThreshold = 0.125
-      let halfThreshold = 0.375
-      let threeQuarterThreshold = 0.7
-
-      if fraction >= threeQuarterThreshold {
-          fractionPhrase = "three-quarters"
-      } else if fraction >= halfThreshold {
-          fractionPhrase = "a half"
-      } else if fraction >= quarterThreshold {
-          fractionPhrase = "a quarter"
-      }
-
-      var phrase = ""
-      if wholeMiles > 0 {
-          phrase = "\(wholeMiles)"
-      }
-
-      if !fractionPhrase.isEmpty {
-          if !phrase.isEmpty {
-              phrase += " and "
-          }
-          phrase += fractionPhrase
-          if wholeMiles == 0 {
-              phrase += " mile" // Singular form if only fractional part exists
-          } else {
-              phrase += " miles" // Plural form if whole miles exist
-          }
-      } else if wholeMiles > 0 {
-          phrase += wholeMiles > 1 ? " miles" : " mile" // Singular/plural form for whole miles
-      }
-
-      if phrase.isEmpty {
-          phrase = "0 miles" // If no miles, then it's 0 miles
-      }
-
-      return phrase
   }
 
-
-  private static func appendOrReplace(_ original: String, with newFragment: String) -> String {
-      if original.isEmpty {
-          return newFragment
-      } else {
-          return original + " and " + newFragment
+  private static func englishPhraseForMiles(_ miles: Double) -> String {
+    let wholeMiles = Int(miles)
+    let fraction = miles - Double(wholeMiles)
+    var fractionPhrase = ""
+    
+    // Adjust these thresholds as needed for accuracy
+    let quarterThreshold = 0.125
+    let halfThreshold = 0.375
+    let threeQuarterThreshold = 0.7
+    
+    if fraction >= threeQuarterThreshold {
+      fractionPhrase = "three-quarters"
+    } else if fraction >= halfThreshold {
+      fractionPhrase = "a half"
+    } else if fraction >= quarterThreshold {
+      fractionPhrase = "a quarter"
+    }
+    
+    var phrase = ""
+    if wholeMiles > 0 {
+      phrase = "\(wholeMiles)"
+    }
+    
+    if !fractionPhrase.isEmpty {
+      if !phrase.isEmpty {
+        phrase += " and "
       }
+      phrase += fractionPhrase
+      if wholeMiles == 0 {
+        phrase += " mile" // Singular form if only fractional part exists
+      } else {
+        phrase += " miles" // Plural form if whole miles exist
+      }
+    } else if wholeMiles > 0 {
+      phrase += wholeMiles > 1 ? " miles" : " mile" // Singular/plural form for whole miles
+    }
+    
+    if phrase.isEmpty {
+      phrase = "0 miles" // If no miles, then it's 0 miles
+    }
+    
+    return phrase
+  }
+  
+  
+  private static func appendOrReplace(_ original: String, with newFragment: String) -> String {
+    if original.isEmpty {
+      return newFragment
+    } else {
+      return original + " and " + newFragment
+    }
   }
 }
 
