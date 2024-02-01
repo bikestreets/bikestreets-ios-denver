@@ -50,7 +50,7 @@ struct CombinedRouteResponse {
   let osrm: RouteResponse
   let mapbox: RouteResponse
 
-  /// An array of `Route` objects based on the choice ot use the OSRM or Mapbox backend.
+  /// An array of `Route` objects based on the choice to use the OSRM or Mapbox backend.
   public var routes: [Route]? {
     // Intentionally just select the first route, adjust in the
     // future if desired.
@@ -131,14 +131,36 @@ final class RouteRequester {
         )
         routeOptions.shapeFormat = .polyline
 
+        // leaving this in, as it is sometimes useful to load previously created RouteResponse JSON from disk with manual tweaks
+        func loadDataFromFile(filePath: String) -> Data? {
+          let url = URL(fileURLWithPath: filePath)
+          
+          do {
+              return try Data(contentsOf: url)
+          } catch {
+              print("Failed to load \(filePath) from bundle:\n\(error)")
+              return nil
+          }
+        }
+          
         let decoder = JSONDecoder()
         decoder.userInfo = [
           .options: routeOptions,
           .credentials: Directions.shared.credentials,
         ]
 
-        let osrmResponse = try decoder.decode(RouteResponse.self, from: data)
-
+        let rawOSRMResponse = try decoder.decode(RouteResponse.self, from: data)
+        let dataWithInstructions = InstructionGenerator.addInstructions(data, routeResponse: rawOSRMResponse)
+        let osrmResponse = try decoder.decode(RouteResponse.self, from: dataWithInstructions ?? data)
+        print("""
+        
+        ==== OSRM ====
+        
+        """)
+        //osrmResponse.printVoiceInstructions()
+        //osrmResponse.printOSRMTextInstructions()
+        //osrmResponse.printJSON()
+        
         // Request Mapbox route
         //
         // Copied from: https://docs.mapbox.com/ios/navigation/examples/custom-server/
@@ -160,6 +182,11 @@ final class RouteRequester {
 
         """)
 
+        print("""
+        
+        ==== MAPBOX ====
+        
+        """)
         switch mode {
         case .mapMatching:
           //
@@ -180,6 +207,10 @@ final class RouteRequester {
               print(error.localizedDescription)
             case .success(let mapboxResponse):
               // Return parsed response
+              //mapboxResponse.printVoiceInstructions()
+              //mapboxResponse.printOSRMTextInstructions()
+              //mapboxResponse.printJSON()
+              
               completion(.success(.init(osrm: osrmResponse, mapbox: mapboxResponse)))
             }
           }
@@ -197,7 +228,9 @@ final class RouteRequester {
             case .failure(let error):
               print(error.localizedDescription)
             case .success(let mapboxResponse):
-              // Return parsed response
+              //mapboxResponse.printVoiceInstructions()
+              //mapboxResponse.printOSRMTextInstructions()
+              //mapboxResponse.printJSON()
               completion(.success(.init(osrm: osrmResponse, mapbox: mapboxResponse)))
             }
           }
@@ -212,6 +245,24 @@ final class RouteRequester {
 }
 
 // MARK: -- Waypoint Mutation
+
+extension RouteResponse {
+  func printJSON() {
+    // pretty print JSON
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = .prettyPrinted
+    do {
+      let jsonData = try encoder.encode(self)
+            
+      if let jsonString = String(data: jsonData, encoding: .utf8) {
+        print(jsonString)
+      }
+    }
+    catch {
+      print("Error encoding RouteResponse: \(error)")
+    }
+  }
+}
 
 extension Array where Element == Waypoint {
   /// By default, each waypoint separates two legs, so the user stops at each

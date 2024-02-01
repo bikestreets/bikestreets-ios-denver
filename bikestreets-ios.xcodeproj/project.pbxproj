@@ -59,6 +59,8 @@
 		35F8C19A2B238C34007AF870 /* Bundle+AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F8C1992B238C34007AF870 /* Bundle+AppVersion.swift */; };
 		35F8C19D2B2396B8007AF870 /* FeedbackEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F8C19C2B2396B8007AF870 /* FeedbackEmailViewController.swift */; };
 		35FE5FF62B486792002A4472 /* GlobalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FE5FF52B486792002A4472 /* GlobalSettings.swift */; };
+		44D9AD452B62D9B700D33DD8 /* OSRMTextInstructions in Frameworks */ = {isa = PBXBuildFile; productRef = 44D9AD442B62D9B700D33DD8 /* OSRMTextInstructions */; };
+		44D9AD472B6C391800D33DD8 /* InstructionGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D9AD462B6C391800D33DD8 /* InstructionGenerator.swift */; };
 		9AA97B2D2AE87E9C00C59426 /* UIView+Subview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA97B2C2AE87E9C00C59426 /* UIView+Subview.swift */; };
 /* End PBXBuildFile section */
 
@@ -110,6 +112,7 @@
 		35FE5FF32B485FE3002A4472 /* Washington Park - Denver, CO.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Washington Park - Denver, CO.gpx"; sourceTree = "<group>"; };
 		35FE5FF42B485FE3002A4472 /* Sloan's Neighborhood - Denver, CO.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Sloan's Neighborhood - Denver, CO.gpx"; sourceTree = "<group>"; };
 		35FE5FF52B486792002A4472 /* GlobalSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSettings.swift; sourceTree = "<group>"; };
+		44D9AD462B6C391800D33DD8 /* InstructionGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionGenerator.swift; sourceTree = "<group>"; };
 		9AA97B2C2AE87E9C00C59426 /* UIView+Subview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Subview.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -125,6 +128,7 @@
 				357FE2FD2A4F754400806743 /* MapboxSearch in Frameworks */,
 				359CB5CF2AD9BC53004560A2 /* MapboxCoreNavigation in Frameworks */,
 				359CB5C52AD97FD9004560A2 /* MapboxCoreNavigation in Frameworks */,
+				44D9AD452B62D9B700D33DD8 /* OSRMTextInstructions in Frameworks */,
 				35A482A92A37BD4C001035BB /* MapboxDirections in Frameworks */,
 				357FE2FF2A4F754400806743 /* MapboxSearchUI in Frameworks */,
 			);
@@ -198,6 +202,7 @@
 				35065CC12A8043E900C7CCAF /* ScreenManager.swift */,
 				35065CAC2A7D9A8F00C7CCAF /* StateManager.swift */,
 				35FE5FF52B486792002A4472 /* GlobalSettings.swift */,
+				44D9AD462B6C391800D33DD8 /* InstructionGenerator.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -357,6 +362,7 @@
 				359CB5C62AD97FD9004560A2 /* MapboxNavigation */,
 				359CB5CE2AD9BC53004560A2 /* MapboxCoreNavigation */,
 				359CB5D02AD9BC53004560A2 /* MapboxNavigation */,
+				44D9AD442B62D9B700D33DD8 /* OSRMTextInstructions */,
 			);
 			productName = MapboxTester;
 			productReference = 35A482932A37B1E4001035BB /* VAMOS.app */;
@@ -392,6 +398,7 @@
 				355256EF2A46295600A15512 /* XCRemoteSwiftPackageReference "Simplify-Swift" */,
 				357FE2FB2A4F754400806743 /* XCRemoteSwiftPackageReference "search-ios" */,
 				359CB5CD2AD9BC53004560A2 /* XCRemoteSwiftPackageReference "mapbox-navigation-ios" */,
+				44D9AD432B62D9B700D33DD8 /* XCRemoteSwiftPackageReference "osrm-text-instructions" */,
 			);
 			productRefGroup = 35A482942A37B1E4001035BB /* Products */;
 			projectDirPath = "";
@@ -450,6 +457,7 @@
 				3516451E2A81D826001EDC99 /* RoutePlaceRowView.swift in Sources */,
 				351645222A827FD9001EDC99 /* UIView+InsetView.swift in Sources */,
 				35065CA12A7D24AD00C7CCAF /* DefaultMapsViewController.swift in Sources */,
+				44D9AD472B6C391800D33DD8 /* InstructionGenerator.swift in Sources */,
 				350BDE462A700E0D00D4DE31 /* BikeStreetsStyles.swift in Sources */,
 				35F8C19D2B2396B8007AF870 /* FeedbackEmailViewController.swift in Sources */,
 				35AEFC122B22D92000234813 /* CLLocationManager+AuthorizationState.swift in Sources */,
@@ -518,7 +526,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -573,7 +581,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -590,7 +598,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 132;
-				DEVELOPMENT_TEAM = JPF6V6763Y;
+				DEVELOPMENT_TEAM = 72TSXKD5M5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "bikestreets-ios/Info.plist";
@@ -620,7 +628,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 132;
-				DEVELOPMENT_TEAM = JPF6V6763Y;
+				DEVELOPMENT_TEAM = 72TSXKD5M5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "bikestreets-ios/Info.plist";
@@ -707,6 +715,14 @@
 				version = 2.11.1;
 			};
 		};
+		44D9AD432B62D9B700D33DD8 /* XCRemoteSwiftPackageReference "osrm-text-instructions" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mattrobmattrob/osrm-text-instructions.swift";
+			requirement = {
+				branch = mr/publish.spm.package.spec;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -752,6 +768,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 35A482A72A37BD4C001035BB /* XCRemoteSwiftPackageReference "mapbox-directions-swift" */;
 			productName = MapboxDirections;
+		};
+		44D9AD442B62D9B700D33DD8 /* OSRMTextInstructions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 44D9AD432B62D9B700D33DD8 /* XCRemoteSwiftPackageReference "osrm-text-instructions" */;
+			productName = OSRMTextInstructions;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

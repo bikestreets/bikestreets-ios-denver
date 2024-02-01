@@ -419,7 +419,7 @@ extension DefaultMapsViewController: StateListener {
       case .mapbox:
         // TODO: (@mattrob) This should be associated with the selected route not the `0` index.
         let indexedRouteResponse = IndexedRouteResponse(
-          routeResponse: routing.response.mapbox,
+          routeResponse: routing.response.osrm,
           routeIndex: 0
         )
 
@@ -435,6 +435,10 @@ extension DefaultMapsViewController: StateListener {
           credentials: NavigationSettings.shared.directions.credentials,
           simulating: .onPoorGPS
         )
+        // these 2 lines allow the route simulation to run faster.
+        // navigationService.simulationMode = .always
+        // navigationService.simulationSpeedMultiplier = 5.0
+        
         let navigationOptions = NavigationOptions(navigationService: navigationService)
         navigationViewController = NavigationViewController(
           for: indexedRouteResponse,
