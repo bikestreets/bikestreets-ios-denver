@@ -20,7 +20,7 @@ struct GlobalSettings {
     case combined
   }
 
-  static let directionsPreviewConfiguration: DirectionsPreviewConfiguration = .combined
+  static let directionsPreviewConfiguration: DirectionsPreviewConfiguration = .osrm
 
   // MARK: -- Live Routing
 

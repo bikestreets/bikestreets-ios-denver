@@ -26,7 +26,7 @@ final class DebugTableViewCell: UITableViewCell {
     // Trigger zoom on load if configuration happens before map is loaded
     // on first configuration.
     mapView.mapboxMap.onNext(event: .mapLoaded) { [weak self] _ in
-      guard let self, let route else { return }
+      guard let self = self, let route = self.route else { return }
       self.zoom(to: route)
     }
   }

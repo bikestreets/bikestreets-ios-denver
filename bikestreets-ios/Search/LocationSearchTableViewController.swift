@@ -145,7 +145,7 @@ extension LocationSearchTableViewController: UISearchResultsUpdating {
 
         let request = MKLocalSearch.Request()
         request.naturalLanguageQuery = searchBarText
-        if let searchRegion = delegate?.mapSearchRegion() {
+        if let searchRegion = self.delegate?.mapSearchRegion() {
           request.region = searchRegion
         }
         let search = MKLocalSearch(request: request)
