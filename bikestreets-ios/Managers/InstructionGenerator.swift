@@ -10,9 +10,13 @@ import MapboxDirections
 import OSRMTextInstructions
 
 struct StepInfo {
-    let step: [String: Any]
-    let stepIndex: Int
-    let stepInstructions: String?
+  let step: [String: Any]
+  let stepIndex: Int
+  let stepInstructions: String?
+
+  var distance: Double {
+    return step["distance"] as? Double ?? 0
+  }
 }
 
 enum InstructionGenerator {
@@ -121,113 +125,159 @@ enum InstructionGenerator {
   }
   
   enum Voice {
-    static func createInstructions(currentStepInfo: StepInfo, nextStepInfo: StepInfo?, nextNextStepInfo: StepInfo?) -> [[String: Any]] {
-      var voiceInstructions: [[String: Any]] = []
+    struct Instruction {
+      let announcement: String?
+      let distanceAlongGeometry: Double
       
-      guard let currentStepDistance = currentStepInfo.step["distance"] as? Double, currentStepDistance > 0 else {
-        return voiceInstructions
-      }
-      
-      func addVoiceInstruction(announcement: String?, distanceAlongGeometry: Double) {
-        guard let announcement else { return }
-        var instruction: [String: Any] = [:]
-        instruction["announcement"] = announcement
-        instruction["ssmlAnnouncement"] = """
-          <speak><amazon:effect name=\"drc\"><prosody rate=\"1.08\">\(announcement)</prosody></amazon:effect></speak>
+      var dictionary: [String: Any]? {
+        guard let announcement = announcement else { return nil }
+        var instructionDict: [String: Any] = [:]
+        instructionDict["announcement"] = announcement
+        instructionDict["ssmlAnnouncement"] = """
+        <speak><amazon:effect name=\"drc\"><prosody rate=\"1.08\">\(announcement)</prosody></amazon:effect></speak>
         """
-        instruction["distanceAlongGeometry"] = distanceAlongGeometry
-        voiceInstructions.append(instruction)
+        instructionDict["distanceAlongGeometry"] = distanceAlongGeometry
+        
+        return instructionDict
       }
-      
-      let nextStepDistance = nextStepInfo?.step["distance"] as? Double
-      
-      let nextStepManeuverType = (nextStepInfo?.step["maneuver"] as? [String: Any])?["type"] as? String
-      let nextNextStepManeuverType = (nextNextStepInfo?.step["maneuver"] as? [String: Any])?["type"] as? String
-      
+    }
+    
+    class DepartStep: StandardStep {
+      let shortStepThresholdForDeparture: Double = 70
+
+      override func createAdvanceInstructions(currentStepInfo: StepInfo, nextStepInfo: StepInfo, nextNextStepInfo: StepInfo?) -> [Instruction] {
+        var instructionList: [Instruction] = []
+        let currentStepDistance = currentStepInfo.distance
+        
+        if currentStepDistance > longStepThreshold {
+          instructionList.append(Instruction(announcement: constructDepartAnnouncement(instructions: currentStepInfo.stepInstructions, distanceString: DistanceConverter.convertToEnglishPhrase(from: currentStepDistance)), distanceAlongGeometry: currentStepDistance))
+          instructionList.append(Instruction(announcement: constructAdvanceAnnouncement(instructions: nextStepInfo.stepInstructions, distanceString: DistanceConverter.convertToEnglishPhrase(from: advanceCueDistanceForLongSteps + instructionSpeakingDistance)), distanceAlongGeometry: advanceCueDistanceForLongSteps))
+          
+        } else if currentStepDistance > advanceStepThreshold {
+          instructionList.append(Instruction(announcement: constructDepartAnnouncement(instructions: currentStepInfo.stepInstructions, distanceString: DistanceConverter.convertToEnglishPhrase(from: currentStepDistance)), distanceAlongGeometry: currentStepDistance))
+          // Mapbox uses something approximate to this to scale the advance distance on the departure step when the departure step is in this intermediate length (between advanceStepThreshold and longStepThreshold).
+          let advanceDistance = (currentStepDistance * 0.5) + 50
+          instructionList.append(Instruction(announcement: constructAdvanceAnnouncement(instructions: nextStepInfo.stepInstructions, distanceString: DistanceConverter.convertToEnglishPhrase(from: advanceDistance + instructionSpeakingDistance)), distanceAlongGeometry: advanceDistance))
+          
+        } else if currentStepDistance > shortStepThresholdForDeparture {
+          instructionList.append(Instruction(announcement: constructLookAheadAnnouncement(firstInstructions: currentStepInfo.stepInstructions, nextInstructions: nextStepInfo.stepInstructions), distanceAlongGeometry: currentStepDistance))
+        }
+        
+        return instructionList
+      }
+    }
+    
+    class StandardStep {
       let longStepThreshold: Double = 500
-      let shortStepThreshold: Double = 100
       let advanceStepThreshold: Double = 150
+      let shortStepThreshold: Double = 100
       let instructionSpeakingDistance: Double = 20
       let maxCueDistanceForPrimaryInstruction: Double = 50
       let maxCueDistanceForArrival: Double = 5
       let advanceCueDistanceForLongSteps: Double = 283
-      let arrival = "arrive"
-      let lookAheadArrivalInstruction = "you will arrive at your destination"
       
-      // initial instruction for first step & long steps
-      if currentStepInfo.stepIndex == 0 {
+      func createAdvanceInstructions(currentStepInfo: StepInfo, nextStepInfo: StepInfo, nextNextStepInfo: StepInfo?) -> [Instruction] {
+        var instructionList: [Instruction] = []
+        let currentStepDistance = currentStepInfo.distance
+        
         if currentStepDistance > longStepThreshold {
-          addVoiceInstruction(announcement: constructDepartAnnouncement(instructions: currentStepInfo.stepInstructions, distanceString: DistanceConverter.convertToEnglishPhrase(from: currentStepDistance)), distanceAlongGeometry: currentStepDistance)
-        } else {
-          addVoiceInstruction(announcement: constructLookAheadAnnouncement(firstInstructions: currentStepInfo.stepInstructions, nextInstructions: nextStepInfo?.stepInstructions), distanceAlongGeometry: currentStepDistance)
+          instructionList.append(Instruction(announcement: constructContinueAnnouncement(currentStepName: currentStepInfo.step["name"] as? String, distanceString: DistanceConverter.convertToEnglishPhrase(from: currentStepDistance - instructionSpeakingDistance)), distanceAlongGeometry: currentStepDistance - instructionSpeakingDistance))
+          instructionList.append(Instruction(announcement: constructAdvanceAnnouncement(instructions: nextStepInfo.stepInstructions, distanceString: DistanceConverter.convertToEnglishPhrase(from: advanceCueDistanceForLongSteps + instructionSpeakingDistance)), distanceAlongGeometry: advanceCueDistanceForLongSteps))
+          
+        } else if currentStepDistance > advanceStepThreshold {
+          let advanceDistance = currentStepDistance - instructionSpeakingDistance
+          instructionList.append(Instruction(announcement: constructAdvanceAnnouncement(instructions: nextStepInfo.stepInstructions, distanceString: DistanceConverter.convertToEnglishPhrase(from: advanceDistance + instructionSpeakingDistance)), distanceAlongGeometry: advanceDistance))
         }
-      } else if currentStepDistance > longStepThreshold {
-        addVoiceInstruction(announcement: constructContinueAnnouncement(currentStepName: currentStepInfo.step["name"] as? String, distanceString: DistanceConverter.convertToEnglishPhrase(from: currentStepDistance - instructionSpeakingDistance)), distanceAlongGeometry: currentStepDistance - instructionSpeakingDistance)
+        
+        return instructionList
       }
       
-      // advance instruction
-      var advanceDistanceAlongGeometry: Double = 0
-      if currentStepDistance > longStepThreshold {
-        advanceDistanceAlongGeometry = advanceCueDistanceForLongSteps
-      } else if currentStepDistance > advanceStepThreshold {
-        advanceDistanceAlongGeometry = currentStepDistance - instructionSpeakingDistance
-      }
-      if advanceDistanceAlongGeometry > 0 {
-        addVoiceInstruction(announcement: constructAdvanceAnnouncement(instructions: nextStepInfo?.stepInstructions, distanceString: DistanceConverter.convertToEnglishPhrase(from: advanceDistanceAlongGeometry + instructionSpeakingDistance)), distanceAlongGeometry: advanceDistanceAlongGeometry)
-      }
-      
-      // primary instruction
-      let nextNextStepInstructions = (nextNextStepManeuverType == arrival) ? lookAheadArrivalInstruction : nextNextStepInfo?.stepInstructions
-      let primaryCueAheadDistance: Double = min(currentStepDistance, (nextStepManeuverType == arrival) ? maxCueDistanceForArrival: maxCueDistanceForPrimaryInstruction)
-      
-      if let nextStepInstructions = nextStepInfo?.stepInstructions {
-        if let nextStepDistance, nextStepDistance < shortStepThreshold {
-          addVoiceInstruction(announcement: constructLookAheadAnnouncement(firstInstructions: nextStepInfo?.stepInstructions, nextInstructions: nextNextStepInstructions), distanceAlongGeometry: primaryCueAheadDistance)
+      func createPrimaryInstruction(currentStepInfo: StepInfo, nextStepInfo: StepInfo, nextNextStepInfo: StepInfo?) -> Instruction? {
+        guard let nextStepInstructions = nextStepInfo.stepInstructions else { return nil }
+        let currentStepDistance = currentStepInfo.distance
+        let nextStepDistance = nextStepInfo.distance
+
+        let nextStepManeuverType = (nextStepInfo.step["maneuver"] as? [String: Any])?["type"] as? String
+        let nextNextStepManeuverType = (nextNextStepInfo?.step["maneuver"] as? [String: Any])?["type"] as? String
+        
+        let arrival = "arrive"
+        let lookAheadArrivalInstruction = "you will arrive at your destination"
+        
+        let nextNextStepInstructions = (nextNextStepManeuverType == arrival) ? lookAheadArrivalInstruction : nextNextStepInfo?.stepInstructions
+        let primaryCueAheadDistance: Double = min(currentStepDistance, (nextStepManeuverType == arrival) ? maxCueDistanceForArrival: maxCueDistanceForPrimaryInstruction)
+        
+        if nextStepDistance < shortStepThreshold {
+          return Instruction(announcement: constructLookAheadAnnouncement(firstInstructions: nextStepInfo.stepInstructions, nextInstructions: nextNextStepInstructions), distanceAlongGeometry: primaryCueAheadDistance)
         } else {
-          addVoiceInstruction(announcement: nextStepInstructions, distanceAlongGeometry: primaryCueAheadDistance)
+          return Instruction(announcement: nextStepInstructions, distanceAlongGeometry: primaryCueAheadDistance)
         }
       }
+    }
+    
+    static func createInstructions(currentStepInfo: StepInfo, nextStepInfo: StepInfo?, nextNextStepInfo: StepInfo?) -> [[String: Any]] {
+      var voiceInstructions: [[String: Any]] = []
+      let currentStepDistance = currentStepInfo.distance
+      
+      guard currentStepDistance > 0, let nextStepInfo else {
+        return voiceInstructions
+      }
+      
+      func addVoiceInstruction(_ instruction: Instruction) {
+        guard let dictionary = instruction.dictionary else { return }
+        voiceInstructions.append(dictionary)
+      }
+      
+      var step: StandardStep
+      if currentStepInfo.stepIndex == 0 {
+        step = DepartStep()
+      } else {
+        step = StandardStep()
+      }
+      let advanceInstructions = step.createAdvanceInstructions(currentStepInfo: currentStepInfo, nextStepInfo: nextStepInfo, nextNextStepInfo: nextNextStepInfo)
+      advanceInstructions.forEach({ addVoiceInstruction($0) })
+      if let primaryInstruction = step.createPrimaryInstruction(currentStepInfo: currentStepInfo, nextStepInfo: nextStepInfo, nextNextStepInfo: nextNextStepInfo) {
+        addVoiceInstruction(primaryInstruction)
+      }
+
       
       return voiceInstructions
     }
-  }
-  
-  
-  private static func constructDepartAnnouncement(instructions: String?, distanceString: String) -> String {
-    var departAnnouncement = ""
-    if let instructions = instructions {
-      departAnnouncement += "\(instructions) for \(distanceString)"
-    }
-    return departAnnouncement
-  }
-  
-  private static func constructContinueAnnouncement(currentStepName: String?, distanceString: String) -> String {
-    var continueAnnouncement = "Continue"
-    if let currentStepName = currentStepName {
-      continueAnnouncement += " on \(currentStepName) for \(distanceString)"
-    }
-    return continueAnnouncement
-  }
-  
-  private static func constructAdvanceAnnouncement(instructions: String?, distanceString: String) -> String {
-    var announcement = ""
-    if let instructions {
-      announcement = "In \(distanceString), \(instructions)"
-    }
-    return announcement
-  }
-  
-  private static func constructLookAheadAnnouncement(firstInstructions: String?, nextInstructions: String?) -> String {
-    var announcement = ""
-    if let firstInstructions {
-      announcement = firstInstructions
-      if let nextInstructions {
-        announcement += ", then \(nextInstructions)"
+    
+    private static func constructDepartAnnouncement(instructions: String?, distanceString: String) -> String {
+      var departAnnouncement = ""
+      if let instructions = instructions {
+        departAnnouncement += "\(instructions) for \(distanceString)"
       }
+      return departAnnouncement
     }
-    return announcement
+    
+    private static func constructContinueAnnouncement(currentStepName: String?, distanceString: String) -> String {
+      var continueAnnouncement = "Continue"
+      if let currentStepName = currentStepName {
+        continueAnnouncement += " on \(currentStepName) for \(distanceString)"
+      }
+      return continueAnnouncement
+    }
+    
+    private static func constructAdvanceAnnouncement(instructions: String?, distanceString: String) -> String {
+      var announcement = ""
+      if let instructions {
+        announcement = "In \(distanceString), \(instructions)"
+      }
+      return announcement
+    }
+    
+    private static func constructLookAheadAnnouncement(firstInstructions: String?, nextInstructions: String?) -> String {
+      var announcement = ""
+      if let firstInstructions {
+        announcement = firstInstructions
+        if let nextInstructions {
+          announcement += ", then \(nextInstructions)"
+        }
+      }
+      return announcement
+    }
   }
-  
 }
 
 enum DistanceConverter {
@@ -310,8 +360,12 @@ enum DistanceConverter {
 extension RouteResponse {
   func printOSRMTextInstructions() {
     // for each RouteStep, print text instruction generated by osrm-text-instructions
+    guard let routes = self.routes else { return }
+    
     let instructionFormatter = OSRMInstructionFormatter(version: "v5")
-    if let route = self.routes?[0] {
+    
+    for (routeIndex, route) in routes.enumerated() {
+      print("Route \(routeIndex)")
       for leg in route.legs {
         for step in leg.steps {
           if let formattedString = instructionFormatter.string(for: step, legIndex: 0, numberOfLegs: 1, modifyValueByKey: nil) {
@@ -324,13 +378,46 @@ extension RouteResponse {
   
   func printVoiceInstructions() {
     // print voice instructions grouped by RouteStep including distance and distanceAlongStep
-    if let route = self.routes?[0] {
+    guard let routes = self.routes else { return }
+    
+    for (routeIndex, route) in routes.enumerated() {
+      print("Route \(routeIndex)")
       for leg in route.legs {
         for (stepIndex, step) in leg.steps.enumerated() {
           print(String(format:"%-11d %-10.2f", stepIndex, step.distance))
           if let voiceInstructions = step.instructionsSpokenAlongStep {
             for (voiceInstructionsIndex, voiceInstruction) in voiceInstructions.enumerated() {
-              print(String(format:"%-5d %-5d %-10.2f %s", stepIndex, voiceInstructionsIndex, voiceInstruction.distanceAlongStep, (voiceInstruction.text as NSString).utf8String!))
+              print(String(format:"%-5d %-5d %-10.2f %@", stepIndex, voiceInstructionsIndex, voiceInstruction.distanceAlongStep, voiceInstruction.text))
+            }
+          }
+          print()
+        }
+      }
+    }
+  }
+  
+  func printBannerInstructions() {
+    // print banner instructions grouped by RouteStep
+    guard let routes = self.routes else { return }
+    
+    func printBannerInstruction(instructionType: String, instruction: VisualInstruction?) {
+      guard let instruction else { return }
+      print(String(format: "%@ %@ %@ %@", instructionType, instruction.maneuverType?.rawValue ?? ""
+                   , instruction.maneuverDirection?.rawValue ?? "", instruction.text ?? ""))
+    }
+    
+    for (routeIndex, route) in routes.enumerated() {
+      print("Route \(routeIndex)")
+      for leg in route.legs {
+        for (stepIndex, step) in leg.steps.enumerated() {
+          print(String(format:"%-11d %-10.2f %-10.2f", stepIndex, step.distance, step.expectedTravelTime))
+          if let bannerInstructions = step.instructionsDisplayedAlongStep {
+            for (bannerInstructionsIndex, bannerInstruction) in bannerInstructions.enumerated() {
+              print(String(format:"%-5d %-5d %-10.2f", stepIndex, bannerInstructionsIndex, bannerInstruction.distanceAlongStep))
+              printBannerInstruction(instructionType: "Primary", instruction: bannerInstruction.primaryInstruction)
+              printBannerInstruction(instructionType: "Secondary", instruction: bannerInstruction.secondaryInstruction)
+              printBannerInstruction(instructionType: "Tertiary", instruction: bannerInstruction.tertiaryInstruction)
+              printBannerInstruction(instructionType: "Quaternary", instruction: bannerInstruction.quaternaryInstruction)
             }
           }
           print()
