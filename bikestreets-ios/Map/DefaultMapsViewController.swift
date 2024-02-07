@@ -435,9 +435,11 @@ extension DefaultMapsViewController: StateListener {
           credentials: NavigationSettings.shared.directions.credentials,
           simulating: .onPoorGPS
         )
-        // these 2 lines allow the route simulation to run faster.
-        // navigationService.simulationMode = .always
-        // navigationService.simulationSpeedMultiplier = 5.0
+        #if targetEnvironment(simulator)
+          // these 2 lines allow the route simulation to run faster.
+          navigationService.simulationMode = .always
+          navigationService.simulationSpeedMultiplier = 5.0
+        #endif
         
         let navigationOptions = NavigationOptions(navigationService: navigationService)
         navigationViewController = NavigationViewController(

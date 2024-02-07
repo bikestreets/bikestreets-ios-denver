@@ -10,12 +10,13 @@ import MapboxDirections
 import OSRMTextInstructions
 
 struct StepInfo {
+
   private let arrival = "arrive"
   private let futureArrivalVoiceInstruction = "You will arrive at your destination"
   private let arrivalVoiceInstruction = "You have arrived at your destination"
   private let futureArrivalBannerInstruction = "You will arrive"
   private let arrivalBannerInstruction = "You have arrived"
-  
+ 
   let step: [String: Any]
   let stepIndex: Int
   let stepInstructions: String?
@@ -23,7 +24,7 @@ struct StepInfo {
   var distance: Double {
     return step["distance"] as? Double ?? 0
   }
-  
+
   var maneuverType: String? {
     return (step["maneuver"] as? [String: Any])?["type"] as? String
   }
@@ -289,6 +290,7 @@ enum InstructionGenerator {
         guard let dictionary = instruction.dictionary else { return }
         voiceInstructions.append(dictionary)
       }
+
       
       var step: StandardStep
       if currentStepInfo.stepIndex == 0 {
