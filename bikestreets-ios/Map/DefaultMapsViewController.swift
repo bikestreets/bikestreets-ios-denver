@@ -450,7 +450,7 @@ extension DefaultMapsViewController: StateListener {
         navigationViewController?.delegate = self
         /// Disable "Report Problem" sheet that shows while navigating.
         navigationViewController?.showsReportFeedback = false
-        navigationViewController?.showsEndOfRouteFeedback = true
+        navigationViewController?.showsEndOfRouteFeedback = false
 
         sheetManager.dismissAllSheets(animated: false) {
           self.present(self.navigationViewController!, animated: true, completion: nil)
