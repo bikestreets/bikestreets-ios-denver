@@ -160,8 +160,10 @@ extension LocationSearchTableViewController: UISearchResultsUpdating {
               case .newDestination, .newOrigin: return [.currentLocation]
               }
             }()
-
-            self.matchingItems = initialLocations + response.mapItems.map {
+            
+            self.matchingItems = initialLocations + response.mapItems.filter {
+              $0.isNearby()
+            }.map {
               .mapItem($0)
             }
             self.tableView.reloadData()
@@ -174,5 +176,24 @@ extension LocationSearchTableViewController: UISearchResultsUpdating {
 
     // Wait 0.25 seconds before executing search to debounce typing
     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.25, execute: task)
+  }
+}
+
+extension MKMapItem {
+  func isNearby() -> Bool {
+    return LocationSearchFilter.isNearby(mapItem: self)
+  }
+}
+
+class LocationSearchFilter {
+  // Union Station, Denver, CO
+  static private let center = CLLocation(latitude: 39.752928, longitude: -104.999826)
+  static private let maxDistanceInMiles: Double = 14
+  static private let maxDistanceInMeters = Measurement(value: maxDistanceInMiles, unit: UnitLength.miles).converted(to: UnitLength.meters).value
+  
+  static func isNearby(mapItem: MKMapItem) -> Bool {
+    let mapItemLocation = CLLocation(latitude: mapItem.placemark.coordinate.latitude, longitude: mapItem.placemark.coordinate.longitude)
+    let distance = center.distance(from: mapItemLocation)
+    return distance <= maxDistanceInMeters
   }
 }
