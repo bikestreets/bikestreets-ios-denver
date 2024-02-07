@@ -162,7 +162,7 @@ extension LocationSearchTableViewController: UISearchResultsUpdating {
             }()
             
             self.matchingItems = initialLocations + response.mapItems.filter {
-              LocationSearchFilter.isNearby(mapItem: $0)
+              $0.isNearby()
             }.map {
               .mapItem($0)
             }
@@ -176,6 +176,12 @@ extension LocationSearchTableViewController: UISearchResultsUpdating {
 
     // Wait 0.25 seconds before executing search to debounce typing
     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.25, execute: task)
+  }
+}
+
+extension MKMapItem {
+  func isNearby() -> Bool {
+    return LocationSearchFilter.isNearby(mapItem: self)
   }
 }
 
