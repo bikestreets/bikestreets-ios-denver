@@ -24,6 +24,7 @@ final class RoutePlaceRowView: UIStackView {
     let fromName = UILabel()
     fromName.text = originName
     fromName.font = .preferredFont(forTextStyle: .body)
+    fromName.textColor = .systemBlue
 
     let toTitle = UILabel()
     toTitle.text = "To"
@@ -32,6 +33,7 @@ final class RoutePlaceRowView: UIStackView {
     let toName = UILabel()
     toName.text = destinationName
     toName.font = .preferredFont(forTextStyle: .body)
+    toName.textColor = .systemBlue
 
     [
       fromTitle,
