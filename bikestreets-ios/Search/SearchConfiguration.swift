@@ -23,8 +23,8 @@ enum SearchConfiguration {
 
   var searchBarPlaceholder: String {
     switch self {
-    case .initialDestination, .newDestination: return "Find Destination"
-    case .newOrigin: return "Find Starting Point"
+    case .initialDestination, .newDestination: return "Search for a Destination"
+    case .newOrigin: return "Search for a Starting Point"
     }
   }
 }

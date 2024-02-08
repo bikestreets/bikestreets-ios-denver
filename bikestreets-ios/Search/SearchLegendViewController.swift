@@ -39,7 +39,7 @@ final class SearchLegendViewController: UIViewController {
     searchBar.delegate = self
 
     let legendTitleLabel = UILabel()
-    legendTitleLabel.text = "Segment Types"
+    legendTitleLabel.text = "Legend"
     legendTitleLabel.font = .preferredFont(forTextStyle: .headline, weight: .bold)
 
     let bars: [UIView] = MapLayerSpec.allCases.map(createLegendBar(_:))
