@@ -171,7 +171,7 @@ enum InstructionGenerator {
         if (name.isEmpty || stepInfo.isArrival), let instructionText {
           instructionComponent["text"] = instructionText
         } else {
-          instructionComponent["text"] = name
+          instructionComponent["text"] = name.capitalizedSentence
         }
       }
       
@@ -488,6 +488,14 @@ extension RouteResponse {
         }
       }
     }
+  }
+}
+
+extension String {
+  var capitalizedSentence: String {
+    let firstLetter = self.prefix(1).uppercased()
+    let remainingLetters = self.dropFirst().lowercased()
+    return firstLetter + remainingLetters
   }
 }
 
