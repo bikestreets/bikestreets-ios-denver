@@ -51,7 +51,7 @@ extension UISheetPresentationController.Detent {
   // MARK: -- Tiny
 
   private static let _tiny: UISheetPresentationController.Detent = custom(identifier: .tiny, resolver: { context in
-    100
+    110
   })
 
   static func tiny() -> UISheetPresentationController.Detent {
