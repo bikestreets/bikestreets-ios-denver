@@ -521,8 +521,10 @@ extension DefaultMapsViewController: SizeTrackingListener {
     // Update map camera.
     syncCameraState(bottomInset: frame.height)
 
-    // Update Mapbox ornaments.
-    let mapboxOrnamentYInset = frame.height - 8
+    // Update Mapbox ornaments. Mapbox insets the ornaments by the safe
+    // area so include that in our ornament offset calculations.
+    let safeAreaBottomPadding = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
+    let mapboxOrnamentYInset = frame.height + 8 - safeAreaBottomPadding
     mapView.ornaments.options.logo.margins = .init(x: 8.0, y: mapboxOrnamentYInset)
     mapView.ornaments.options.compass.margins = .init(x: 8.0, y: mapboxOrnamentYInset)
   }
