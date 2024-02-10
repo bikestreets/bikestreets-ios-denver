@@ -33,6 +33,7 @@ final class DefaultMapsViewController: MapsViewController {
   private let stateManager = StateManager()
   private let mapCameraManager = MapCameraManager()
   private let screenManager: ScreenManager
+  private var viewportTransitionFailureCount = 0
 
   /// Camera bottom inset based on the presented sheet height.
   private var cameraBottomInset: CGFloat {
@@ -738,6 +739,27 @@ extension DefaultMapsViewController: ViewportStatusObserver {
     to toStatus: MapboxMaps.ViewportStatus,
     reason: MapboxMaps.ViewportStatusChangeReason
   ) {
+    // on failure to transition, try one more time to transition to the attempted state
+    switch reason {
+    case .transitionFailed:
+      viewportTransitionFailureCount += 1
+      if viewportTransitionFailureCount <= 1 {
+        switch fromStatus {
+        case .transition(_, let state):
+          mapView.viewport.transition(to: state)
+          return
+        default:
+          break
+        }
+      } else {
+        // retry failed -> reset the counter and proceed
+        viewportTransitionFailureCount = 0
+      }
+    case .transitionSucceeded:
+      viewportTransitionFailureCount = 0
+    default: break
+    }
+
     switch toStatus {
     case .idle:
       mapCameraManager.toIdle()
