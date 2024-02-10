@@ -49,14 +49,14 @@ final class StateManager {
 
   struct DirectionsPreview {
     let request: RouteRequest
-    let response: CombinedRouteResponse
-    let selectedRoute: CombinedRoute
+    let response: CustomRouteResponse
+    let selectedRoute: Route
   }
 
   struct Routing {
     let request: RouteRequest
-    let response: CombinedRouteResponse
-    let selectedRoute: CombinedRoute
+    let response: CustomRouteResponse
+    let selectedRoute: Route
   }
 
   enum State {

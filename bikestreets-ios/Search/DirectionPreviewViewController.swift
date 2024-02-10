@@ -188,7 +188,7 @@ extension DirectionPreviewViewController: RouteSelectable {
       stateManager.state = .routing(routing: .init(
         request: preview.request,
         response: preview.response,
-        selectedRoute: .init(osrm: osrmRoute, mapbox: route)
+        selectedRoute: osrmRoute
       ))
     default:
       fatalError("State must be preview directions when route is selected")

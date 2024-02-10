@@ -145,7 +145,7 @@ final class DefaultMapsViewController: MapsViewController {
   // MARK: - Map Movement
 
   // TODO: Make this smarter using approach from https://docs.mapbox.com/ios/maps/examples/line-gradient/
-  private func updateMapAnnotations(combinedRoute: CombinedRoute?) {
+  private func updateMapAnnotations(route: MapboxDirections.Route?) {
     let geoJSONDataSourceIdentifier = "current-route"
     let geoJSONDataSourceIdentifierOSRM = "current-route-osrm"
 
@@ -199,37 +199,14 @@ final class DefaultMapsViewController: MapsViewController {
       geoJSONDataSourceIdentifierOSRM
     ].forEach(removeLayer(withId:))
 
-    guard let combinedRoute else { return }
+    guard let route else { return }
 
-    switch GlobalSettings.directionsPreviewConfiguration {
-    case .combined:
-      addLayer(
-        withIdentifier: geoJSONDataSourceIdentifier,
-        color: .vamosYellow,
-        route: combinedRoute.mapbox,
-        layerPosition: .below(MapLayerSpec.bottomLayerIdentifier)
-      )
-      addLayer(
-        withIdentifier: geoJSONDataSourceIdentifierOSRM,
-        color: .magenta.withAlphaComponent(0.8),
-        route: combinedRoute.osrm,
-        layerPosition: .below(geoJSONDataSourceIdentifier)
-      )
-    case .osrm:
-      addLayer(
-        withIdentifier: geoJSONDataSourceIdentifierOSRM,
-        color: .vamosYellow,
-        route: combinedRoute.osrm,
-        layerPosition: .below(MapLayerSpec.bottomLayerIdentifier)
-      )
-    case .mapbox:
-      addLayer(
-        withIdentifier: geoJSONDataSourceIdentifier,
-        color: .vamosYellow,
-        route: combinedRoute.mapbox,
-        layerPosition: .below(MapLayerSpec.bottomLayerIdentifier)
-      )
-    }
+    addLayer(
+      withIdentifier: geoJSONDataSourceIdentifierOSRM,
+      color: .vamosYellow,
+      route: route,
+      layerPosition: .below(MapLayerSpec.bottomLayerIdentifier)
+    )
   }
 
   // MARK: - State Handling
@@ -256,14 +233,13 @@ final class DefaultMapsViewController: MapsViewController {
       switch result {
       case .success(let result):
         DispatchQueue.main.async {
-          if let osrmRoute = result.osrm.routes?.first,
-             let mapboxRoute = result.mapbox.routes?.first {
+          if let osrmRoute = result.routes?.first {
             // On initial state update, assume first route is selected.
             self.stateManager.state = .previewDirections(
               preview: .init(
                 request: request,
                 response: result,
-                selectedRoute: .init(osrm: osrmRoute, mapbox: mapboxRoute)
+                selectedRoute: osrmRoute
               )
             )
           } else {
@@ -361,7 +337,7 @@ extension DefaultMapsViewController: StateListener {
       }
 
       // Clean any annotations.
-      updateMapAnnotations(combinedRoute: nil)
+      updateMapAnnotations(route: nil)
     case .searchDestination:
       let searchViewController = SearchViewController(
         configuration: .initialDestination,
@@ -384,7 +360,7 @@ extension DefaultMapsViewController: StateListener {
       // sheetNavigationController.sheetPresentationController?.selectedDetentIdentifier = UISheetPresentationController.Detent.small().identifier
       requestDirections(request: request)
     case .previewDirections(let preview):
-      updateMapAnnotations(combinedRoute: preview.selectedRoute)
+      updateMapAnnotations(route: preview.selectedRoute)
     case .updateDestination(let preview):
       let searchViewController = SearchViewController(
         configuration: .newDestination,
@@ -472,7 +448,7 @@ extension DefaultMapsViewController: StateListener {
         }
 
         // Update route polyline display.
-        updateMapAnnotations(combinedRoute: routing.selectedRoute)
+        updateMapAnnotations(route: routing.selectedRoute)
       }
     case .routingFeedback(let feedback):
       // Can only present mail controller when sheets are dismissed.
@@ -674,14 +650,7 @@ extension DefaultMapsViewController: MapCameraStateListener {
       // TODO: Add handling for "possible routes" vs. just the selected route.
       // preview.response.routes.map(\.geometry.coordinates).flatMap { $0 }
       let coordinates: [CLLocationCoordinate2D] = {
-        switch GlobalSettings.directionsPreviewConfiguration {
-        case .combined:
-          return route.osrmCoordinates + route.mapboxCoordinates
-        case .osrm:
-          return route.osrmCoordinates
-        case .mapbox:
-          return route.mapboxCoordinates
-        }
+        return route.coordinates
       }()
 
       newState = mapView.viewport.makeOverviewViewportState(
