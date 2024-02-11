@@ -9,19 +9,6 @@ import Foundation
 
 struct GlobalSettings {
 
-  // MARK: -- Directions Preview
-
-  enum DirectionsPreviewConfiguration {
-    /// Show just the Mapbox Directions result on the directions preview screen.
-    case mapbox
-    /// Show just the OSRM result on the directions preview screen.
-    case osrm
-    /// Show both the OSRM and Mapbox result on the directions preview screen.
-    case combined
-  }
-
-  static let directionsPreviewConfiguration: DirectionsPreviewConfiguration = .osrm
-
   // MARK: -- Live Routing
 
   enum LiveRoutingConfiguration {

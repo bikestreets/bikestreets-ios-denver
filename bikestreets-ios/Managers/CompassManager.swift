@@ -27,8 +27,8 @@ final class MapCameraManager {
     case routing
     case routingIdle
     /// Not oriented to anything. User could be free-scrolling the map.
-    case showRoute(route: CombinedRoute)
-    case showRouteIdle(route: CombinedRoute)
+    case showRoute(route: Route)
+    case showRouteIdle(route: Route)
   }
 
   var state: State = .showDenver {
