@@ -469,7 +469,7 @@ extension DefaultMapsViewController: StateListener {
           .searchDestination,
           .requestingRoutes,
           .routingFeedback:
-        return .followUserPosition
+        return .followUserHeading
       case .previewDirections(let preview),
           .updateOrigin(let preview),
           .updateDestination(let preview):
