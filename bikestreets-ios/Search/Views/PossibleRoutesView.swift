@@ -10,8 +10,8 @@ import MapboxDirections
 import UIKit
 
 protocol RouteSelectable: AnyObject {
-  func didSelect(route: MapboxDirections.Route)
-  func didStart(route: MapboxDirections.Route)
+  func didSelect(routeIndex: Int)
+  func didStart(routeIndex: Int)
 }
 
 final class PossibleRoutesView: UIStackView {
@@ -126,12 +126,12 @@ final class PossibleRoutesView: UIStackView {
     guard let routeIndex = recognizer.view?.tag else {
       return
     }
-    delegate?.didSelect(route: routes[routeIndex])
+    delegate?.didSelect(routeIndex: routeIndex)
   }
 
   @objc
   private func didTapRouteGo(sender: UIButton) {
     let routeIndex = sender.tag
-    delegate?.didStart(route: routes[routeIndex])
+    delegate?.didStart(routeIndex: routeIndex)
   }
 }
