@@ -25,6 +25,14 @@ final class PossibleRoutesView: UIStackView {
     formatter.numberFormatter.maximumFractionDigits = 2
     return formatter
   }()
+  
+  private let expectedTimeFormatter: DateComponentsFormatter = {
+    let formatter = DateComponentsFormatter()
+    formatter.unitsStyle = .short
+    formatter.allowedUnits = [.hour, .minute]
+    formatter.zeroFormattingBehavior = [.dropLeading, .dropTrailing]
+    return formatter
+  }()
 
   init(routes: [MapboxDirections.Route]) {
     self.routes = routes
@@ -53,10 +61,22 @@ final class PossibleRoutesView: UIStackView {
     }
 
     for (index, route) in routes.enumerated() {
+      let expectedTimeLabel = UILabel()
+      expectedTimeLabel.text = expectedTimeString(for: route.expectedTravelTime)
+      expectedTimeLabel.font = .preferredFont(forTextStyle: .title3, weight: .bold)
+      
       let distanceLabel = UILabel()
       distanceLabel.text = distanceString(for: route.distance)
       distanceLabel.font = .preferredFont(forTextStyle: .callout)
 
+      let routeDetailsStack = UIStackView(arrangedSubviews: [
+        expectedTimeLabel,
+        distanceLabel
+      ])
+      routeDetailsStack.axis = .vertical
+      routeDetailsStack.spacing = 9
+      routeDetailsStack.alignment = .leading
+      
       let leftInsetView = UIView()
       
       let spacerView = UIView()
@@ -75,7 +95,7 @@ final class PossibleRoutesView: UIStackView {
       let rightInsetView = UIView()
 
       [
-        distanceLabel,
+        routeDetailsStack,
         leftInsetView,
         spacerView,
         button,
@@ -93,7 +113,7 @@ final class PossibleRoutesView: UIStackView {
 
       let routeStack = UIStackView(arrangedSubviews: [
         leftInsetView,
-        distanceLabel,
+        routeDetailsStack,
         spacerView,
         button,
         rightInsetView
@@ -117,6 +137,11 @@ final class PossibleRoutesView: UIStackView {
   private func distanceString(for distance: Double) -> String {
     let measurement = Measurement(value: distance, unit: UnitLength.meters)
     return distanceFormatter.string(from: measurement)
+  }
+  
+  private func expectedTimeString(for expectedTime: TimeInterval) -> String {
+    guard let formattedValue = expectedTimeFormatter.string(from: expectedTime) else { return "" }
+    return formattedValue
   }
 
   // MARK: - Tap Handling
