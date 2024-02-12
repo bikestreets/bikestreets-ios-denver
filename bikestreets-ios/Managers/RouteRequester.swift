@@ -40,9 +40,7 @@ struct CustomRouteResponse {
   let osrm: RouteResponse
 
   public var routes: [Route]? {
-    // Intentionally just select the first route, adjust in the
-    // future if desired.
-    return osrm.routes?.first.map { [$0] }
+    return osrm.routes
   }
 }
 
