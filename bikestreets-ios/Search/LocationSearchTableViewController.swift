@@ -51,6 +51,8 @@ final class LocationSearchTableViewController: UITableViewController {
   /// Exists to debounce many search requests while typing. This helps avoid API overuse errors from Apple.
   private var searchTask: DispatchWorkItem?
   private var matchingItems: [TableItem]
+  private var initialMatchingItems: [TableItem]
+  private var isSearchActive: Bool = false
 
   weak var delegate: LocationSearchDelegate?
 
@@ -59,12 +61,14 @@ final class LocationSearchTableViewController: UITableViewController {
   init(configuration: SearchConfiguration) {
     self.configuration = configuration
 
-    self.matchingItems = {
+    self.initialMatchingItems = {
       switch configuration {
-      case .initialDestination: return []
-      case .newDestination, .newOrigin: return [.currentLocation]
+      case .initialDestination, .newDestination: return RecentLocationManager.loadRecentLocations().map { .mapItem($0) }
+      case .newOrigin: return [.currentLocation]
       }
     }()
+    
+    self.matchingItems = initialMatchingItems
 
     super.init(nibName: nil, bundle: nil)
   }
@@ -84,16 +88,20 @@ final class LocationSearchTableViewController: UITableViewController {
     // Configure search bar visual appearance
     searchController.searchBar.barStyle = .default
     searchController.searchBar.searchBarStyle = .minimal
+    
+    // Dynamically hiding/showing a section header -- this keeps the top position of the table content relatively the same
+    tableView.sectionHeaderTopPadding = 0
   }
 
   // MARK: -- Helpers
 
-  private var isCurrentLocationIncluded: Bool {
+  private var showRecentLocations: Bool {
     switch configuration {
-    case .initialDestination:
+    case .initialDestination, .newDestination:
+      // search is not active and there's at least 1 recent location to show
+      return !isSearchActive && matchingItems.count > 0
+    case .newOrigin:
       return false
-    case .newDestination, .newOrigin:
-      return true
     }
   }
 }
@@ -121,12 +129,33 @@ extension LocationSearchTableViewController {
     let selectedLocation: SelectedLocation = {
       switch item {
       case .currentLocation: return .currentLocation
-      case .mapItem(let mapItem): return .mapItem(mapItem)
+      case .mapItem(let mapItem):
+        switch self.configuration {
+        case .initialDestination, .newDestination:
+          RecentLocationManager.saveLocation(mapItem)
+        case .newOrigin: break
+        }
+        
+        return .mapItem(mapItem)
       }
     }()
 
     delegate?.didSelect(configuration: configuration, location: selectedLocation)
     tableView.deselectRow(at: indexPath, animated: true)
+  }
+  
+  override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    guard showRecentLocations else { return 0 }
+    return UITableView.automaticDimension
+  }
+  
+  override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    guard showRecentLocations else { return nil }
+    
+    let headerView = UITableViewHeaderFooterView()
+    headerView.textLabel?.text = "Recent"
+    headerView.textLabel?.font = .preferredFont(forTextStyle: .callout, weight: .bold)
+    return headerView
   }
 }
 
@@ -134,8 +163,15 @@ extension LocationSearchTableViewController {
 
 extension LocationSearchTableViewController: UISearchResultsUpdating {
   func updateSearchResults(for searchController: UISearchController) {
-    guard let searchBarText = searchController.searchBar.text, !searchBarText.isEmpty else { return }
+    guard let searchBarText = searchController.searchBar.text, !searchBarText.isEmpty else {
+      // reset to initial state
+      matchingItems = initialMatchingItems
+      isSearchActive = false
+      tableView.reloadData()
+      return
+    }
 
+    isSearchActive = true
     // Invalidate and reinitiate
     self.searchTask?.cancel()
 
@@ -156,8 +192,8 @@ extension LocationSearchTableViewController: UISearchResultsUpdating {
           DispatchQueue.main.async {
             let initialLocations: [TableItem] = {
               switch self.configuration {
-              case .initialDestination: return []
-              case .newDestination, .newOrigin: return [.currentLocation]
+              case .initialDestination, .newDestination: return []
+              case .newOrigin: return [.currentLocation]
               }
             }()
             
@@ -197,3 +233,49 @@ class LocationSearchFilter {
     return distance <= maxDistanceInMeters
   }
 }
+
+class RecentLocationManager {
+  private static let recentLocationsKey = "RecentLocations"
+
+  static func saveLocation(_ mapItem: MKMapItem?) {
+    guard let mapItem = mapItem else { return }
+    let defaults = UserDefaults.standard
+    
+    do {
+      let data = try NSKeyedArchiver.archivedData(withRootObject: mapItem, requiringSecureCoding: true)
+      
+      var locationsData = defaults.array(forKey: recentLocationsKey) as? [Data] ?? []
+      
+      // Avoid repeats/duplicates:
+      // Find the first item that has the same coordinates and remove it from the list. It will pop to the top on .insert below
+      let coordinate = mapItem.placemark.coordinate
+      if let index = locationsData.firstIndex(where: { data -> Bool in
+        guard let item = try? NSKeyedUnarchiver.unarchivedObject(ofClass: MKMapItem.self, from: data) else { return false }
+        return item.placemark.coordinate.latitude == coordinate.latitude && item.placemark.coordinate.longitude == coordinate.longitude
+      }) {
+        locationsData.remove(at: index)
+      }
+      
+      // Insert at the beginning of the array, and trim list
+      let maxSavedLocationCount = 10
+      locationsData.insert(data, at: 0)
+      if locationsData.count > maxSavedLocationCount {
+        locationsData.removeSubrange(maxSavedLocationCount...)
+      }
+      
+      defaults.set(locationsData, forKey: recentLocationsKey)
+    } catch {
+      print("Error saving location. Failed to encode MKMapItem: \(error)")
+    }
+  }
+
+  static func loadRecentLocations() -> [MKMapItem] {
+    let defaults = UserDefaults.standard
+    guard let locationsData = defaults.array(forKey: recentLocationsKey) as? [Data] else { return [] }
+    
+    return locationsData.compactMap { data in
+      try? NSKeyedUnarchiver.unarchivedObject(ofClass: MKMapItem.self, from: data)
+    }
+  }
+}
+
