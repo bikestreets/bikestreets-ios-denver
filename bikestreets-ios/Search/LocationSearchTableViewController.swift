@@ -50,8 +50,7 @@ final class LocationSearchTableViewController: UITableViewController {
 
   /// Exists to debounce many search requests while typing. This helps avoid API overuse errors from Apple.
   private var searchTask: DispatchWorkItem?
-  private var matchingItems: [TableItem]
-  private var initialMatchingItems: [TableItem]
+  private var matchingItems: [TableItem] = []
   private var isSearchActive: Bool = false
 
   weak var delegate: LocationSearchDelegate?
@@ -60,15 +59,6 @@ final class LocationSearchTableViewController: UITableViewController {
 
   init(configuration: SearchConfiguration) {
     self.configuration = configuration
-
-    self.initialMatchingItems = {
-      switch configuration {
-      case .initialDestination, .newDestination: return RecentLocationManager.loadRecentLocations().map { .mapItem($0) }
-      case .newOrigin: return [.currentLocation]
-      }
-    }()
-    
-    self.matchingItems = initialMatchingItems
 
     super.init(nibName: nil, bundle: nil)
   }
@@ -80,6 +70,8 @@ final class LocationSearchTableViewController: UITableViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
 
+    self.matchingItems = recentLocations
+    
     searchController.searchBar.placeholder = configuration.searchBarPlaceholder
 
     searchController.searchResultsUpdater = self
@@ -94,7 +86,15 @@ final class LocationSearchTableViewController: UITableViewController {
   }
 
   // MARK: -- Helpers
-
+  
+  private var recentLocations: [TableItem]
+  {
+    switch configuration {
+    case .initialDestination, .newDestination: return RecentLocationManager.loadRecentLocations().map { .mapItem($0) }
+    case .newOrigin: return [.currentLocation]
+    }
+  }
+  
   private var showRecentLocations: Bool {
     switch configuration {
     case .initialDestination, .newDestination:
@@ -165,7 +165,7 @@ extension LocationSearchTableViewController: UISearchResultsUpdating {
   func updateSearchResults(for searchController: UISearchController) {
     guard let searchBarText = searchController.searchBar.text, !searchBarText.isEmpty else {
       // reset to initial state
-      matchingItems = initialMatchingItems
+      matchingItems = recentLocations
       isSearchActive = false
       tableView.reloadData()
       return
