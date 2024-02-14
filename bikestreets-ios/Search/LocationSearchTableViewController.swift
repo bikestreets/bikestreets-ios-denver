@@ -80,29 +80,29 @@ final class LocationSearchTableViewController: UITableViewController {
     // Configure search bar visual appearance
     searchController.searchBar.barStyle = .default
     searchController.searchBar.searchBarStyle = .minimal
-    
-    // Dynamically hiding/showing a section header -- this keeps the top position of the table content relatively the same
-    tableView.sectionHeaderTopPadding = 0
   }
 
   // MARK: -- Helpers
   
-  private var recentLocations: [TableItem]
-  {
+  private var showCurrentLocation: Bool {
     switch configuration {
-    case .initialDestination, .newDestination: return RecentLocationManager.loadRecentLocations().map { .mapItem($0) }
-    case .newOrigin: return [.currentLocation]
+    case .initialDestination, .newDestination:
+      return false
+    case .newOrigin:
+      return true
     }
   }
   
-  private var showRecentLocations: Bool {
-    switch configuration {
-    case .initialDestination, .newDestination:
-      // search is not active and there's at least 1 recent location to show
-      return !isSearchActive && matchingItems.count > 0
-    case .newOrigin:
-      return false
+  private var recentLocations: [TableItem] {
+    var locations: [TableItem] = RecentLocationManager.loadRecentLocations().map { .mapItem($0) }
+    if showCurrentLocation {
+      locations.insert(.currentLocation, at: 0)
     }
+    return locations
+  }
+  
+  private var showRecentLocations: Bool {
+    return !isSearchActive && matchingItems.count > 0
   }
 }
 
@@ -119,7 +119,18 @@ extension LocationSearchTableViewController {
     let item = matchingItems[indexPath.row]
     cell.textLabel?.text = item.textLabel
     cell.detailTextLabel?.text = item.detailLabel
-
+    switch item {
+    case .currentLocation:
+      cell.imageView?.tintColor = .systemBlue
+      cell.imageView?.image = UIImage(systemName: "location.fill")?.withRenderingMode(.alwaysTemplate)
+    case .mapItem(_):
+      cell.imageView?.tintColor = .label
+      if showRecentLocations {
+        cell.imageView?.image = UIImage(systemName: "clock")?.withRenderingMode(.alwaysTemplate)
+      } else {
+        cell.imageView?.image = UIImage(systemName: "mappin.and.ellipse")?.withRenderingMode(.alwaysTemplate)
+      }
+    }
     return cell
   }
 
@@ -130,32 +141,13 @@ extension LocationSearchTableViewController {
       switch item {
       case .currentLocation: return .currentLocation
       case .mapItem(let mapItem):
-        switch self.configuration {
-        case .initialDestination, .newDestination:
-          RecentLocationManager.saveLocation(mapItem)
-        case .newOrigin: break
-        }
-        
+        RecentLocationManager.saveLocation(mapItem)
         return .mapItem(mapItem)
       }
     }()
 
     delegate?.didSelect(configuration: configuration, location: selectedLocation)
     tableView.deselectRow(at: indexPath, animated: true)
-  }
-  
-  override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-    guard showRecentLocations else { return 0 }
-    return UITableView.automaticDimension
-  }
-  
-  override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-    guard showRecentLocations else { return nil }
-    
-    let headerView = UITableViewHeaderFooterView()
-    headerView.textLabel?.text = "Recent"
-    headerView.textLabel?.font = .preferredFont(forTextStyle: .callout, weight: .bold)
-    return headerView
   }
 }
 
@@ -190,17 +182,13 @@ extension LocationSearchTableViewController: UISearchResultsUpdating {
             return
           }
           DispatchQueue.main.async {
-            let initialLocations: [TableItem] = {
-              switch self.configuration {
-              case .initialDestination, .newDestination: return []
-              case .newOrigin: return [.currentLocation]
-              }
-            }()
-            
-            self.matchingItems = initialLocations + response.mapItems.filter {
+            self.matchingItems = response.mapItems.filter {
               $0.isNearby()
             }.map {
               .mapItem($0)
+            }
+            if self.showCurrentLocation {
+              self.matchingItems.insert(.currentLocation, at: 0)
             }
             self.tableView.reloadData()
           }
