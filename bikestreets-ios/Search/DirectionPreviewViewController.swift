@@ -11,7 +11,7 @@ import UIKit
 
 final class DirectionPreviewViewController: UIViewController {
   private let stateManager: StateManager
-
+  private let sheetManager: SheetManager
   private let stackView = UIStackView()
   private let scrollView: UIScrollView = {
     let scrollView = UIScrollView()
@@ -19,8 +19,9 @@ final class DirectionPreviewViewController: UIViewController {
     return scrollView
   }()
 
-  init(stateManager: StateManager) {
+  init(stateManager: StateManager, sheetManager: SheetManager) {
     self.stateManager = stateManager
+    self.sheetManager = sheetManager
     super.init(nibName: nil, bundle: nil)
   }
 
@@ -32,15 +33,25 @@ final class DirectionPreviewViewController: UIViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-
-    view.backgroundColor = .secondarySystemBackground
+    
+    isModalInPresentation = true
+    updateColors()
 
     view.addSubview(scrollView)
     view.matchAutolayoutSize(scrollView)
 
     stateManager.add(listener: self)
-
+    configureDismissButton(action: #selector(dismissButtonClicked))
     configureViews()
+  }
+  
+  private func updateColors() {
+    view.backgroundColor = .directionsPreviewBackgroundColor
+  }
+  
+  override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    super.traitCollectionDidChange(previousTraitCollection)
+    updateColors()
   }
 
   /// Remove any past views and then re-add all the views based on the current state.
@@ -95,6 +106,11 @@ final class DirectionPreviewViewController: UIViewController {
       stackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 16),
       stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
     ].activate()
+  }
+  
+  @objc func dismissButtonClicked() {
+    stateManager.state = .initial
+    sheetManager.dismiss(viewController: self, animated: true)
   }
 
   // MARK: -- Helpers
@@ -156,7 +172,7 @@ extension DirectionPreviewViewController: RoutePlaceRowViewDelegate {
     case .updateOrigin:
       break
     default:
-      fatalError("Ununexpected state")
+      fatalError("Unexpected state")
     }
   }
 
@@ -167,7 +183,7 @@ extension DirectionPreviewViewController: RoutePlaceRowViewDelegate {
     case .updateDestination:
       break
     default:
-      fatalError("Ununexpected state")
+      fatalError("Unexpected state")
     }
   }
 }

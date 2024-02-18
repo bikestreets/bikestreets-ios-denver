@@ -117,15 +117,16 @@ final class DefaultMapsViewController: MapsViewController {
     default: break
     }
 
-    let searchViewController = SearchLegendViewController(
+    let initialViewController = SearchLegendViewController(
       stateManager: stateManager
     )
 
     sheetManager.present(
-      searchViewController,
+      initialViewController,
       animated: true,
       sheetOptions: .init(
-        detents: [.tiny(), .medium(), .large()]
+        detents: [.tiny(), .medium()],
+        selectedDetentIdentifier: .medium
       ),
       options: .init(shouldDismiss: false)
     )
@@ -324,6 +325,7 @@ extension DefaultMapsViewController: StateListener {
             .requestingLocationPermissions,
             .insufficientLocationPermissions,
             .searchDestination,
+            .previewDirections,
             .routing,
             .routingFeedback:
           return true
@@ -348,14 +350,17 @@ extension DefaultMapsViewController: StateListener {
         sheetManager: sheetManager
       )
       searchViewController.delegate = self
-
-      sheetManager.present(
-        searchViewController,
-        animated: true,
-        sheetOptions: .init(
-          detents: [.tiny(), .medium(), .large()]
+      sheetManager.dismiss(viewController: presentedViewController!, animated: false) { [weak self] in
+        guard let self else { return }
+        self.sheetManager.present(
+          searchViewController,
+          animated: true,
+          sheetOptions: .init(
+            detents: [.medium(), .large()],
+            selectedDetentIdentifier: .large
+          )
         )
-      )
+      }
     case .requestingRoutes(let request):
       // Potentially show destination on map
       // showAnnotation(.init(item: mapItem), cameraShouldFollow: false)
@@ -364,7 +369,7 @@ extension DefaultMapsViewController: StateListener {
       requestDirections(request: request)
     case .previewDirections(let preview):
       updateMapAnnotations(routes: preview.routes)
-    case .updateDestination(let preview):
+    case .updateDestination:
       let searchViewController = SearchViewController(
         configuration: .newDestination,
         stateManager: stateManager,
@@ -374,12 +379,13 @@ extension DefaultMapsViewController: StateListener {
       sheetManager.present(
         searchViewController,
         animated: true,
-        options: .init(presentationControllerDidDismiss: { [weak self] in
-          guard let self else { return }
-          self.stateManager.state = .previewDirections(preview: preview)
-        })
+        sheetOptions: .init(
+          detents: [.medium(), .large()],
+          selectedDetentIdentifier: .medium,
+          largestUndimmedDetentIdentifier: nil
+        )
       )
-    case .updateOrigin(let preview):
+    case .updateOrigin:
       let searchViewController = SearchViewController(
         configuration: .newOrigin,
         stateManager: stateManager,
@@ -389,10 +395,11 @@ extension DefaultMapsViewController: StateListener {
       sheetManager.present(
         searchViewController,
         animated: true,
-        options: .init(presentationControllerDidDismiss: { [weak self] in
-          guard let self else { return }
-          self.stateManager.state = .previewDirections(preview: preview)
-        })
+        sheetOptions: .init(
+          detents: [.medium(), .large()],
+          selectedDetentIdentifier: .medium,
+          largestUndimmedDetentIdentifier: nil
+        )
       )
     case .routing(let routing):
       switch GlobalSettings.liveRoutingConfiguration {

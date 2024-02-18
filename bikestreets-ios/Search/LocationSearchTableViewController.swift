@@ -9,21 +9,6 @@ import Foundation
 import MapKit
 import UIKit
 
-enum SelectedLocation {
-  case currentLocation
-  case mapItem(MKMapItem)
-}
-
-protocol LocationSearchDelegate: AnyObject {
-  // MARK: -- Searching
-
-  func mapSearchRegion() -> MKCoordinateRegion?
-
-  // MARK: -- Selection
-
-  func didSelect(configuration: SearchConfiguration, location: SelectedLocation)
-}
-
 final class LocationSearchTableViewController: UITableViewController {
   private enum TableItem {
     case currentLocation
@@ -200,70 +185,6 @@ extension LocationSearchTableViewController: UISearchResultsUpdating {
 
     // Wait 0.25 seconds before executing search to debounce typing
     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.25, execute: task)
-  }
-}
-
-extension MKMapItem {
-  func isNearby() -> Bool {
-    return LocationSearchFilter.isNearby(mapItem: self)
-  }
-}
-
-class LocationSearchFilter {
-  // Union Station, Denver, CO
-  static private let center = CLLocation(latitude: 39.752928, longitude: -104.999826)
-  static private let maxDistanceInMiles: Double = 14
-  static private let maxDistanceInMeters = Measurement(value: maxDistanceInMiles, unit: UnitLength.miles).converted(to: UnitLength.meters).value
-  
-  static func isNearby(mapItem: MKMapItem) -> Bool {
-    let mapItemLocation = CLLocation(latitude: mapItem.placemark.coordinate.latitude, longitude: mapItem.placemark.coordinate.longitude)
-    let distance = center.distance(from: mapItemLocation)
-    return distance <= maxDistanceInMeters
-  }
-}
-
-class RecentLocationManager {
-  private static let recentLocationsKey = "RecentLocations"
-
-  static func saveLocation(_ mapItem: MKMapItem?) {
-    guard let mapItem = mapItem else { return }
-    let defaults = UserDefaults.standard
-    
-    do {
-      let data = try NSKeyedArchiver.archivedData(withRootObject: mapItem, requiringSecureCoding: true)
-      
-      var locationsData = defaults.array(forKey: recentLocationsKey) as? [Data] ?? []
-      
-      // Avoid repeats/duplicates:
-      // Find the first item that has the same coordinates and remove it from the list. It will pop to the top on .insert below
-      let coordinate = mapItem.placemark.coordinate
-      if let index = locationsData.firstIndex(where: { data -> Bool in
-        guard let item = try? NSKeyedUnarchiver.unarchivedObject(ofClass: MKMapItem.self, from: data) else { return false }
-        return item.placemark.coordinate.latitude == coordinate.latitude && item.placemark.coordinate.longitude == coordinate.longitude
-      }) {
-        locationsData.remove(at: index)
-      }
-      
-      // Insert at the beginning of the array, and trim list
-      let maxSavedLocationCount = 10
-      locationsData.insert(data, at: 0)
-      if locationsData.count > maxSavedLocationCount {
-        locationsData.removeSubrange(maxSavedLocationCount...)
-      }
-      
-      defaults.set(locationsData, forKey: recentLocationsKey)
-    } catch {
-      print("Error saving location. Failed to encode MKMapItem: \(error)")
-    }
-  }
-
-  static func loadRecentLocations() -> [MKMapItem] {
-    let defaults = UserDefaults.standard
-    guard let locationsData = defaults.array(forKey: recentLocationsKey) as? [Data] else { return [] }
-    
-    return locationsData.compactMap { data in
-      try? NSKeyedUnarchiver.unarchivedObject(ofClass: MKMapItem.self, from: data)
-    }
   }
 }
 

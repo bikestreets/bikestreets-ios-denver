@@ -61,6 +61,8 @@
 		35F8C19D2B2396B8007AF870 /* FeedbackEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F8C19C2B2396B8007AF870 /* FeedbackEmailViewController.swift */; };
 		35FE5FF62B486792002A4472 /* GlobalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FE5FF52B486792002A4472 /* GlobalSettings.swift */; };
 		44D9AD472B6C391800D33DD8 /* InstructionGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D9AD462B6C391800D33DD8 /* InstructionGenerator.swift */; };
+		44D9AD4C2B818E9500D33DD8 /* UIViewController+DismissButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D9AD4B2B818E9500D33DD8 /* UIViewController+DismissButton.swift */; };
+		44D9AD4E2B82BA4100D33DD8 /* RecentLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D9AD4D2B82BA4100D33DD8 /* RecentLocationManager.swift */; };
 		9AA97B2D2AE87E9C00C59426 /* UIView+Subview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA97B2C2AE87E9C00C59426 /* UIView+Subview.swift */; };
 /* End PBXBuildFile section */
 
@@ -113,6 +115,8 @@
 		35FE5FF42B485FE3002A4472 /* Sloan's Neighborhood - Denver, CO.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Sloan's Neighborhood - Denver, CO.gpx"; sourceTree = "<group>"; };
 		35FE5FF52B486792002A4472 /* GlobalSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSettings.swift; sourceTree = "<group>"; };
 		44D9AD462B6C391800D33DD8 /* InstructionGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionGenerator.swift; sourceTree = "<group>"; };
+		44D9AD4B2B818E9500D33DD8 /* UIViewController+DismissButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+DismissButton.swift"; sourceTree = "<group>"; };
+		44D9AD4D2B82BA4100D33DD8 /* RecentLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentLocationManager.swift; sourceTree = "<group>"; };
 		9AA97B2C2AE87E9C00C59426 /* UIView+Subview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Subview.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -179,6 +183,7 @@
 				351645192A81CC73001EDC99 /* UIView+Constraints.swift */,
 				351645212A827FD9001EDC99 /* UIView+InsetView.swift */,
 				351645232A8288D6001EDC99 /* UIFont+Preferred.swift */,
+				44D9AD4B2B818E9500D33DD8 /* UIViewController+DismissButton.swift */,
 				9AA97B2C2AE87E9C00C59426 /* UIView+Subview.swift */,
 				35AEFC112B22D92000234813 /* CLLocationManager+AuthorizationState.swift */,
 				35F8C1992B238C34007AF870 /* Bundle+AppVersion.swift */,
@@ -203,6 +208,7 @@
 				35065CAC2A7D9A8F00C7CCAF /* StateManager.swift */,
 				35FE5FF52B486792002A4472 /* GlobalSettings.swift */,
 				44D9AD462B6C391800D33DD8 /* InstructionGenerator.swift */,
+				44D9AD4D2B82BA4100D33DD8 /* RecentLocationManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -434,6 +440,7 @@
 				351645242A8288D6001EDC99 /* UIFont+Preferred.swift in Sources */,
 				35065CA32A7D2EB400C7CCAF /* SearchViewController.swift in Sources */,
 				3550D9682A98ECC200C70EE5 /* SearchConfiguration.swift in Sources */,
+				44D9AD4E2B82BA4100D33DD8 /* RecentLocationManager.swift in Sources */,
 				351645202A827F08001EDC99 /* PossibleRoutesView.swift in Sources */,
 				35065CB42A7DA3AB00C7CCAF /* DirectionPreviewViewController.swift in Sources */,
 				3516451A2A81CC73001EDC99 /* UIView+Constraints.swift in Sources */,
@@ -446,6 +453,7 @@
 				35065CBA2A803A4000C7CCAF /* UISheetPresentationController+Configuration.swift in Sources */,
 				35FE5FF62B486792002A4472 /* GlobalSettings.swift in Sources */,
 				35AEFC152B22DCC600234813 /* CustomAlertViewController.swift in Sources */,
+				44D9AD4C2B818E9500D33DD8 /* UIViewController+DismissButton.swift in Sources */,
 				35A2F0BF2A4F7957002BF520 /* MapsViewController.swift in Sources */,
 				35065CC22A8043E900C7CCAF /* ScreenManager.swift in Sources */,
 				35065CA82A7D451B00C7CCAF /* MKPlacemark+PrettyAddress.swift in Sources */,
