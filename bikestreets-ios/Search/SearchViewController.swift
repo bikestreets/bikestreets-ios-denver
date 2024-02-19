@@ -55,6 +55,7 @@ final class SearchViewController: UIViewController {
   private var searchTask: DispatchWorkItem?
   private var matchingItems: [TableItem] = []
   private var isSearchActive: Bool = false
+  private var lastSelectedDetentIdentifier: UISheetPresentationController.Detent.Identifier?
   
   lazy var searchController: UISearchController = {
     return UISearchController(searchResultsController: nil)
@@ -130,7 +131,7 @@ final class SearchViewController: UIViewController {
     // Link up delegates
     tableView.delegate = self
     tableView.dataSource = self
-    
+    searchController.searchBar.delegate = self
     self.matchingItems = recentLocations
   }
   
@@ -154,7 +155,7 @@ final class SearchViewController: UIViewController {
     let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
 
     if notification.name == UIResponder.keyboardWillHideNotification {
-        tableView.contentInset = .zero
+      tableView.contentInset = .zero
     } else {
       tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height - view.safeAreaInsets.bottom, right: 0)
     }
@@ -276,6 +277,24 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
 
     didSelect(configuration: configuration, location: selectedLocation)
     tableView.deselectRow(at: indexPath, animated: true)
+  }
+}
+
+extension SearchViewController: UISearchBarDelegate {
+  func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+    guard let sheetPresentationController else { return }
+    if let currentDetent = sheetPresentationController.selectedDetentIdentifier, currentDetent != .large {
+      lastSelectedDetentIdentifier = currentDetent
+      animateSelectedDetentIdentifier(to: .large)
+    }
+  }
+  
+  func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+    guard let sheetPresentationController else { return }
+    if let currentDetent = sheetPresentationController.selectedDetentIdentifier,
+       let lastSelectedDetentIdentifier, currentDetent != lastSelectedDetentIdentifier {
+        animateSelectedDetentIdentifier(to: lastSelectedDetentIdentifier)
+    }
   }
 }
 
