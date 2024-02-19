@@ -283,9 +283,12 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
 extension SearchViewController: UISearchBarDelegate {
   func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
     guard let sheetPresentationController else { return }
-    if let currentDetent = sheetPresentationController.selectedDetentIdentifier, currentDetent != .large {
-      lastSelectedDetentIdentifier = currentDetent
-      animateSelectedDetentIdentifier(to: .large)
+    
+    if let currentDetent = sheetPresentationController.selectedDetentIdentifier {
+        lastSelectedDetentIdentifier = currentDetent
+        if currentDetent != .large {
+          animateSelectedDetentIdentifier(to: .large)
+        }
     }
   }
   
