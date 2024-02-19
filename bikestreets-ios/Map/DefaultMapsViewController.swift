@@ -350,7 +350,7 @@ extension DefaultMapsViewController: StateListener {
       )
       searchViewController.modalTransitionStyle = .crossDissolve
       searchViewController.delegate = self
-      self.sheetManager.present(
+      sheetManager.present(
         searchViewController,
         animated: true,
         sheetOptions: .init(
