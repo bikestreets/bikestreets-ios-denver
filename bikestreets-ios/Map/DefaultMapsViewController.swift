@@ -324,7 +324,6 @@ extension DefaultMapsViewController: StateListener {
         case .initialTerms,
             .requestingLocationPermissions,
             .insufficientLocationPermissions,
-            .searchDestination,
             .previewDirections,
             .routing,
             .routingFeedback:
@@ -349,18 +348,16 @@ extension DefaultMapsViewController: StateListener {
         stateManager: stateManager,
         sheetManager: sheetManager
       )
+      searchViewController.modalTransitionStyle = .crossDissolve
       searchViewController.delegate = self
-      sheetManager.dismiss(viewController: presentedViewController!, animated: false) { [weak self] in
-        guard let self else { return }
-        self.sheetManager.present(
-          searchViewController,
-          animated: true,
-          sheetOptions: .init(
-            detents: [.medium(), .large()],
-            selectedDetentIdentifier: .large
-          )
+      self.sheetManager.present(
+        searchViewController,
+        animated: true,
+        sheetOptions: .init(
+          detents: [.medium(), .large()],
+          selectedDetentIdentifier: .medium
         )
-      }
+      )
     case .requestingRoutes(let request):
       // Potentially show destination on map
       // showAnnotation(.init(item: mapItem), cameraShouldFollow: false)
@@ -375,6 +372,7 @@ extension DefaultMapsViewController: StateListener {
         stateManager: stateManager,
         sheetManager: sheetManager
       )
+      searchViewController.modalTransitionStyle = .crossDissolve
       searchViewController.delegate = self
       sheetManager.present(
         searchViewController,
@@ -391,6 +389,7 @@ extension DefaultMapsViewController: StateListener {
         stateManager: stateManager,
         sheetManager: sheetManager
       )
+      searchViewController.modalTransitionStyle = .crossDissolve
       searchViewController.delegate = self
       sheetManager.present(
         searchViewController,

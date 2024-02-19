@@ -67,7 +67,7 @@ final class DirectionPreviewViewController: UIViewController {
 
     let titleContainer = UIView()
     titleContainer.addSubview(titleLabel)
-    titleContainer.matchAutolayoutSize(titleLabel)
+    titleContainer.matchAutolayoutSize(titleLabel, insets: .init(top: 0, left: 8, bottom: 0, right: 0))
 
     let placesStackView = RoutePlaceRowView(originName: originName, destinationName: destinationName)
     placesStackView.delegate = self
@@ -166,6 +166,7 @@ extension DirectionPreviewViewController: StateListener {
 
 extension DirectionPreviewViewController: RoutePlaceRowViewDelegate {
   func requestOriginUpdate() {
+    animateSelectedDetentIdentifier(to: .medium)
     switch stateManager.state {
     case .previewDirections(let preview):
       stateManager.state = .updateOrigin(preview: preview)
@@ -177,6 +178,7 @@ extension DirectionPreviewViewController: RoutePlaceRowViewDelegate {
   }
 
   func requestDestinationUpdate() {
+    animateSelectedDetentIdentifier(to: .medium)
     switch stateManager.state {
     case .previewDirections(let preview):
       stateManager.state = .updateDestination(preview: preview)

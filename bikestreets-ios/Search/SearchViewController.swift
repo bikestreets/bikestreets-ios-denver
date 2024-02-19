@@ -73,6 +73,11 @@ final class SearchViewController: UIViewController {
     fatalError("init(coder:) has not been implemented")
   }
 
+  deinit {
+    NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+    NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+  }
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = .systemBackground
@@ -87,7 +92,7 @@ final class SearchViewController: UIViewController {
     headerLabel.disableTranslatesAutoresizingMaskIntoConstraints()
     [
       headerLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-      headerLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+      headerLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
       headerLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -8)
     ].activate()
     
@@ -96,7 +101,7 @@ final class SearchViewController: UIViewController {
     view.addSubview(tableView)
     tableView.disableTranslatesAutoresizingMaskIntoConstraints()
     [
-      tableView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 8),
+      tableView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 2),
       tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
       tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
       tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
@@ -104,21 +109,27 @@ final class SearchViewController: UIViewController {
     
     // SearchBar
     definesPresentationContext = true
+    searchController.searchBar.placeholder = configuration.searchBarPlaceholder
     searchController.searchResultsUpdater = self
     searchController.searchBar.barStyle = .default
     searchController.searchBar.searchBarStyle = .minimal
     searchController.searchBar.showsCancelButton = false
     searchController.searchBar.returnKeyType = .done
+    searchController.searchBar.backgroundColor = .systemBackground
+    searchController.searchBar.layoutMargins = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
     
     tableView.tableHeaderView = searchController.searchBar
     
     // DismissButton
     configureDismissButton(action: #selector(dismissButtonClicked))
     
+    // Keyboard Notifications
+    NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChangeFrame), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChangeFrame), name: UIResponder.keyboardWillHideNotification, object: nil)
+    
     // Link up delegates
     tableView.delegate = self
     tableView.dataSource = self
-    searchController.searchBar.delegate = self
     
     self.matchingItems = recentLocations
   }
@@ -135,6 +146,22 @@ final class SearchViewController: UIViewController {
     }
   }
   
+  // https://www.hackingwithswift.com/example-code/uikit/how-to-adjust-a-uiscrollview-to-fit-the-keyboard
+  @objc func keyboardWillChangeFrame(notification: NSNotification) {
+    guard let keyboardValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+
+    let keyboardScreenEndFrame = keyboardValue.cgRectValue
+    let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
+
+    if notification.name == UIResponder.keyboardWillHideNotification {
+        tableView.contentInset = .zero
+    } else {
+      tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height - view.safeAreaInsets.bottom, right: 0)
+    }
+
+    tableView.scrollIndicatorInsets = tableView.contentInset
+  }
+  
   func didSelect(configuration: SearchConfiguration, location: SelectedLocation) {
     delegate?.didSelect(configuration: configuration, location: location)
 
@@ -149,19 +176,16 @@ final class SearchViewController: UIViewController {
     case .initialDestination:
       // Only push direction preview from initial destination selection.
       let directionPreviewViewController = DirectionPreviewViewController(stateManager: stateManager, sheetManager: sheetManager)
-      
-      sheetManager.dismiss(viewController: self, animated: true, completion: { [weak self] in
-        guard let self else { return }
-
-        self.sheetManager.present(
-          directionPreviewViewController,
-          animated: true,
-          sheetOptions: .init(
-            detents: [.small(), .medium(), .large()],
-            selectedDetentIdentifier: .medium
-          )
+      directionPreviewViewController.modalTransitionStyle = .crossDissolve
+      self.sheetManager.present(
+        directionPreviewViewController,
+        animated: true,
+        sheetOptions: .init(
+          detents: [.small(), .medium(), .large()],
+          selectedDetentIdentifier: .medium
         )
-      })
+      )
+      animateSelectedDetentIdentifier(to: .medium)
     }
   }
   
@@ -252,18 +276,6 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
 
     didSelect(configuration: configuration, location: selectedLocation)
     tableView.deselectRow(at: indexPath, animated: true)
-  }
-}
-
-// MARK: - UISearchBarDelegate
-
-extension SearchViewController: UISearchBarDelegate {
-  func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-    if let sheet = sheetPresentationController {
-      sheet.animateChanges {
-        sheet.selectedDetentIdentifier = .large
-      }
-    }
   }
 }
 
