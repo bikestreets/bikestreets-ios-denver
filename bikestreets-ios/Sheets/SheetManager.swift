@@ -163,3 +163,13 @@ final class SheetManager: NSObject, UISheetPresentationControllerDelegate {
     }
   }
 }
+
+extension UIViewController {
+  func animateSelectedDetentIdentifier(to selectedDetentIdentifier: UISheetPresentationController.Detent.Identifier) {
+    if let sheet = sheetPresentationController {
+      sheet.animateChanges {
+        sheet.selectedDetentIdentifier = selectedDetentIdentifier
+      }
+    }
+  }
+}

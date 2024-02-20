@@ -17,5 +17,33 @@ extension UIColor {
     blue: 59.0 / 255.0,
     alpha: 1
   )
+  
+  // colors eye-dropper pulled from Apple Maps
+  static let directionsPreviewBackgroundColor = UIColor { traitCollection in
+      switch traitCollection.userInterfaceStyle {
+      case .dark:
+          return UIColor(rgb: 0x25272C)
+      default:
+          return UIColor(rgb: 0xF6F6F4)
+      }
+  }
+  
+  static let accessoryButtonTintColor = UIColor { traitCollection in
+      switch traitCollection.userInterfaceStyle {
+      case .dark:
+          return UIColor(rgb: 0xA3A4Ad)
+      default:
+          return UIColor(rgb: 0x818085)
+      }
+  }
+  
+  static let accessoryButtonBackgroundColor = UIColor { traitCollection in
+      switch traitCollection.userInterfaceStyle {
+      case .dark:
+          return UIColor(rgb: 0x393B3F)
+      default:
+          return UIColor(rgb: 0xe7e6e7)
+      }
+  }
 }
 

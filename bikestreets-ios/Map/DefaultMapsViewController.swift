@@ -117,15 +117,16 @@ final class DefaultMapsViewController: MapsViewController {
     default: break
     }
 
-    let searchViewController = SearchLegendViewController(
+    let initialViewController = SearchLegendViewController(
       stateManager: stateManager
     )
 
     sheetManager.present(
-      searchViewController,
+      initialViewController,
       animated: true,
       sheetOptions: .init(
-        detents: [.tiny(), .medium(), .large()]
+        detents: [.tiny(), .medium()],
+        selectedDetentIdentifier: .medium
       ),
       options: .init(shouldDismiss: false)
     )
@@ -323,7 +324,7 @@ extension DefaultMapsViewController: StateListener {
         case .initialTerms,
             .requestingLocationPermissions,
             .insufficientLocationPermissions,
-            .searchDestination,
+            .previewDirections,
             .routing,
             .routingFeedback:
           return true
@@ -347,13 +348,14 @@ extension DefaultMapsViewController: StateListener {
         stateManager: stateManager,
         sheetManager: sheetManager
       )
+      searchViewController.modalTransitionStyle = .crossDissolve
       searchViewController.delegate = self
-
       sheetManager.present(
         searchViewController,
         animated: true,
         sheetOptions: .init(
-          detents: [.tiny(), .medium(), .large()]
+          detents: [.small(), .medium(), .large()],
+          selectedDetentIdentifier: .medium
         )
       )
     case .requestingRoutes(let request):
@@ -364,35 +366,39 @@ extension DefaultMapsViewController: StateListener {
       requestDirections(request: request)
     case .previewDirections(let preview):
       updateMapAnnotations(routes: preview.routes)
-    case .updateDestination(let preview):
+    case .updateDestination:
       let searchViewController = SearchViewController(
         configuration: .newDestination,
         stateManager: stateManager,
         sheetManager: sheetManager
       )
+      searchViewController.modalTransitionStyle = .crossDissolve
       searchViewController.delegate = self
       sheetManager.present(
         searchViewController,
         animated: true,
-        options: .init(presentationControllerDidDismiss: { [weak self] in
-          guard let self else { return }
-          self.stateManager.state = .previewDirections(preview: preview)
-        })
+        sheetOptions: .init(
+          detents: [.small(), .medium(), .large()],
+          selectedDetentIdentifier: .medium,
+          largestUndimmedDetentIdentifier: nil
+        )
       )
-    case .updateOrigin(let preview):
+    case .updateOrigin:
       let searchViewController = SearchViewController(
         configuration: .newOrigin,
         stateManager: stateManager,
         sheetManager: sheetManager
       )
+      searchViewController.modalTransitionStyle = .crossDissolve
       searchViewController.delegate = self
       sheetManager.present(
         searchViewController,
         animated: true,
-        options: .init(presentationControllerDidDismiss: { [weak self] in
-          guard let self else { return }
-          self.stateManager.state = .previewDirections(preview: preview)
-        })
+        sheetOptions: .init(
+          detents: [.small(), .medium(), .large()],
+          selectedDetentIdentifier: .medium,
+          largestUndimmedDetentIdentifier: nil
+        )
       )
     case .routing(let routing):
       switch GlobalSettings.liveRoutingConfiguration {

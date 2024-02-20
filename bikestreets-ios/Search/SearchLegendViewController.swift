@@ -30,6 +30,19 @@ final class SearchLegendViewController: UIViewController {
     view.addSubview(scrollView)
     view.matchAutolayoutSize(scrollView)
 
+    // Header
+    let headerLabel = UILabel()
+    headerLabel.text = SearchConfiguration.initialDestination.sheetTitle
+    headerLabel.font = .preferredFont(forTextStyle: .title2, weight: .bold)
+    
+    view.addSubview(headerLabel)
+    headerLabel.disableTranslatesAutoresizingMaskIntoConstraints()
+    [
+      headerLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+      headerLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+      headerLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -8)
+    ].activate()
+    
     let searchBar = UISearchBar()
     searchBar.placeholder = SearchConfiguration.initialDestination.searchBarPlaceholder
     searchBar.barStyle = .default
@@ -69,7 +82,7 @@ final class SearchLegendViewController: UIViewController {
     stackView.axis = .vertical
     stackView.spacing = 16
     stackView.disableTranslatesAutoresizingMaskIntoConstraints()
-    stackView.setCustomSpacing(20, after: searchBar)
+    stackView.setCustomSpacing(12, after: searchBar)
     stackView.layoutMargins = UIEdgeInsets(top: 0, left: -4, bottom: 0, right: -4)
     stackView.isLayoutMarginsRelativeArrangement = true
 
@@ -77,8 +90,8 @@ final class SearchLegendViewController: UIViewController {
 
     [
       stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-      stackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 16),
-      stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+      stackView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 10),
+      stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
     ].activate()
   }
 
