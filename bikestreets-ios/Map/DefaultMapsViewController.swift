@@ -354,7 +354,7 @@ extension DefaultMapsViewController: StateListener {
         searchViewController,
         animated: true,
         sheetOptions: .init(
-          detents: [.medium(), .large()],
+          detents: [.small(), .medium(), .large()],
           selectedDetentIdentifier: .medium
         )
       )
@@ -378,7 +378,7 @@ extension DefaultMapsViewController: StateListener {
         searchViewController,
         animated: true,
         sheetOptions: .init(
-          detents: [.medium(), .large()],
+          detents: [.small(), .medium(), .large()],
           selectedDetentIdentifier: .medium,
           largestUndimmedDetentIdentifier: nil
         )
@@ -395,7 +395,7 @@ extension DefaultMapsViewController: StateListener {
         searchViewController,
         animated: true,
         sheetOptions: .init(
-          detents: [.medium(), .large()],
+          detents: [.small(), .medium(), .large()],
           selectedDetentIdentifier: .medium,
           largestUndimmedDetentIdentifier: nil
         )

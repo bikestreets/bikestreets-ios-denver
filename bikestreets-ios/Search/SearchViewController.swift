@@ -50,16 +50,14 @@ final class SearchViewController: UIViewController {
   private let stateManager: StateManager
   private let sheetManager: SheetManager
   private var tableView: UITableView!
+  private var headerView: UIView!
+  private var searchBar: UISearchBar!
   
   /// Exists to debounce many search requests while typing. This helps avoid API overuse errors from Apple.
   private var searchTask: DispatchWorkItem?
   private var matchingItems: [TableItem] = []
   private var isSearchActive: Bool = false
   private var lastSelectedDetentIdentifier: UISheetPresentationController.Detent.Identifier?
-  
-  lazy var searchController: UISearchController = {
-    return UISearchController(searchResultsController: nil)
-  }()
   
   weak var delegate: LocationSearchDelegate?
 
@@ -97,29 +95,37 @@ final class SearchViewController: UIViewController {
       headerLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -8)
     ].activate()
     
+    // SearchBar
+    searchBar = UISearchBar()
+    definesPresentationContext = true
+    searchBar.placeholder = configuration.searchBarPlaceholder
+    searchBar.barStyle = .default
+    searchBar.searchBarStyle = .minimal
+    searchBar.returnKeyType = .done
+    searchBar.layoutMargins = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+    view.addSubview(searchBar)
+    searchBar.disableTranslatesAutoresizingMaskIntoConstraints()
+    [
+      searchBar.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 10),
+      searchBar.heightAnchor.constraint(equalToConstant: 40),
+      searchBar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
+      searchBar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0)
+    ].activate()
+    searchBar.delegate = self
+    
+    
     // TableView
     tableView = UITableView()
     view.addSubview(tableView)
     tableView.disableTranslatesAutoresizingMaskIntoConstraints()
     [
-      tableView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 2),
+      tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 2),
       tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
       tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
       tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
     ].activate()
-    
-    // SearchBar
-    definesPresentationContext = true
-    searchController.searchBar.placeholder = configuration.searchBarPlaceholder
-    searchController.searchResultsUpdater = self
-    searchController.searchBar.barStyle = .default
-    searchController.searchBar.searchBarStyle = .minimal
-    searchController.searchBar.showsCancelButton = false
-    searchController.searchBar.returnKeyType = .done
-    searchController.searchBar.backgroundColor = .systemBackground
-    searchController.searchBar.layoutMargins = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
-    
-    tableView.tableHeaderView = searchController.searchBar
+    tableView.delegate = self
+    tableView.dataSource = self
     
     // DismissButton
     configureDismissButton(action: #selector(dismissButtonClicked))
@@ -128,10 +134,6 @@ final class SearchViewController: UIViewController {
     NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChangeFrame), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
     NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChangeFrame), name: UIResponder.keyboardWillHideNotification, object: nil)
     
-    // Link up delegates
-    tableView.delegate = self
-    tableView.dataSource = self
-    searchController.searchBar.delegate = self
     self.matchingItems = recentLocations
   }
   
@@ -142,7 +144,7 @@ final class SearchViewController: UIViewController {
       hasBeenPresented = true
       // Doing this after this run loop finishes allows it to work.
       DispatchQueue.main.async {
-        self.searchController.searchBar.becomeFirstResponder()
+        self.searchBar.becomeFirstResponder()
       }
     }
   }
@@ -167,8 +169,7 @@ final class SearchViewController: UIViewController {
     delegate?.didSelect(configuration: configuration, location: location)
 
     // Consider searching to be done.
-    searchController.searchBar.endEditing(true)
-    searchController.isActive = false
+    searchBar.endEditing(true)
     
     // Dismiss on selection when not in initial state.
     switch configuration {
@@ -202,7 +203,6 @@ final class SearchViewController: UIViewController {
   }
   
   @objc func dismissButtonClicked() {
-    searchController.isActive = false
     updateCanceledState()
     sheetManager.dismiss(viewController: self, animated: true)
   }
@@ -280,6 +280,8 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
   }
 }
 
+// MARK: - UISearchBarDelegate
+
 extension SearchViewController: UISearchBarDelegate {
   func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
     guard let sheetPresentationController else { return }
@@ -299,13 +301,13 @@ extension SearchViewController: UISearchBarDelegate {
         animateSelectedDetentIdentifier(to: lastSelectedDetentIdentifier)
     }
   }
-}
-
-// MARK: - UISearchResultsUpdating
-
-extension SearchViewController: UISearchResultsUpdating {
-  func updateSearchResults(for searchController: UISearchController) {
-    guard let searchBarText = searchController.searchBar.text, !searchBarText.isEmpty else {
+  
+  func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    searchBar.resignFirstResponder()
+  }
+  
+  func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    guard let searchBarText = searchBar.text, !searchBarText.isEmpty else {
       // reset to initial state
       matchingItems = recentLocations
       isSearchActive = false
