@@ -25,7 +25,7 @@ extension UIViewController {
   }
 }
 
-class DismissButton: UIButton {
+final class DismissButton: UIButton {
   init() {
     super.init(frame: .zero)
     configureButton()
