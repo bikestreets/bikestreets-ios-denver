@@ -1,0 +1,1744 @@
+{
+  "waypoints" : [
+    {
+      "location" : [
+        -104.97573,
+        39.709294
+      ],
+      "distance" : 0,
+      "hint" : "3m4BgCKUCYAAAAAA5gMAAAAAAAAAAAAAAAAAAMoUQkMAAAAAAAAAAAAAAADmAwAAAAAAAAAAAAA7BAAAjjK--W7qXQKOMr75bupdAgAAfxZBjOYu3W4BgAxuAYAAAAAAPAAAAAAAAAAAAAAAAAAAADGQRkIAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA7BAAAjjK--W7qXQKOMr75bupdAgAArwVBjOYu3G4BgNSTCYAAAAAAPQAAAAAAAAAAAAAAAAAAANSuSkIAAAAAAAAAAAAAAAA9AAAAAAAAAAAAAAA7BAAAjjK--W7qXQKOMr75bupdAgAA3xBBjOYu024BgNtuAYDwAAAAAAAAAAAAAAAAAAAACkxIQwAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAAAAAAA7BAAAjjK--W7qXQKOMr75bupdAgAADwBBjOYu",
+      "coordinateAccuracy" : -1,
+      "allowsArrivingOnOppositeSide" : true,
+      "name" : "South Ogden Street \/ East Dakota Avenue \/ East Dakota Avenue \/ South Ogden Street",
+      "separatesLegs" : true
+    },
+    {
+      "location" : [
+        -104.975236,
+        39.720132999999997
+      ],
+      "distance" : 0,
+      "hint" : "BoYJgPGGCYAAAAAACQAAAAAAAAAAAAAAAAAAANWv-UAAAAAAAAAAAAAAAAAJAAAAAAAAAAAAAAA7BAAAfDS--cUUXgJ8NL75xRReAgAA7xBBjOYuBYYJgDVrAYAAAAAACQAAAAAAAAAAAAAAAAAAAPN05kAAAAAAAAAAAAAAAAAJAAAAAAAAAAAAAAA7BAAAfDS--cUUXgJ8NL75xRReAgAArwVBjOYuBIYJgF6GCYAAAAAA9gEAAAAAAAAAAAAAAAAAAN5pw0IAAAAAAAAAAAAAAAD2AQAAAAAAAAAAAAA7BAAAfDS--cUUXgJ8NL75xRReAgAATwtBjOYuA4YJgE-GCYAAAAAABQQAAAAAAAAAAAAAAAAAAEoTSEMAAAAAAAAAAAAAAAAFBAAAAAAAAAAAAAA7BAAAfDS--cUUXgJ8NL75xRReAgAADwBBjOYu",
+      "coordinateAccuracy" : -1,
+      "allowsArrivingOnOppositeSide" : true,
+      "name" : "East 3rd Avenue \/ East 3rd Avenue \/ Ogden Street \/ Ogden Street",
+      "separatesLegs" : true
+    }
+  ],
+  "code" : "Ok",
+  "routes" : [
+    {
+      "weight" : 272.10000000000002,
+      "weight_name" : "cyclability",
+      "legs" : [
+        {
+          "source" : {
+            "location" : [
+              -104.97573,
+              39.709294
+            ],
+            "distance" : 0,
+            "hint" : "3m4BgCKUCYAAAAAA5gMAAAAAAAAAAAAAAAAAAMoUQkMAAAAAAAAAAAAAAADmAwAAAAAAAAAAAAA7BAAAjjK--W7qXQKOMr75bupdAgAAfxZBjOYu3W4BgAxuAYAAAAAAPAAAAAAAAAAAAAAAAAAAADGQRkIAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA7BAAAjjK--W7qXQKOMr75bupdAgAArwVBjOYu3G4BgNSTCYAAAAAAPQAAAAAAAAAAAAAAAAAAANSuSkIAAAAAAAAAAAAAAAA9AAAAAAAAAAAAAAA7BAAAjjK--W7qXQKOMr75bupdAgAA3xBBjOYu024BgNtuAYDwAAAAAAAAAAAAAAAAAAAACkxIQwAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAAAAAAA7BAAAjjK--W7qXQKOMr75bupdAgAADwBBjOYu",
+            "coordinateAccuracy" : -1,
+            "allowsArrivingOnOppositeSide" : true,
+            "name" : "South Ogden Street \/ East Dakota Avenue \/ East Dakota Avenue \/ South Ogden Street",
+            "separatesLegs" : true
+          },
+          "destination" : {
+            "location" : [
+              -104.975236,
+              39.720132999999997
+            ],
+            "distance" : 0,
+            "hint" : "BoYJgPGGCYAAAAAACQAAAAAAAAAAAAAAAAAAANWv-UAAAAAAAAAAAAAAAAAJAAAAAAAAAAAAAAA7BAAAfDS--cUUXgJ8NL75xRReAgAA7xBBjOYuBYYJgDVrAYAAAAAACQAAAAAAAAAAAAAAAAAAAPN05kAAAAAAAAAAAAAAAAAJAAAAAAAAAAAAAAA7BAAAfDS--cUUXgJ8NL75xRReAgAArwVBjOYuBIYJgF6GCYAAAAAA9gEAAAAAAAAAAAAAAAAAAN5pw0IAAAAAAAAAAAAAAAD2AQAAAAAAAAAAAAA7BAAAfDS--cUUXgJ8NL75xRReAgAATwtBjOYuA4YJgE-GCYAAAAAABQQAAAAAAAAAAAAAAAAAAEoTSEMAAAAAAAAAAAAAAAAFBAAAAAAAAAAAAAA7BAAAfDS--cUUXgJ8NL75xRReAgAADwBBjOYu",
+            "coordinateAccuracy" : -1,
+            "allowsArrivingOnOppositeSide" : true,
+            "name" : "East 3rd Avenue \/ East 3rd Avenue \/ Ogden Street \/ Ogden Street",
+            "separatesLegs" : true
+          },
+          "profileIdentifier" : "mapbox\/cycling",
+          "steps" : [
+            {
+              "intersections" : [
+                {
+                  "entry" : [
+                    true
+                  ],
+                  "out" : 0,
+                  "location" : [
+                    -104.97573,
+                    39.709294
+                  ],
+                  "bearings" : [
+                    90
+                  ]
+                },
+                {
+                  "entry" : [
+                    true,
+                    true,
+                    true,
+                    false
+                  ],
+                  "in" : 3,
+                  "out" : 1,
+                  "location" : [
+                    -104.97456099999999,
+                    39.709296000000002
+                  ],
+                  "bearings" : [
+                    0,
+                    90,
+                    180,
+                    270
+                  ]
+                },
+                {
+                  "entry" : [
+                    true,
+                    true,
+                    true,
+                    false
+                  ],
+                  "in" : 3,
+                  "out" : 1,
+                  "location" : [
+                    -104.97338999999999,
+                    39.709299000000001
+                  ],
+                  "bearings" : [
+                    0,
+                    90,
+                    180,
+                    270
+                  ]
+                }
+              ],
+              "distance" : 284.5,
+              "mode" : "cycling",
+              "voiceInstructions" : [
+                {
+                  "announcement" : "Head east on East Dakota Avenue for 500 feet",
+                  "ssmlAnnouncement" : "<speak><amazon:effect name=\"drc\"><prosody rate=\"1.08\">Head east on East Dakota Avenue for 500 feet<\/prosody><\/amazon:effect><\/speak>",
+                  "distanceAlongGeometry" : 284.5
+                },
+                {
+                  "announcement" : "Carefully cross Downing Street",
+                  "ssmlAnnouncement" : "<speak><amazon:effect name=\"drc\"><prosody rate=\"1.08\">Carefully cross Downing Street<\/prosody><\/amazon:effect><\/speak>",
+                  "distanceAlongGeometry" : 132.25
+                },
+                {
+                  "announcement" : "Turn left onto South Marion Parkway",
+                  "ssmlAnnouncement" : "<speak><amazon:effect name=\"drc\"><prosody rate=\"1.08\">Turn left onto South Marion Parkway<\/prosody><\/amazon:effect><\/speak>",
+                  "distanceAlongGeometry" : 50
+                }
+              ],
+              "bannerInstructions" : [
+                {
+                  "primary" : {
+                    "components" : [
+                      {
+                        "type" : "text",
+                        "text" : "Carefully cross Downing Street"
+                      }
+                    ],
+                    "type" : "continue",
+                    "modifier" : "straight",
+                    "text" : "Carefully cross Downing Street"
+                  },
+                  "drivingSide" : "right",
+                  "distanceAlongGeometry" : 284.5
+                },
+                {
+                  "primary" : {
+                    "components" : [
+                      {
+                        "type" : "text",
+                        "text" : "South Marion Parkway"
+                      }
+                    ],
+                    "type" : "turn",
+                    "modifier" : "left",
+                    "text" : "South Marion Parkway"
+                  },
+                  "drivingSide" : "right",
+                  "distanceAlongGeometry" : 76
+                }
+              ],
+              "driving_side" : "right",
+              "duration" : 34.100000000000001,
+              "geometry" : "avjqFhav_S?sBAuB?uB?_B?S?Q?aB?w@?W",
+              "maneuver" : {
+                "bearing_after" : 90,
+                "bearing_before" : 0,
+                "type" : "depart",
+                "location" : [
+                  -104.97573,
+                  39.709294
+                ],
+                "instruction" : "depart "
+              },
+              "name" : "East Dakota Avenue"
+            },
+            {
+              "intersections" : [
+                {
+                  "entry" : [
+                    false,
+                    true,
+                    true,
+                    false
+                  ],
+                  "in" : 3,
+                  "out" : 1,
+                  "location" : [
+                    -104.97241200000001,
+                    39.709304000000003
+                  ],
+                  "bearings" : [
+                    0,
+                    90,
+                    180,
+                    270
+                  ]
+                },
+                {
+                  "entry" : [
+                    true,
+                    true,
+                    false,
+                    false
+                  ],
+                  "in" : 3,
+                  "out" : 0,
+                  "location" : [
+                    -104.97221,
+                    39.709305999999998
+                  ],
+                  "bearings" : [
+                    0,
+                    90,
+                    180,
+                    270
+                  ]
+                },
+                {
+                  "entry" : [
+                    true,
+                    true,
+                    false,
+                    true
+                  ],
+                  "in" : 2,
+                  "out" : 0,
+                  "location" : [
+                    -104.972221,
+                    39.711112
+                  ],
+                  "bearings" : [
+                    0,
+                    90,
+                    180,
+                    270
+                  ]
+                },
+                {
+                  "entry" : [
+                    true,
+                    true,
+                    false,
+                    true
+                  ],
+                  "in" : 2,
+                  "out" : 0,
+                  "location" : [
+                    -104.97223700000001,
+                    39.712918999999999
+                  ],
+                  "bearings" : [
+                    0,
+                    90,
+                    180,
+                    270
+                  ]
+                },
+                {
+                  "entry" : [
+                    true,
+                    false,
+                    true
+                  ],
+                  "in" : 1,
+                  "out" : 2,
+                  "location" : [
+                    -104.97223099999999,
+                    39.714092000000001
+                  ],
+                  "bearings" : [
+                    0,
+                    180,
+                    345
+                  ]
+                },
+                {
+                  "entry" : [
+                    true,
+                    false,
+                    true
+                  ],
+                  "in" : 1,
+                  "out" : 2,
+                  "location" : [
+                    -104.972668,
+                    39.714571999999997
+                  ],
+                  "bearings" : [
+                    30,
+                    120,
+                    300
+                  ]
+                }
+              ],
+              "weight" : 88.899999999000002,
+              "distance" : 622.29999999999995,
+              "mode" : "cycling",
+              "voiceInstructions" : [
+                {
+                  "announcement" : "Continue on South Marion Parkway for a quarter mile",
+                  "ssmlAnnouncement" : "<speak><amazon:effect name=\"drc\"><prosody rate=\"1.08\">Continue on South Marion Parkway for a quarter mile<\/prosody><\/amazon:effect><\/speak>",
+                  "distanceAlongGeometry" : 602.29999999999995
+                },
+                {
+                  "announcement" : "In 1000 feet, As the road curves, Turn right on the sidewalk, then follow the sidewalk along Downing.",
+                  "ssmlAnnouncement" : "<speak><amazon:effect name=\"drc\"><prosody rate=\"1.08\">In 1000 feet, As the road curves, Turn right on the sidewalk, then follow the sidewalk along Downing.<\/prosody><\/amazon:effect><\/speak>",
+                  "distanceAlongGeometry" : 283
+                },
+                {
+                  "announcement" : "As the road curves, Turn right on the sidewalk, then follow the sidewalk along Downing.",
+                  "ssmlAnnouncement" : "<speak><amazon:effect name=\"drc\"><prosody rate=\"1.08\">As the road curves, Turn right on the sidewalk, then follow the sidewalk along Downing.<\/prosody><\/amazon:effect><\/speak>",
+                  "distanceAlongGeometry" : 50
+                }
+              ],
+              "bannerInstructions" : [
+                {
+                  "primary" : {
+                    "components" : [
+                      {
+                        "type" : "text",
+                        "text" : "Sidewalk"
+                      }
+                    ],
+                    "type" : "turn",
+                    "modifier" : "right",
+                    "text" : "Sidewalk"
+                  },
+                  "drivingSide" : "right",
+                  "distanceAlongGeometry" : 622.29999999999995
+                },
+                {
+                  "primary" : {
+                    "components" : [
+                      {
+                        "type" : "text",
+                        "text" : "Sidewalk"
+                      }
+                    ],
+                    "type" : "turn",
+                    "modifier" : "right",
+                    "text" : "Sidewalk"
+                  },
+                  "secondary" : {
+                    "components" : [
+                      {
+                        "type" : "text",
+                        "text" : "Ride on the sidewalk"
+                      }
+                    ],
+                    "text" : "Ride on the sidewalk"
+                  },
+                  "drivingSide" : "right",
+                  "distanceAlongGeometry" : 80
+                }
+              ],
+              "driving_side" : "right",
+              "duration" : 88.899999999000002,
+              "geometry" : "cvjqFplu_S?EAY?GcH@u@?M?S?uIBiFAQBKDIBIFKJEDKNEHITEJ",
+              "maneuver" : {
+                "location" : [
+                  -104.97241200000001,
+                  39.709304000000003
+                ],
+                "bearing_after" : 88,
+                "bearing_before" : 90,
+                "type" : "turn",
+                "modifier" : "left",
+                "instruction" : "turn left"
+              },
+              "name" : "South Marion Parkway"
+            },
+            {
+              "intersections" : [
+                {
+                  "entry" : [
+                    true,
+                    false,
+                    true,
+                    true
+                  ],
+                  "in" : 1,
+                  "out" : 0,
+                  "location" : [
+                    -104.97272599999999,
+                    39.714599
+                  ],
+                  "bearings" : [
+                    0,
+                    120,
+                    180,
+                    300
+                  ]
+                },
+                {
+                  "entry" : [
+                    true,
+                    false,
+                    true
+                  ],
+                  "in" : 1,
+                  "out" : 0,
+                  "location" : [
+                    -104.972724,
+                    39.714643000000002
+                  ],
+                  "bearings" : [
+                    0,
+                    180,
+                    195
+                  ]
+                },
+                {
+                  "entry" : [
+                    true,
+                    false,
+                    true
+                  ],
+                  "in" : 1,
+                  "out" : 2,
+                  "location" : [
+                    -104.972724,
+                    39.714663999999999
+                  ],
+                  "bearings" : [
+                    120,
+                    180,
+                    315
+                  ]
+                },
+                {
+                  "entry" : [
+                    false,
+                    true,
+                    true
+                  ],
+                  "in" : 0,
+                  "out" : 2,
+                  "location" : [
+                    -104.973119,
+                    39.714861999999997
+                  ],
+                  "bearings" : [
+                    150,
+                    225,
+                    345
+                  ]
+                },
+                {
+                  "entry" : [
+                    true,
+                    false,
+                    true
+                  ],
+                  "in" : 1,
+                  "out" : 0,
+                  "location" : [
+                    -104.973086,
+                    39.716456999999998
+                  ],
+                  "bearings" : [
+                    0,
+                    180,
+                    270
+                  ]
+                },
+                {
+                  "entry" : [
+                    true,
+                    false,
+                    true,
+                    true
+                  ],
+                  "in" : 1,
+                  "out" : 3,
+                  "location" : [
+                    -104.97312100000001,
+                    39.718116000000002
+                  ],
+                  "bearings" : [
+                    75,
+                    165,
+                    270,
+                    345
+                  ]
+                },
+                {
+                  "entry" : [
+                    true,
+                    false,
+                    false,
+                    true
+                  ],
+                  "in" : 1,
+                  "out" : 3,
+                  "location" : [
+                    -104.973136,
+                    39.718178000000002
+                  ],
+                  "bearings" : [
+                    90,
+                    165,
+                    270,
+                    345
+                  ]
+                }
+              ],
+              "weight" : 62,
+              "distance" : 427.69999999999999,
+              "mode" : "cycling",
+              "voiceInstructions" : [
+                {
+                  "announcement" : "In a quarter mile, Carefully cross East Speer Boulevard, then turn right on the sidewalk",
+                  "ssmlAnnouncement" : "<speak><amazon:effect name=\"drc\"><prosody rate=\"1.08\">In a quarter mile, Carefully cross East Speer Boulevard, then turn right on the sidewalk<\/prosody><\/amazon:effect><\/speak>",
+                  "distanceAlongGeometry" : 407.69999999999999
+                },
+                {
+                  "announcement" : "Carefully cross East Speer Boulevard, then turn right on the sidewalk, then turn left on the cycleway",
+                  "ssmlAnnouncement" : "<speak><amazon:effect name=\"drc\"><prosody rate=\"1.08\">Carefully cross East Speer Boulevard, then turn right on the sidewalk, then turn left on the cycleway<\/prosody><\/amazon:effect><\/speak>",
+                  "distanceAlongGeometry" : 50
+                }
+              ],
+              "bannerInstructions" : [
+                {
+                  "drivingSide" : "right",
+                  "primary" : {
+                    "components" : [
+                      {
+                        "type" : "text",
+                        "text" : "Cross East Speer"
+                      }
+                    ],
+                    "type" : "turn",
+                    "modifier" : "straight",
+                    "text" : "Cross East Speer"
+                  },
+                  "distanceAlongGeometry" : 427.6999999999,
+                  "secondary" : {
+                    "components" : [
+                      {
+                        "type" : "text",
+                        "text" : "Right on Sidewalk"
+                      }
+                    ],
+                    "text" : "Right on Sidewalk"
+                  }
+                }
+              ],
+              "driving_side" : "right",
+              "duration" : 62,
+              "geometry" : "gwkqFpnu_SAAE?C???C@EDAFAJCNAJGJGFCBA@G@G?I?KCQCOAM?SAoC@cA?gC?M?G@IAI?uA@a@?O?I@G@KBO@",
+              "maneuver" : {
+                "location" : [
+                  -104.97272599999999,
+                  39.714599
+                ],
+                "bearing_after" : 1,
+                "bearing_before" : 300,
+                "type" : "turn",
+                "modifier" : "right",
+                "instruction" : "turn right"
+              },
+              "name" : "path"
+            },
+            {
+              "intersections" : [
+                {
+                  "entry" : [
+                    true,
+                    false,
+                    true
+                  ],
+                  "in" : 1,
+                  "out" : 0,
+                  "location" : [
+                    -104.973153,
+                    39.718257000000001
+                  ],
+                  "bearings" : [
+                    0,
+                    165,
+                    285
+                  ]
+                },
+                {
+                  "entry" : [
+                    true,
+                    true,
+                    false,
+                    true
+                  ],
+                  "in" : 2,
+                  "out" : 0,
+                  "location" : [
+                    -104.973187,
+                    39.718608000000003
+                  ],
+                  "bearings" : [
+                    0,
+                    105,
+                    180,
+                    285
+                  ]
+                },
+                {
+                  "entry" : [
+                    true,
+                    false,
+                    false,
+                    true
+                  ],
+                  "in" : 2,
+                  "out" : 0,
+                  "location" : [
+                    -104.973189,
+                    39.718680999999997
+                  ],
+                  "bearings" : [
+                    0,
+                    105,
+                    180,
+                    285
+                  ]
+                }
+              ],
+              "weight" : 12.9,
+              "distance" : 57.200000000000003,
+              "mode" : "cycling",
+              "bannerInstructions" : [
+                {
+                  "drivingSide" : "right",
+                  "primary" : {
+                    "components" : [
+                      {
+                        "type" : "text",
+                        "text" : "Cross East Speer"
+                      }
+                    ],
+                    "type" : "turn",
+                    "modifier" : "straight",
+                    "text" : "Cross East Speer"
+                  },
+                  "distanceAlongGeometry" : 57.2,
+                  "secondary" : {
+                    "components" : [
+                      {
+                        "type" : "text",
+                        "text" : "Right on Sidewalk"
+                      }
+                    ],
+                    "text" : "Right on Sidewalk"
+                  },
+                  "sub" : {
+                    "components" : [
+                      {
+                        "type" : "text",
+                        "text" : "Cycleway"
+                      }
+                    ],
+                    "type" : "turn",
+                    "modifier" : "left",
+                    "text" : "Cycleway"
+                  }
+                }
+              ],
+              "driving_side" : "right",
+              "duration" : 12.9,
+              "geometry" : "cnlqFdqu_SeAFM?Q?",
+              "maneuver" : {
+                "location" : [
+                  -104.973153,
+                  39.718257000000001
+                ],
+                "bearing_after" : 354,
+                "bearing_before" : 350,
+                "type" : "turn",
+                "modifier" : "straight",
+                "instruction" : "turn straight"
+              },
+              "name" : "crossing"
+            },
+            {
+              "intersections" : [
+                {
+                  "entry" : [
+                    true,
+                    true,
+                    false,
+                    true
+                  ],
+                  "in" : 2,
+                  "out" : 1,
+                  "location" : [
+                    -104.973189,
+                    39.718770999999997
+                  ],
+                  "bearings" : [
+                    0,
+                    105,
+                    180,
+                    285
+                  ]
+                }
+              ],
+              "weight" : 7.4000000000000004,
+              "distance" : 20.300000000000001,
+              "mode" : "cycling",
+              "voiceInstructions" : [
+                {
+                  "announcement" : "Turn left on the cycleway",
+                  "ssmlAnnouncement" : "<speak><amazon:effect name=\"drc\"><prosody rate=\"1.08\">Turn left on the cycleway<\/prosody><\/amazon:effect><\/speak>",
+                  "distanceAlongGeometry" : 20.3
+                }
+              ],
+              "bannerInstructions" : [
+                {
+                  "drivingSide" : "right",
+                  "primary" : {
+                    "components" : [
+                      {
+                        "type" : "text",
+                        "text" : "Cycleway"
+                      }
+                    ],
+                    "type" : "turn",
+                    "modifier" : "left",
+                    "text" : "Cycleway"
+                  },
+                  "distanceAlongGeometry" : 20.3000
+                }
+              ],
+              "driving_side" : "right",
+              "duration" : 2.3999999999999999,
+              "geometry" : "iqlqFlqu_SHi@?C",
+              "maneuver" : {
+                "location" : [
+                  -104.973189,
+                  39.718770999999997
+                ],
+                "bearing_after" : 105,
+                "bearing_before" : 0,
+                "type" : "turn",
+                "modifier" : "right",
+                "instruction" : "turn right"
+              },
+              "name" : "sidewalk"
+            },
+            {
+              "intersections" : [
+                {
+                  "entry" : [
+                    true,
+                    false
+                  ],
+                  "in" : 1,
+                  "out" : 0,
+                  "location" : [
+                    -104.972962,
+                    39.718719
+                  ],
+                  "bearings" : [
+                    105,
+                    285
+                  ]
+                }
+              ],
+              "weight" : 9.6999999999999993,
+              "distance" : 5.5,
+              "mode" : "walking",
+              "bannerInstructions" : [
+                {
+                  "drivingSide" : "right",
+                  "primary" : {
+                    "components" : [
+                      {
+                        "type" : "text",
+                        "text" : "Cycleway"
+                      }
+                    ],
+                    "type" : "turn",
+                    "modifier" : "left",
+                    "text" : "Cycleway"
+                  },
+                  "distanceAlongGeometry" : 20.3000
+                }
+              ],
+              "driving_side" : "right",
+              "duration" : 9.6999999999999993,
+              "geometry" : "_qlqF~ou_S@K",
+              "maneuver" : {
+                "location" : [
+                  -104.972962,
+                  39.718719
+                ],
+                "bearing_after" : 105,
+                "bearing_before" : 105,
+                "type" : "notification",
+                "modifier" : "straight",
+                "instruction" : "heedWarning straight"
+              },
+              "name" : "crossing"
+            },
+            {
+              "intersections" : [
+                {
+                  "entry" : [
+                    true,
+                    true,
+                    true,
+                    true,
+                    false
+                  ],
+                  "in" : 4,
+                  "out" : 1,
+                  "location" : [
+                    -104.9729,
+                    39.718705
+                  ],
+                  "bearings" : [
+                    0,
+                    15,
+                    105,
+                    195,
+                    285
+                  ]
+                },
+                {
+                  "entry" : [
+                    true,
+                    true,
+                    false,
+                    true
+                  ],
+                  "in" : 2,
+                  "out" : 0,
+                  "location" : [
+                    -104.972872,
+                    39.720033000000001
+                  ],
+                  "bearings" : [
+                    30,
+                    105,
+                    180,
+                    285
+                  ]
+                }
+              ],
+              "weight" : 25.699999999999999,
+              "distance" : 155.19999999999999,
+              "mode" : "cycling",
+              "voiceInstructions" : [
+                {
+                  "announcement" : "In 500 feet, Make a slight left onto crossing",
+                  "ssmlAnnouncement" : "<speak><amazon:effect name=\"drc\"><prosody rate=\"1.08\">In 500 feet, Make a slight left onto crossing<\/prosody><\/amazon:effect><\/speak>",
+                  "distanceAlongGeometry" : 135.19999999999999
+                },
+                {
+                  "announcement" : "Make a slight left onto crossing, then Turn left onto East 3rd Avenue",
+                  "ssmlAnnouncement" : "<speak><amazon:effect name=\"drc\"><prosody rate=\"1.08\">Make a slight left onto crossing, then Turn left onto East 3rd Avenue<\/prosody><\/amazon:effect><\/speak>",
+                  "distanceAlongGeometry" : 50
+                }
+              ],
+              "bannerInstructions" : [
+                {
+                  "primary" : {
+                    "components" : [
+                      {
+                        "type" : "text",
+                        "text" : "Crossing"
+                      }
+                    ],
+                    "type" : "turn",
+                    "modifier" : "slight left",
+                    "text" : "Crossing"
+                  },
+                  "drivingSide" : "right",
+                  "distanceAlongGeometry" : 155.19999999999999
+                },
+                {
+                  "drivingSide" : "right",
+                  "primary" : {
+                    "components" : [
+                      {
+                        "type" : "text",
+                        "text" : "Crossing"
+                      }
+                    ],
+                    "type" : "turn",
+                    "modifier" : "slight left",
+                    "text" : "Crossing"
+                  },
+                  "distanceAlongGeometry" : 45,
+                  "sub" : {
+                    "components" : [
+                      {
+                        "type" : "text",
+                        "text" : "East 3rd Avenue"
+                      }
+                    ],
+                    "type" : "turn",
+                    "modifier" : "left",
+                    "text" : "East 3rd Avenue"
+                  }
+                }
+              ],
+              "driving_side" : "right",
+              "duration" : 20.699999999999999,
+              "geometry" : "}plqFrou_SCE{F@GAE?CG",
+              "maneuver" : {
+                "location" : [
+                  -104.9729,
+                  39.718705
+                ],
+                "bearing_after" : 18,
+                "bearing_before" : 105,
+                "type" : "turn",
+                "modifier" : "left",
+                "instruction" : "turn left"
+              },
+              "name" : "cycleway"
+            },
+            {
+              "intersections" : [
+                {
+                  "entry" : [
+                    true,
+                    true,
+                    true,
+                    false
+                  ],
+                  "in" : 3,
+                  "out" : 0,
+                  "location" : [
+                    -104.97283299999999,
+                    39.720077000000003
+                  ],
+                  "bearings" : [
+                    0,
+                    45,
+                    180,
+                    210
+                  ]
+                }
+              ],
+              "weight" : 6.5,
+              "distance" : 1,
+              "mode" : "walking",
+              "voiceInstructions" : [
+                {
+                  "announcement" : "Turn left onto East 3rd Avenue",
+                  "ssmlAnnouncement" : "<speak><amazon:effect name=\"drc\"><prosody rate=\"1.08\">Turn left onto East 3rd Avenue<\/prosody><\/amazon:effect><\/speak>",
+                  "distanceAlongGeometry" : 1
+                }
+              ],
+              "bannerInstructions" : [
+                {
+                  "primary" : {
+                    "components" : [
+                      {
+                        "type" : "text",
+                        "text" : "East 3rd Avenue"
+                      }
+                    ],
+                    "type" : "turn",
+                    "modifier" : "left",
+                    "text" : "East 3rd Avenue"
+                  },
+                  "drivingSide" : "right",
+                  "distanceAlongGeometry" : 1
+                }
+              ],
+              "driving_side" : "right",
+              "duration" : 6.5,
+              "geometry" : "oylqFdou_SA?",
+              "maneuver" : {
+                "location" : [
+                  -104.97283299999999,
+                  39.720077000000003
+                ],
+                "bearing_after" : 354,
+                "bearing_before" : 33,
+                "type" : "turn",
+                "modifier" : "slight left",
+                "instruction" : "turn slight left"
+              },
+              "name" : "crossing"
+            },
+            {
+              "intersections" : [
+                {
+                  "entry" : [
+                    true,
+                    true,
+                    false,
+                    true
+                  ],
+                  "in" : 2,
+                  "out" : 3,
+                  "location" : [
+                    -104.97283400000001,
+                    39.720086000000002
+                  ],
+                  "bearings" : [
+                    0,
+                    90,
+                    180,
+                    285
+                  ]
+                },
+                {
+                  "entry" : [
+                    true,
+                    false,
+                    true,
+                    false,
+                    true
+                  ],
+                  "in" : 1,
+                  "out" : 4,
+                  "location" : [
+                    -104.972932,
+                    39.720103999999999
+                  ],
+                  "bearings" : [
+                    0,
+                    105,
+                    165,
+                    195,
+                    285
+                  ]
+                },
+                {
+                  "entry" : [
+                    false,
+                    true,
+                    true
+                  ],
+                  "in" : 0,
+                  "out" : 2,
+                  "location" : [
+                    -104.97334600000001,
+                    39.720134000000002
+                  ],
+                  "bearings" : [
+                    90,
+                    180,
+                    270
+                  ]
+                },
+                {
+                  "entry" : [
+                    false,
+                    false,
+                    true,
+                    true
+                  ],
+                  "in" : 1,
+                  "out" : 3,
+                  "location" : [
+                    -104.974068,
+                    39.720134000000002
+                  ],
+                  "bearings" : [
+                    0,
+                    90,
+                    180,
+                    270
+                  ]
+                }
+              ],
+              "weight" : 24.899999999999999,
+              "distance" : 206.5,
+              "mode" : "cycling",
+              "voiceInstructions" : [
+                {
+                  "announcement" : "In 600 feet, You will arrive at your destination",
+                  "ssmlAnnouncement" : "<speak><amazon:effect name=\"drc\"><prosody rate=\"1.08\">In 600 feet, You will arrive at your destination<\/prosody><\/amazon:effect><\/speak>",
+                  "distanceAlongGeometry" : 186.5
+                },
+                {
+                  "announcement" : "You have arrived at your destination",
+                  "ssmlAnnouncement" : "<speak><amazon:effect name=\"drc\"><prosody rate=\"1.08\">You have arrived at your destination<\/prosody><\/amazon:effect><\/speak>",
+                  "distanceAlongGeometry" : 5
+                }
+              ],
+              "bannerInstructions" : [
+                {
+                  "primary" : {
+                    "type" : "arrive",
+                    "text" : "You will arrive",
+                    "components" : [
+                      {
+                        "type" : "text",
+                        "text" : "You will arrive"
+                      }
+                    ]
+                  },
+                  "drivingSide" : "right",
+                  "distanceAlongGeometry" : 206.5
+                },
+                {
+                  "primary" : {
+                    "type" : "arrive",
+                    "text" : "You have arrived",
+                    "components" : [
+                      {
+                        "type" : "text",
+                        "text" : "You have arrived"
+                      }
+                    ]
+                  },
+                  "drivingSide" : "right",
+                  "distanceAlongGeometry" : 5
+                }
+              ],
+              "driving_side" : "right",
+              "duration" : 24.899999999999999,
+              "geometry" : "qylqFdou_S?@APCH?LAB?H?l@?Z?rB?R?~A?bB?P",
+              "maneuver" : {
+                "location" : [
+                  -104.97283400000001,
+                  39.720086000000002
+                ],
+                "bearing_after" : 282,
+                "bearing_before" : 354,
+                "type" : "turn",
+                "modifier" : "left",
+                "instruction" : "turn left"
+              },
+              "name" : "East 3rd Avenue"
+            },
+            {
+              "intersections" : [
+                {
+                  "entry" : [
+                    true
+                  ],
+                  "in" : 0,
+                  "location" : [
+                    -104.975236,
+                    39.720132999999997
+                  ],
+                  "bearings" : [
+                    90
+                  ]
+                }
+              ],
+              "weight" : 0,
+              "distance" : 0,
+              "mode" : "cycling",
+              "voiceInstructions" : [
+
+              ],
+              "bannerInstructions" : [
+
+              ],
+              "driving_side" : "right",
+              "duration" : 0,
+              "geometry" : "yylqFf~u_S??",
+              "maneuver" : {
+                "bearing_after" : 0,
+                "bearing_before" : 270,
+                "type" : "arrive",
+                "location" : [
+                  -104.975236,
+                  39.720132999999997
+                ],
+                "instruction" : "arrive "
+              },
+              "name" : "East 3rd Avenue"
+            }
+          ],
+          "distance" : 1780.2,
+          "summary" : "South Marion Parkway, path",
+          "annotation" : {
+            "weight" : [
+              6,
+              6.0999999999999996,
+              6,
+              5,
+              1,
+              0.90000000000000002,
+              5.0999999999999996,
+              2.7999999999999998,
+              1.2,
+              0.29999999999999999,
+              1.3999999999999999,
+              0.40000000000000002,
+              19.5,
+              3.6000000000000001,
+              0.90000000000000002,
+              1.3,
+              22.800000000000001,
+              15.6,
+              1.2,
+              0.90000000000000002,
+              0.59999999999999998,
+              0.80000000000000004,
+              1,
+              0.5,
+              1.1000000000000001,
+              0.69999999999999996,
+              1.3,
+              0.69999999999999996,
+              0.10000000000000001,
+              0.5,
+              0.29999999999999999,
+              0.10000000000000001,
+              0.29999999999999999,
+              0.5,
+              0.5,
+              0.69999999999999996,
+              0.90000000000000002,
+              0.80000000000000004,
+              0.90000000000000002,
+              0.80000000000000004,
+              0.5,
+              0.20000000000000001,
+              0.59999999999999998,
+              0.59999999999999998,
+              0.80000000000000004,
+              1,
+              1.3,
+              1.3,
+              1.1000000000000001,
+              1.5,
+              11.199999999999999,
+              5.0999999999999996,
+              10.5,
+              1,
+              0.59999999999999998,
+              0.80000000000000004,
+              0.90000000000000002,
+              6.5999999999999996,
+              2.5,
+              1.3,
+              0.80000000000000004,
+              0.59999999999999998,
+              1,
+              1.2,
+              4.7000000000000002,
+              1,
+              1.2,
+              2.2999999999999998,
+              0.10000000000000001,
+              1.7,
+              0.5,
+              16.800000000000001,
+              0.5,
+              0.29999999999999999,
+              0.5,
+              1.2,
+              0.10000000000000001,
+              0.90000000000000002,
+              0.59999999999999998,
+              0.69999999999999996,
+              0.20000000000000001,
+              0.59999999999999998,
+              2.2999999999999998,
+              1.5,
+              5.9000000000000004,
+              1.1000000000000001,
+              4.9000000000000004,
+              5.0999999999999996,
+              0.90000000000000002
+            ],
+            "speed" : [
+              8.3000000000000007,
+              8.3000000000000007,
+              8.4000000000000004,
+              8.3000000000000007,
+              8.3000000000000007,
+              8.5,
+              8.3000000000000007,
+              8.4000000000000004,
+              8.4000000000000004,
+              8.5999999999999996,
+              8.3000000000000007,
+              7.9000000000000004,
+              8.3000000000000007,
+              8.4000000000000004,
+              8.5999999999999996,
+              8.5,
+              8.3000000000000007,
+              8.3000000000000007,
+              8.1999999999999993,
+              8.1999999999999993,
+              9,
+              8.5,
+              8.4000000000000004,
+              8.3000000000000007,
+              8.1999999999999993,
+              8.5999999999999996,
+              8.3000000000000007,
+              8.3000000000000007,
+              8,
+              8.1999999999999993,
+              6.2999999999999998,
+              4.5,
+              7.5,
+              7.0999999999999996,
+              7.7999999999999998,
+              6.9000000000000004,
+              7.5999999999999996,
+              7,
+              7.2000000000000002,
+              6.9000000000000004,
+              7,
+              7.2000000000000002,
+              7,
+              6.9000000000000004,
+              7.0999999999999996,
+              7.2000000000000002,
+              7.2000000000000002,
+              7,
+              7.4000000000000004,
+              7,
+              7.2000000000000002,
+              7.2999999999999998,
+              7.2000000000000002,
+              7.2999999999999998,
+              7.5999999999999996,
+              6.9000000000000004,
+              6.9000000000000004,
+              7.2000000000000002,
+              7.2000000000000002,
+              7.2000000000000002,
+              7,
+              7,
+              7,
+              7.4000000000000004,
+              8.3000000000000007,
+              8.0999999999999996,
+              8.3000000000000007,
+              8.3000000000000007,
+              11.6,
+              3.2999999999999998,
+              8.6999999999999993,
+              8.3000000000000007,
+              8.9000000000000004,
+              9.3000000000000007,
+              7.5999999999999996,
+              0.80000000000000004,
+              7.7999999999999998,
+              8.6999999999999993,
+              7.7000000000000002,
+              7.7999999999999998,
+              8.1999999999999993,
+              7.9000000000000004,
+              8.4000000000000004,
+              8.1999999999999993,
+              8.4000000000000004,
+              8.1999999999999993,
+              8.4000000000000004,
+              8.4000000000000004,
+              8
+            ],
+            "distance" : [
+              49.640812412000002,
+              50.584389518999998,
+              50.412920321000001,
+              41.667417671000003,
+              8.3170775789999993,
+              7.6304530289999999,
+              42.527091005000003,
+              23.577503934999999,
+              10.116780422,
+              2.5720628200000002,
+              11.576412647,
+              3.1722108090000001,
+              162.548803636,
+              30.200470693,
+              7.7720546810000002,
+              10.992240262999999,
+              189.64249478400001,
+              130.23844649700001,
+              9.8587740260000007,
+              7.3977993189999998,
+              5.4034384209999997,
+              6.7681757290000002,
+              8.4420943289999997,
+              4.14629358,
+              8.9928988810000003,
+              6.0395391610000004,
+              10.754903913,
+              5.8063805930000001,
+              0.79589609500000003,
+              4.1080860450000003,
+              1.88944516,
+              0.45231718599999998,
+              2.246247833,
+              3.5471150859999998,
+              3.9145311390000002,
+              4.8176141000000001,
+              6.7979745420000004,
+              5.5987107719999996,
+              6.4560229429999998,
+              5.5236813040000001,
+              3.4969069890000002,
+              1.4446540130000001,
+              4.196597111,
+              4.1161299820000004,
+              5.6787002170000003,
+              7.2370749920000002,
+              9.3583021409999994,
+              9.1531220569999991,
+              8.1164710870000008,
+              10.550923998,
+              80.829777910000004,
+              37.083902870999999,
+              75.833096283000003,
+              7.3459706589999998,
+              4.5554317639999997,
+              5.5541151490000003,
+              6.2388872419999997,
+              47.636530282000003,
+              18.099612091000001,
+              9.3406413700000002,
+              5.5936775829999998,
+              4.1799242339999996,
+              7.0029174379999999,
+              8.8915885689999996,
+              39.080170037000002,
+              8.1069563369999997,
+              9.9926417329999992,
+              19.137000143000002,
+              1.1632681920000001,
+              5.5382090450000003,
+              4.3433504699999999,
+              139.78913623099999,
+              4.4618148209999999,
+              2.781025074,
+              3.8096135119999999,
+              1.002935417,
+              0.77956600600000003,
+              7.8604367499999999,
+              4.6225050850000002,
+              5.4929878390000004,
+              1.644038774,
+              4.748014585,
+              19.293346640999999,
+              12.345901531000001,
+              49.555076984999999,
+              9.0022198660000008,
+              41.239338392999997,
+              42.696387162000001,
+              7.2017758939999998
+            ],
+            "duration" : [
+              6,
+              6.0999999999999996,
+              6,
+              5,
+              1,
+              0.90000000000000002,
+              5.0999999999999996,
+              2.7999999999999998,
+              1.2,
+              0.29999999999999999,
+              1.3999999999999999,
+              0.40000000000000002,
+              19.5,
+              3.6000000000000001,
+              0.90000000000000002,
+              1.3,
+              22.800000000000001,
+              15.6,
+              1.2,
+              0.90000000000000002,
+              0.59999999999999998,
+              0.80000000000000004,
+              1,
+              0.5,
+              1.1000000000000001,
+              0.69999999999999996,
+              1.3,
+              0.69999999999999996,
+              0.10000000000000001,
+              0.5,
+              0.29999999999999999,
+              0.10000000000000001,
+              0.29999999999999999,
+              0.5,
+              0.5,
+              0.69999999999999996,
+              0.90000000000000002,
+              0.80000000000000004,
+              0.90000000000000002,
+              0.80000000000000004,
+              0.5,
+              0.20000000000000001,
+              0.59999999999999998,
+              0.59999999999999998,
+              0.80000000000000004,
+              1,
+              1.3,
+              1.3,
+              1.1000000000000001,
+              1.5,
+              11.199999999999999,
+              5.0999999999999996,
+              10.5,
+              1,
+              0.59999999999999998,
+              0.80000000000000004,
+              0.90000000000000002,
+              6.5999999999999996,
+              2.5,
+              1.3,
+              0.80000000000000004,
+              0.59999999999999998,
+              1,
+              1.2,
+              4.7000000000000002,
+              1,
+              1.2,
+              2.2999999999999998,
+              0.10000000000000001,
+              1.7,
+              0.5,
+              16.800000000000001,
+              0.5,
+              0.29999999999999999,
+              0.5,
+              1.2,
+              0.10000000000000001,
+              0.90000000000000002,
+              0.59999999999999998,
+              0.69999999999999996,
+              0.20000000000000001,
+              0.59999999999999998,
+              2.2999999999999998,
+              1.5,
+              5.9000000000000004,
+              1.1000000000000001,
+              4.9000000000000004,
+              5.0999999999999996,
+              0.90000000000000002
+            ],
+            "datasources" : [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "nodes" : [
+              176101604,
+              861688930,
+              176076296,
+              861688999,
+              11076169267,
+              176101606,
+              11102607035,
+              2867824553,
+              2430648004,
+              176074184,
+              10937924086,
+              10937926718,
+              176074151,
+              5933218081,
+              5575185846,
+              176074149,
+              5575185870,
+              176074147,
+              176074145,
+              2867830787,
+              2867855012,
+              2867830794,
+              2867830793,
+              2867830792,
+              2867855037,
+              2867855009,
+              2867855010,
+              2430647978,
+              10937924094,
+              10937924071,
+              10937924095,
+              2867874128,
+              9344727248,
+              2867874127,
+              2867874126,
+              2867874123,
+              2867874005,
+              2867874109,
+              2867874048,
+              2867874081,
+              2867872061,
+              5444046237,
+              2867874047,
+              2867872066,
+              2867874009,
+              2867872098,
+              2867872097,
+              2867874054,
+              2867872080,
+              2867874082,
+              2867874030,
+              2867872083,
+              2867874027,
+              2867872089,
+              2867874093,
+              2867872072,
+              2867874108,
+              2867874117,
+              2867872094,
+              2867874097,
+              2867874062,
+              2867874058,
+              2867872070,
+              2867874131,
+              4040432656,
+              5423649717,
+              2393060800,
+              3327230725,
+              10944392285,
+              10944392283,
+              4104203257,
+              10944392282,
+              10944392281,
+              11167628611,
+              10944392280,
+              11167622104,
+              11167628610,
+              2867885239,
+              176085479,
+              2867885240,
+              11167622103,
+              2867885237,
+              2867885243,
+              385223166,
+              2797919108,
+              176072864,
+              5420488199,
+              493905150,
+              5420488200,
+              176090469
+            ],
+            "metadata" : {
+              "datasource_names" : [
+                "lua profile"
+              ]
+            }
+          },
+          "duration" : 262.10000000000002,
+          "weight" : 272.10000000000002
+        }
+      ],
+      "geometry" : "avjqFhav_S?sBAuB?uB?_B?S?Q?aB?w@?W?EAY?GcH@u@?M?S?uIBiFAQBKDIBIFKJEDKNEHITEJAAE?C???C@EDAFAJCNAJGJGFCBA@G@G?I?KCQCOAM?SAoC@cA?gC?M?G@IAI?uA@a@?O?I@G@KBO@eAFM?Q?Hi@?C@KCE{F@GAE?CGA??@APCH?LAB?H?l@?Z?rB?R?~A?bB?P",
+      "distance" : 1780.2,
+      "duration" : 262.10000000000002
+    }
+  ]
+}

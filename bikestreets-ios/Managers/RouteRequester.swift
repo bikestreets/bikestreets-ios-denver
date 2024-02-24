@@ -52,6 +52,39 @@ final class RouteRequester {
     case unableToParse
   }
 
+  private static func getOSRMPath(startPoint: CLLocationCoordinate2D, endPoint: CLLocationCoordinate2D) -> String {
+    var startLatitude = startPoint.latitude
+    var startLongitude = startPoint.longitude
+    var endLatitude = endPoint.latitude
+    var endLongitude = endPoint.longitude
+    
+    // for ease of pasting in fixed coordinates when testing
+    let startOverrideString = "39.7092943, -104.9757300"
+    let endOverrideString = "39.7201333, -104.9752361"
+    let overrideCoordinates = false
+    
+    func parseCoordinates(from string: String) -> (CLLocationDegrees, CLLocationDegrees)? {
+      let components = string.components(separatedBy: ",").map { $0.trimmingCharacters(in: .whitespaces) }
+      
+      guard components.count == 2 else { return nil }
+      guard let latitude = Double(components[0]), let longitude = Double(components[1]) else { return nil }
+
+      return (latitude, longitude)
+    }
+    
+    if overrideCoordinates,
+        let startOverride = parseCoordinates(from: startOverrideString),
+        let endOverride = parseCoordinates(from: endOverrideString) {
+      
+      startLatitude = startOverride.0
+      startLongitude = startOverride.1
+      endLatitude = endOverride.0
+      endLongitude = endOverride.1
+    }
+    
+    return "/route/v1/bike/\(startLongitude),\(startLatitude);\(endLongitude),\(endLatitude)"
+  }
+  
   static func getOSRMDirections(
     originName: String,
     startPoint: CLLocationCoordinate2D,
@@ -65,7 +98,7 @@ final class RouteRequester {
     var components = URLComponents()
     components.scheme = "http"
     components.host = "206.189.205.9"
-    components.percentEncodedPath = "/route/v1/bike/\(startPoint.longitude),\(startPoint.latitude);\(endPoint.longitude),\(endPoint.latitude)"
+    components.percentEncodedPath = getOSRMPath(startPoint: startPoint, endPoint: endPoint)
 
     print("""
     OSRM REQUEST:
@@ -111,18 +144,6 @@ final class RouteRequester {
           profileIdentifier: .cycling
         )
         routeOptions.shapeFormat = .polyline
-
-        // leaving this in, as it is sometimes useful to load previously created RouteResponse JSON from disk with manual tweaks
-        func loadDataFromFile(filePath: String) -> Data? {
-          let url = URL(fileURLWithPath: filePath)
-          
-          do {
-              return try Data(contentsOf: url)
-          } catch {
-              print("Failed to load \(filePath) from bundle:\n\(error)")
-              return nil
-          }
-        }
           
         let decoder = JSONDecoder()
         decoder.userInfo = [
@@ -130,8 +151,15 @@ final class RouteRequester {
           .credentials: Directions.shared.credentials,
         ]
 
-        let rawOSRMResponse = try decoder.decode(RouteResponse.self, from: data)
-        let dataWithInstructions = InstructionGenerator.addInstructions(data, routeResponse: rawOSRMResponse)
+        // Check if start/end points yield a FixedResponse
+        var dataWithInstructions: Data?
+        if let fixedData = FixedRouteResponse.getData(startPoint: startPoint, endPoint: endPoint) {
+          dataWithInstructions = fixedData
+        } else {
+          let rawOSRMResponse = try decoder.decode(RouteResponse.self, from: data)
+          dataWithInstructions = InstructionGenerator.addInstructions(data, routeResponse: rawOSRMResponse)
+        }
+        
         let osrmResponse = try decoder.decode(RouteResponse.self, from: dataWithInstructions ?? data)
         print("""
         
@@ -257,6 +285,61 @@ extension Array where Element == Waypoint {
   func disableWaypointLegSeparation() {
     for waypoint in dropFirst().dropLast() {
       waypoint.separatesLegs = false
+    }
+  }
+}
+
+final class FixedRouteResponse {
+  // Hard-coded routes that can be loaded from disk based on proximity to requested start/end locations
+  // Easter egg instruction testing
+  enum FixedRouteSpec: String, CaseIterable {
+    case dakotaMarion =  "dakota-marion"
+    
+    var startLocation: CLLocation {
+      switch self {
+      case .dakotaMarion:
+        return CLLocation(latitude: 39.70929, longitude: -104.97573)
+      }
+    }
+    
+    var endLocation: CLLocation {
+      switch self {
+      case .dakotaMarion:
+        return CLLocation(latitude: 39.72013, longitude: -104.97523)
+      }
+    }
+  }
+  
+  static func getData(startPoint: CLLocationCoordinate2D, endPoint: CLLocationCoordinate2D) -> Data? {
+    let startLocation = CLLocation(latitude: startPoint.latitude, longitude: startPoint.longitude)
+    let endLocation = CLLocation(latitude: endPoint.latitude, longitude: endPoint.longitude)
+    let tolerance: Double = 10.0
+    
+    for fixedRoute in FixedRouteSpec.allCases {
+      if fixedRoute.startLocation.distance(from: startLocation) < tolerance,
+          fixedRoute.endLocation.distance(from: endLocation) < tolerance
+        {
+        if let routeData = fromFile(named: fixedRoute.rawValue) {
+          return routeData
+        }
+      }
+    }
+    return nil
+  }
+  
+  private static func fromFile(named fileName: String) -> Data? {
+    let fileExtension = "txt"
+    
+    guard let url = Bundle.main.url(forResource: fileName, withExtension: fileExtension) else {
+      print("File \(fileName).txt not found")
+      return nil
+    }
+    do {
+      let data = try Data(contentsOf: url)
+      return data
+    } catch {
+      print("Error reading \(fileName).\(fileExtension): \(error)")
+      return nil
     }
   }
 }
