@@ -52,7 +52,9 @@ struct StepInfo {
 
 extension OSRMInstructionFormatter {
   func bikestreetsString(for obj: Any?, legIndex: Int?, numberOfLegs: Int?, roadClasses: RoadClasses? = RoadClasses([]), modifyValueByKey: ((TokenType, String) -> String)?) -> String? {
+    
     let rawString = self.string(for: obj, legIndex: legIndex, numberOfLegs: numberOfLegs, roadClasses: roadClasses, modifyValueByKey: modifyValueByKey)
+    
     guard var output = rawString else { return nil }
 
     InstructionGenerator.bikestreetsReplacements.forEach { pair in
@@ -71,7 +73,9 @@ enum InstructionGenerator {
   // Precompile the regular expressions since the find/replace pairs are static. No need to keep creating NSRegularExpressions
   static let bikestreetsReplacements: [RegexReplacementPair] = [
       (" onto sidewalk ", " on the sidewalk "),
+      (" onto cycleway ", " on the cycleway "),
       (" onto crossing ", " at the crossing "),
+      (" onto path ", " on the path "),
       (" onto alley ", " in the alley ")
   ].map { find, replace in
       let pattern = "\\b\(find.trimmingCharacters(in: .whitespaces))\\b"
