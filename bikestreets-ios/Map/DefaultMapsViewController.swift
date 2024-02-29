@@ -43,10 +43,30 @@ final class DefaultMapsViewController: MapsViewController {
   override init() {
     screenManager = ScreenManager(stateManager: stateManager)
     super.init()
+    subscribeForNotifications()
   }
 
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+  
+  deinit {
+    unsubscribeFromNotifications()
+  }
+  
+  // MARK: - Notifications observer methods
+  
+  func subscribeForNotifications() {
+    NotificationCenter.default.addObserver(self,
+                                           selector: #selector(progressDidChange(_:)),
+                                           name: .routeControllerProgressDidChange,
+                                           object: nil)
+  }
+  
+  func unsubscribeFromNotifications() {
+    NotificationCenter.default.removeObserver(self,
+                                              name: .routeControllerProgressDidChange,
+                                              object: nil)
   }
 
   override func viewDidLoad() {
@@ -423,7 +443,7 @@ extension DefaultMapsViewController: StateListener {
         #if targetEnvironment(simulator)
           // these 2 lines allow the route simulation to run faster.
           navigationService.simulationMode = .always
-          navigationService.simulationSpeedMultiplier = 5.0
+          navigationService.simulationSpeedMultiplier = 1.0
         #endif
         
         let navigationOptions = NavigationOptions(navigationService: navigationService)
@@ -436,7 +456,10 @@ extension DefaultMapsViewController: StateListener {
         /// Disable "Report Problem" sheet that shows while navigating.
         navigationViewController?.showsReportFeedback = false
         navigationViewController?.showsEndOfRouteFeedback = false
-
+        if let viewportDataSource = navigationViewController?.navigationMapView?.navigationCamera.viewportDataSource as? NavigationViewportDataSource {
+          // Based on some experimentation, lowering the pitch for cycling seems appropriate compared to automobile, as speeds are lower and horizon doesn't need to be quite so far.
+          viewportDataSource.options.followingCameraOptions.defaultPitch = 35.0
+        }
         sheetManager.dismissAllSheets(animated: false) {
           self.present(self.navigationViewController!, animated: true, completion: nil)
         }
@@ -489,6 +512,28 @@ extension DefaultMapsViewController: StateListener {
         }
       }
     }()
+  }
+  
+  @objc func progressDidChange(_ notification: NSNotification) {
+    let activeLocation = notification.userInfo?[RouteController.NotificationUserInfoKey.locationKey] as? CLLocation
+    
+    if let navigationMapView = navigationViewController?.navigationMapView,
+       let navigationViewportDataSource = navigationMapView.navigationCamera.viewportDataSource as? NavigationViewportDataSource {
+
+      // pitch = 0.0 seems to only be at the very beginning of the route when transitioning from overview.
+      // Actual maneuver pitch is close to overhead at just above 0.0, so the goal here is to avoid rapid telescoping out/in at the point of departure
+      if navigationMapView.mapView.mapboxMap.cameraState.pitch < 20.0 && navigationMapView.mapView.mapboxMap.cameraState.pitch > 0.0 {
+        navigationViewportDataSource.options.followingCameraOptions.zoomUpdatesAllowed = false
+        navigationViewportDataSource.followingMobileCamera.zoom = navigationViewportDataSource.options.followingCameraOptions.zoomRange.upperBound + 1.0
+        navigationViewportDataSource.options.followingCameraOptions.centerUpdatesAllowed = false
+        navigationViewportDataSource.followingMobileCamera.center = activeLocation?.coordinate
+      } else {
+        navigationViewportDataSource.options.followingCameraOptions.zoomUpdatesAllowed = true
+        navigationViewportDataSource.followingMobileCamera.zoom = nil
+        navigationViewportDataSource.options.followingCameraOptions.centerUpdatesAllowed = true
+        navigationViewportDataSource.followingMobileCamera.center = nil
+      }
+    }
   }
 }
 
