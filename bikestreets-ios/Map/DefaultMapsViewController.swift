@@ -14,36 +14,6 @@ import MapKit
 import MessageUI
 import SwiftUI
 import UIKit
-
-final class RerouteManager {
-  enum State {
-    case idle
-    case rerouting
-  }
-  
-  private var rerouteTimer: Timer?
-  private var lastRerouteCompletionTime: Date? = Date()
-  private let cooldownInterval: TimeInterval = 3.0
-  
-  var state: State = .idle {
-    didSet {
-      if state == .idle {
-        lastRerouteCompletionTime = Date()
-      }
-    }
-  }
-  
-  var canRequestReroute: Bool {
-    guard state == .idle else { return false }
-    
-    if let lastRerouteTime = lastRerouteCompletionTime,
-       Date().timeIntervalSince(lastRerouteTime) < cooldownInterval {
-        print("IGNORING ROUTE REQUEST")
-        return false
-    }
-    return true
-  }
-}
   
 final class DefaultMapsViewController: MapsViewController {
   private let locationManager = CLLocationManager()
@@ -263,53 +233,93 @@ final class DefaultMapsViewController: MapsViewController {
       )
     }
   }
-
-  // MARK: - State Handling
-
-  private func requestDirections(request: StateManager.RouteRequest) {
-    let startName: String
-    let endName: String
-
-    switch stateManager.state {
-    case .requestingRoutes(let request):
-      startName = request.origin.name
-      endName = request.destination.name
-    default:
-      startName = "INCORRECT-STATE-FOR-NAME"
-      endName = "INCORRECT-STATE-FOR-NAME"
-    }
-
+  
+  // MARK: - Route Requests
+  private func requestRoute(request: StateManager.RouteRequest) {
     RouteRequester.getOSRMDirections(
-      originName: startName,
       startPoint: request.origin.coordinate,
-      destinationName: endName,
       endPoint: request.destination.coordinate
-    ) { result in
-      switch result {
-      case .success(let result):
-        DispatchQueue.main.async {
-          if let previewRoutes = result.routes {
-            // On initial state update, assume first route is selected.
-            self.stateManager.state = .previewDirections(
-              preview: .init(
-                request: request,
-                response: result,
-                routes: previewRoutes
-              )
-            )
-          } else {
-            // TODO: Improve the state when a route is requested but returns no options.
-            self.stateManager.state = .initial
-          }
-        }
-      case .failure(let error):
-        // TODO: Handle route request errors.
-        print(error)
+    ) { [weak self] result in
+      DispatchQueue.main.async {
+        self?.handleRouteResponse(result, forRequest: request)
       }
+    }
+  }
+  
+  private func handleRouteResponse(_ result: Result<CustomRouteResponse, Error>, forRequest request: StateManager.RouteRequest) {
+    switch result {
+    case .success(let result):
+      switch rerouteManager.state {
+      case .rerouting:
+        // Do nothing if a reroute is requested but returns no options
+        guard let _ = result.routes?.first, let router = navigationViewController?.navigationService.router else { break }
+        
+        router.updateRoute(with: IndexedRouteResponse(routeResponse: result.osrm, routeIndex: 0), routeOptions: nil, completion: {
+          [weak self] _ in
+          guard let self else { return }
+          self.rerouteManager.state = .idle
+        })
+        
+      case .idle:
+        if let _ = result.routes?.first {
+          // On initial state update, assume first route is selected.
+          self.stateManager.state = .previewDirections(
+            preview: .init(
+              request: request,
+              response: result
+            )
+          )
+        } else {
+          // TODO: Improve the state when a route is requested but returns no options.
+          self.stateManager.state = .initial
+        }
+      }
+    case .failure(let error):
+      // TODO: Handle route request errors.
+      rerouteManager.state = .idle
+      print(error)
     }
   }
 }
 
+// MARK: -- NavigationViewControllerDelegate
+
+extension DefaultMapsViewController: NavigationViewControllerDelegate {
+  func navigationViewController(_ navigationViewController: NavigationViewController, shouldRerouteFrom location: CLLocation) -> Bool {
+    guard rerouteManager.canRequestReroute, case .routing(let routing) = stateManager.state else { return false }
+    
+    let request = StateManager.RouteRequest(
+      origin: .currentLocation(coordinate: location.coordinate),
+      destination: routing.request.destination
+    )
+    
+    rerouteManager.state = .rerouting
+    requestRoute(request: request)
+    
+    return true
+  }
+
+  func navigationViewControllerDidDismiss(
+    _ navigationViewController: NavigationViewController,
+    byCanceling canceled: Bool
+  ) {
+    self.navigationViewController = nil
+
+    // If still in routing state, transition back to initial.
+    if case .routing = stateManager.state {
+      stateManager.state = .initial
+    }
+  }
+
+  func navigationViewController(
+    _ navigationViewController: NavigationViewController,
+    didSubmitArrivalFeedback feedback: EndOfRouteFeedback
+  ) {
+    guard MFMailComposeViewController.canSendMail() else { return }
+    stateManager.state = .routingFeedback(feedback: feedback)
+  }
+  
+}
 // MARK: - State Management
 
 extension DefaultMapsViewController: StateListener {
@@ -414,7 +424,7 @@ extension DefaultMapsViewController: StateListener {
       // showAnnotation(.init(item: mapItem), cameraShouldFollow: false)
       // Potentially shift to smaller sheet presentation
       // sheetNavigationController.sheetPresentationController?.selectedDetentIdentifier = UISheetPresentationController.Detent.small().identifier
-      requestDirections(request: request)
+      requestRoute(request: request)
     case .previewDirections(let preview):
       updateMapAnnotations(routes: preview.routes)
     case .updateDestination:
@@ -852,71 +862,6 @@ extension DefaultMapsViewController {
       sheetManager.present(DebugTableViewController(entries: files), animated: true)
     }
   }
-}
-
-// MARK: -- NavigationViewControllerDelegate
-
-extension DefaultMapsViewController: NavigationViewControllerDelegate {
-  func navigationViewController(
-    _ navigationViewController: NavigationViewController,
-    shouldRerouteFrom location: CLLocation
-  ) -> Bool {
-    
-    guard rerouteManager.canRequestReroute, let endPoint = navigationViewController.routeOptions?.waypoints.last?.coordinate else { return false }
-    
-    print("******* REROUTE STARTED")
-    rerouteManager.state = .rerouting
-    RouteRequester.getOSRMDirections(
-      originName: "",
-      startPoint: location.coordinate,
-      destinationName: "",
-      endPoint: endPoint
-    ) { [weak self] result in
-      guard let self else { return }
-      switch result {
-      case .success(let result):
-        guard let routeShape = result.osrm.routes?.first?.shape else { break }
-        let matchOptions = NavigationMatchOptions(coordinates: routeShape.coordinates)
-        let routeOptions = RouteOptions(matchOptions: matchOptions)
-        let router = navigationViewController.navigationService.router
-        let indexedRouteResponse = IndexedRouteResponse(routeResponse: result.osrm, routeIndex: 0)
-        router.updateRoute(with: indexedRouteResponse, routeOptions: routeOptions, completion: {
-          [weak self] _ in
-          guard let self else { return }
-          rerouteManager.state = .idle
-          print("******* REROUTE FINISHED")
-        })
-        
-      case .failure(let error):
-        // TODO: Handle route request errors.
-        rerouteManager.state = .idle
-        print(error)
-      }
-    }
-    
-    return true
-  }
-
-  func navigationViewControllerDidDismiss(
-    _ navigationViewController: NavigationViewController,
-    byCanceling canceled: Bool
-  ) {
-    self.navigationViewController = nil
-
-    // If still in routing state, transition back to initial.
-    if case .routing = stateManager.state {
-      stateManager.state = .initial
-    }
-  }
-
-  func navigationViewController(
-    _ navigationViewController: NavigationViewController,
-    didSubmitArrivalFeedback feedback: EndOfRouteFeedback
-  ) {
-    guard MFMailComposeViewController.canSendMail() else { return }
-    stateManager.state = .routingFeedback(feedback: feedback)
-  }
-  
 }
 
 // MARK: -- CLLocationManagerDelegate

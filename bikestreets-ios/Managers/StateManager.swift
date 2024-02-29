@@ -50,7 +50,10 @@ final class StateManager {
   struct DirectionsPreview {
     let request: RouteRequest
     let response: CustomRouteResponse
-    let routes: [Route]
+    var routes: [Route] {
+      guard let routes = response.routes else { return [] }
+      return routes
+    }
   }
 
   struct Routing {
