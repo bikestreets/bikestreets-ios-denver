@@ -50,7 +50,39 @@ struct StepInfo {
   }
 }
 
+extension OSRMInstructionFormatter {
+  func bikestreetsString(for obj: Any?, legIndex: Int?, numberOfLegs: Int?, roadClasses: RoadClasses? = RoadClasses([]), modifyValueByKey: ((TokenType, String) -> String)?) -> String? {
+    
+    let rawString = self.string(for: obj, legIndex: legIndex, numberOfLegs: numberOfLegs, roadClasses: roadClasses, modifyValueByKey: modifyValueByKey)
+    
+    guard var output = rawString else { return nil }
+
+    InstructionGenerator.bikestreetsReplacements.forEach { pair in
+        output = pair.regex.stringByReplacingMatches(in: output, options: [], range: NSRange(location: 0, length: output.utf16.count), withTemplate: pair.replacement)
+    }
+    return output
+  }
+}
+
 enum InstructionGenerator {
+  struct RegexReplacementPair {
+      let regex: NSRegularExpression
+      let replacement: String
+  }
+  
+  // Precompile the regular expressions since the find/replace pairs are static. No need to keep creating NSRegularExpressions
+  static let bikestreetsReplacements: [RegexReplacementPair] = [
+      (" onto sidewalk ", " on the sidewalk "),
+      (" onto cycleway ", " on the cycleway "),
+      (" onto crossing ", " at the crossing "),
+      (" onto path ", " on the path "),
+      (" onto alley ", " in the alley ")
+  ].map { find, replace in
+      let pattern = "\\b\(find.trimmingCharacters(in: .whitespaces))\\b"
+      let regex = try! NSRegularExpression(pattern: pattern, options: .caseInsensitive)
+      return RegexReplacementPair(regex: regex, replacement: replace.trimmingCharacters(in: .whitespaces))
+  }
+  
   static func addInstructions(_ jsonData: Data, routeResponse: RouteResponse) -> Data? {
     guard var jsonDict = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] else {
       print("Error: Cannot create JSON object from string")
@@ -75,7 +107,7 @@ enum InstructionGenerator {
         var modifiedSteps = steps
         
         func getInstructionText(for stepIndex: Int) -> String? {
-          instructionFormatter.string(for: routeResponse.routes?[routeIndex].legs[legIndex].steps[stepIndex], legIndex: legIndex, numberOfLegs: legs.count, modifyValueByKey: nil)
+          instructionFormatter.bikestreetsString(for: routeResponse.routes?[routeIndex].legs[legIndex].steps[stepIndex], legIndex: legIndex, numberOfLegs: legs.count, modifyValueByKey: nil)
         }
         
         for (stepIndex, step) in steps.enumerated() {
@@ -432,7 +464,7 @@ extension RouteResponse {
       print("Route \(routeIndex)")
       for leg in route.legs {
         for step in leg.steps {
-          if let formattedString = instructionFormatter.string(for: step, legIndex: 0, numberOfLegs: 1, modifyValueByKey: nil) {
+          if let formattedString = instructionFormatter.bikestreetsString(for: step, legIndex: 0, numberOfLegs: 1, modifyValueByKey: nil) {
             print(formattedString as Any)
           }
         }
