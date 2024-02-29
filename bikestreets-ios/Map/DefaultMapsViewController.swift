@@ -15,6 +15,36 @@ import MessageUI
 import SwiftUI
 import UIKit
 
+final class RerouteManager {
+  enum State {
+    case idle
+    case rerouting
+  }
+  
+  private var rerouteTimer: Timer?
+  private var lastRerouteCompletionTime: Date? = Date()
+  private let cooldownInterval: TimeInterval = 3.0
+  
+  var state: State = .idle {
+    didSet {
+      if state == .idle {
+        lastRerouteCompletionTime = Date()
+      }
+    }
+  }
+  
+  var canRequestReroute: Bool {
+    guard state == .idle else { return false }
+    
+    if let lastRerouteTime = lastRerouteCompletionTime,
+       Date().timeIntervalSince(lastRerouteTime) < cooldownInterval {
+        print("IGNORING ROUTE REQUEST")
+        return false
+    }
+    return true
+  }
+}
+  
 final class DefaultMapsViewController: MapsViewController {
   private let locationManager = CLLocationManager()
 
@@ -34,6 +64,7 @@ final class DefaultMapsViewController: MapsViewController {
   private let mapCameraManager = MapCameraManager()
   private let screenManager: ScreenManager
   private var viewportTransitionFailureCount = 0
+  private let rerouteManager = RerouteManager()
 
   /// Camera bottom inset based on the presented sheet height.
   private var cameraBottomInset: CGFloat {
@@ -433,6 +464,7 @@ extension DefaultMapsViewController: StateListener {
         // increases battery drain by making constant requests to Mapbox despite
         // being unused/always failing.
         NavigationSettings.shared.initialize(with: .init(alternativeRouteDetectionStrategy: nil))
+        //NavigationSettings.shared.initialize(with: .init())
 
         let navigationService = MapboxNavigationService(
           indexedRouteResponse: indexedRouteResponse,
@@ -442,7 +474,7 @@ extension DefaultMapsViewController: StateListener {
         )
         #if targetEnvironment(simulator)
           // these 2 lines allow the route simulation to run faster.
-          navigationService.simulationMode = .always
+          navigationService.simulationMode = .never
           navigationService.simulationSpeedMultiplier = 1.0
         #endif
         
@@ -829,7 +861,40 @@ extension DefaultMapsViewController: NavigationViewControllerDelegate {
     _ navigationViewController: NavigationViewController,
     shouldRerouteFrom location: CLLocation
   ) -> Bool {
-    false
+    
+    guard rerouteManager.canRequestReroute, let endPoint = navigationViewController.routeOptions?.waypoints.last?.coordinate else { return false }
+    
+    print("******* REROUTE STARTED")
+    rerouteManager.state = .rerouting
+    RouteRequester.getOSRMDirections(
+      originName: "",
+      startPoint: location.coordinate,
+      destinationName: "",
+      endPoint: endPoint
+    ) { [weak self] result in
+      guard let self else { return }
+      switch result {
+      case .success(let result):
+        guard let routeShape = result.osrm.routes?.first?.shape else { break }
+        let matchOptions = NavigationMatchOptions(coordinates: routeShape.coordinates)
+        let routeOptions = RouteOptions(matchOptions: matchOptions)
+        let router = navigationViewController.navigationService.router
+        let indexedRouteResponse = IndexedRouteResponse(routeResponse: result.osrm, routeIndex: 0)
+        router.updateRoute(with: indexedRouteResponse, routeOptions: routeOptions, completion: {
+          [weak self] _ in
+          guard let self else { return }
+          rerouteManager.state = .idle
+          print("******* REROUTE FINISHED")
+        })
+        
+      case .failure(let error):
+        // TODO: Handle route request errors.
+        rerouteManager.state = .idle
+        print(error)
+      }
+    }
+    
+    return true
   }
 
   func navigationViewControllerDidDismiss(
@@ -851,6 +916,7 @@ extension DefaultMapsViewController: NavigationViewControllerDelegate {
     guard MFMailComposeViewController.canSendMail() else { return }
     stateManager.state = .routingFeedback(feedback: feedback)
   }
+  
 }
 
 // MARK: -- CLLocationManagerDelegate
