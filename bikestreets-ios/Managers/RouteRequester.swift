@@ -86,9 +86,7 @@ final class RouteRequester {
   }
   
   static func getOSRMDirections(
-    originName: String,
     startPoint: CLLocationCoordinate2D,
-    destinationName: String,
     endPoint: CLLocationCoordinate2D,
     completion: @escaping (Result<CustomRouteResponse, Error>) -> Void
   ) {

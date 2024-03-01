@@ -49,6 +49,10 @@
             ReferencedContainer = "container:bikestreets-ios.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <LocationScenarioReference
+         identifier = "../../GPX/Washington Park - Denver, CO.gpx"
+         referenceType = "0">
+      </LocationScenarioReference>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

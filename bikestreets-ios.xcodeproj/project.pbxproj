@@ -59,10 +59,12 @@
 		35F8C19A2B238C34007AF870 /* Bundle+AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F8C1992B238C34007AF870 /* Bundle+AppVersion.swift */; };
 		35F8C19D2B2396B8007AF870 /* FeedbackEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F8C19C2B2396B8007AF870 /* FeedbackEmailViewController.swift */; };
 		35FE5FF62B486792002A4472 /* GlobalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FE5FF52B486792002A4472 /* GlobalSettings.swift */; };
+		441308452B902AFE0002E1BB /* West Wash Park Headed N - Denver, CO.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 441308442B902AFE0002E1BB /* West Wash Park Headed N - Denver, CO.gpx */; };
 		44C20FFB2B89965100E48870 /* dakota-marion.txt in Resources */ = {isa = PBXBuildFile; fileRef = 44C20FFA2B89965100E48870 /* dakota-marion.txt */; };
 		44D9AD472B6C391800D33DD8 /* InstructionGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D9AD462B6C391800D33DD8 /* InstructionGenerator.swift */; };
 		44D9AD4C2B818E9500D33DD8 /* UIViewController+DismissButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D9AD4B2B818E9500D33DD8 /* UIViewController+DismissButton.swift */; };
 		44D9AD4E2B82BA4100D33DD8 /* RecentLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D9AD4D2B82BA4100D33DD8 /* RecentLocationManager.swift */; };
+		44FDF2B42B914A0C003C9420 /* RerouteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44FDF2B32B914A0C003C9420 /* RerouteManager.swift */; };
 		9AA97B2D2AE87E9C00C59426 /* UIView+Subview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA97B2C2AE87E9C00C59426 /* UIView+Subview.swift */; };
 /* End PBXBuildFile section */
 
@@ -113,10 +115,12 @@
 		35FE5FF32B485FE3002A4472 /* Washington Park - Denver, CO.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Washington Park - Denver, CO.gpx"; sourceTree = "<group>"; };
 		35FE5FF42B485FE3002A4472 /* Sloan's Neighborhood - Denver, CO.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Sloan's Neighborhood - Denver, CO.gpx"; sourceTree = "<group>"; };
 		35FE5FF52B486792002A4472 /* GlobalSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSettings.swift; sourceTree = "<group>"; };
+		441308442B902AFE0002E1BB /* West Wash Park Headed N - Denver, CO.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "West Wash Park Headed N - Denver, CO.gpx"; sourceTree = "<group>"; };
 		44C20FFA2B89965100E48870 /* dakota-marion.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "dakota-marion.txt"; sourceTree = "<group>"; };
 		44D9AD462B6C391800D33DD8 /* InstructionGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionGenerator.swift; sourceTree = "<group>"; };
 		44D9AD4B2B818E9500D33DD8 /* UIViewController+DismissButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+DismissButton.swift"; sourceTree = "<group>"; };
 		44D9AD4D2B82BA4100D33DD8 /* RecentLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentLocationManager.swift; sourceTree = "<group>"; };
+		44FDF2B32B914A0C003C9420 /* RerouteManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RerouteManager.swift; sourceTree = "<group>"; };
 		9AA97B2C2AE87E9C00C59426 /* UIView+Subview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Subview.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -208,6 +212,7 @@
 				35FE5FF52B486792002A4472 /* GlobalSettings.swift */,
 				44D9AD462B6C391800D33DD8 /* InstructionGenerator.swift */,
 				44D9AD4D2B82BA4100D33DD8 /* RecentLocationManager.swift */,
+				44FDF2B32B914A0C003C9420 /* RerouteManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -328,6 +333,7 @@
 		35F04BCC2A61C5C1008083A1 /* GPX */ = {
 			isa = PBXGroup;
 			children = (
+				441308442B902AFE0002E1BB /* West Wash Park Headed N - Denver, CO.gpx */,
 				35FE5FF42B485FE3002A4472 /* Sloan's Neighborhood - Denver, CO.gpx */,
 				35FE5FF32B485FE3002A4472 /* Washington Park - Denver, CO.gpx */,
 			);
@@ -436,6 +442,7 @@
 				35A4829B2A37B1E6001035BB /* Assets.xcassets in Resources */,
 				44C20FFB2B89965100E48870 /* dakota-marion.txt in Resources */,
 				35D13F762AE7FF3400A31CB0 /* Settings.bundle in Resources */,
+				441308452B902AFE0002E1BB /* West Wash Park Headed N - Denver, CO.gpx in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -454,6 +461,7 @@
 				35065CB42A7DA3AB00C7CCAF /* DirectionPreviewViewController.swift in Sources */,
 				3516451A2A81CC73001EDC99 /* UIView+Constraints.swift in Sources */,
 				35F8C19A2B238C34007AF870 /* Bundle+AppVersion.swift in Sources */,
+				44FDF2B42B914A0C003C9420 /* RerouteManager.swift in Sources */,
 				3547E64B2AB7D0AC004FA7F7 /* DebugTableViewController.swift in Sources */,
 				35065CBD2A803BFC00C7CCAF /* RoutingViewController.swift in Sources */,
 				35065C9C2A7C69E600C7CCAF /* AppDelegate.swift in Sources */,
