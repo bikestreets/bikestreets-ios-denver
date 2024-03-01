@@ -264,7 +264,8 @@ final class DefaultMapsViewController: MapsViewController {
         })
         
       case .idle:
-        if let _ = result.routes?.first {
+        // Ensure we only process routes when they exists, otherwise don't change state.        
+        if result.routes?.first != nil {
           // On initial state update, assume first route is selected.
           self.stateManager.state = .previewDirections(
             preview: .init(
