@@ -27,10 +27,8 @@ final class RerouteManager {
   var canRequestReroute: Bool {
     guard state == .idle else { return false }
     
-    if let lastRerouteTime = lastRerouteCompletionTime,
-       Date().timeIntervalSince(lastRerouteTime) < cooldownInterval {
-        return false
-    }
-    return true
+    guard let lastRerouteCompletionTime else { return true }
+    
+    return Date().timeIntervalSince(lastRerouteCompletionTime) > cooldownInterval
   }
 }
