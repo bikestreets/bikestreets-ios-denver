@@ -252,7 +252,10 @@ final class DefaultMapsViewController: MapsViewController {
       switch rerouteManager.state {
       case .rerouting:
         // Do nothing if a reroute is requested but returns no options
-        guard let _ = result.routes?.first, let router = navigationViewController?.navigationService.router else { break }
+        guard result.routes?.first != nil, let router = navigationViewController?.navigationService.router else {
+            rerouteManager.state = .idle
+            break 
+        }
         
         router.updateRoute(with: IndexedRouteResponse(routeResponse: result.osrm, routeIndex: 0), routeOptions: nil, completion: {
           [weak self] _ in
