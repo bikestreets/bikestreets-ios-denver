@@ -516,13 +516,29 @@ extension DefaultMapsViewController: StateListener {
   
   @objc func progressDidChange(_ notification: NSNotification) {
     let activeLocation = notification.userInfo?[RouteController.NotificationUserInfoKey.locationKey] as? CLLocation
+    let routeProgress = notification.userInfo?[RouteController.NotificationUserInfoKey.routeProgressKey] as? RouteProgress
     
     if let navigationMapView = navigationViewController?.navigationMapView,
        let navigationViewportDataSource = navigationMapView.navigationCamera.viewportDataSource as? NavigationViewportDataSource {
 
+      // Default camera settings for NavigationViewportDataSource will start to pitch forward at 180.0 meters before maneuvers, excepting "continue" and "merge" maneuvers. We want to get the center/zoom/overhead effect on all maneuvers, so we force the pitch towards zero as we approach any maneuver.
+      var overridePitch = false
+      let overridePitchDistanceThreshold: Double = 75.0
+      if let distanceToNextManeuver = routeProgress?.currentLegProgress.currentStepProgress.distanceRemaining {
+        print(distanceToNextManeuver)
+        if distanceToNextManeuver < overridePitchDistanceThreshold { overridePitch = true }
+      }
+      if overridePitch {
+        navigationViewportDataSource.options.followingCameraOptions.pitchUpdatesAllowed = false
+        navigationViewportDataSource.followingMobileCamera.pitch = 0.1
+      } else {
+        navigationViewportDataSource.options.followingCameraOptions.pitchUpdatesAllowed = true
+        navigationViewportDataSource.followingMobileCamera.pitch = nil
+      }
+      
       // pitch = 0.0 seems to only be at the very beginning of the route when transitioning from overview.
       // Actual maneuver pitch is close to overhead at just above 0.0, so the goal here is to avoid rapid telescoping out/in at the point of departure
-      if navigationMapView.mapView.mapboxMap.cameraState.pitch < 20.0 && navigationMapView.mapView.mapboxMap.cameraState.pitch > 0.0 {
+      if (navigationMapView.mapView.mapboxMap.cameraState.pitch < 20.0 && navigationMapView.mapView.mapboxMap.cameraState.pitch > 0.0) || overridePitch {
         navigationViewportDataSource.options.followingCameraOptions.zoomUpdatesAllowed = false
         navigationViewportDataSource.followingMobileCamera.zoom = navigationViewportDataSource.options.followingCameraOptions.zoomRange.upperBound + 1.0
         navigationViewportDataSource.options.followingCameraOptions.centerUpdatesAllowed = false
