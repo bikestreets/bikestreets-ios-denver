@@ -76,7 +76,12 @@ enum InstructionGenerator {
       (" onto cycleway ", " on the cycleway "),
       (" onto crossing ", " at the crossing "),
       (" onto path ", " on the path "),
-      (" onto alley ", " in the alley ")
+      (" onto alley ", " in the alley "),
+      (" on sidewalk ", " on the sidewalk "),
+      (" on cycleway ", " on the cycleway "),
+      (" on crossing ", " at the crossing "),
+      (" on path ", " on the path "),
+      (" on alley ", " in the alley ")
   ].map { find, replace in
       let pattern = "\\b\(find.trimmingCharacters(in: .whitespaces))\\b"
       let regex = try! NSRegularExpression(pattern: pattern, options: .caseInsensitive)
