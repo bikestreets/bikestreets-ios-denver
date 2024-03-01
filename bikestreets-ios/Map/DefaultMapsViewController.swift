@@ -474,7 +474,6 @@ extension DefaultMapsViewController: StateListener {
         // increases battery drain by making constant requests to Mapbox despite
         // being unused/always failing.
         NavigationSettings.shared.initialize(with: .init(alternativeRouteDetectionStrategy: nil))
-        //NavigationSettings.shared.initialize(with: .init())
 
         let navigationService = MapboxNavigationService(
           indexedRouteResponse: indexedRouteResponse,
@@ -484,7 +483,7 @@ extension DefaultMapsViewController: StateListener {
         )
         #if targetEnvironment(simulator)
           // these 2 lines allow the route simulation to run faster.
-          navigationService.simulationMode = .never
+          navigationService.simulationMode = .always
           navigationService.simulationSpeedMultiplier = 1.0
         #endif
         
