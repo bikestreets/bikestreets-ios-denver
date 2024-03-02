@@ -300,7 +300,7 @@ extension DefaultMapsViewController: NavigationViewControllerDelegate {
     rerouteManager.state = .rerouting
     requestRoute(request: request)
     
-    return true
+    return false
   }
 
   func navigationViewControllerDidDismiss(
