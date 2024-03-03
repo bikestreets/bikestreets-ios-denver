@@ -88,6 +88,7 @@ final class RouteRequester {
   static func getOSRMDirections(
     startPoint: CLLocationCoordinate2D,
     endPoint: CLLocationCoordinate2D,
+    bearing: CLLocationDirection? = nil,
     completion: @escaping (Result<CustomRouteResponse, Error>) -> Void
   ) {
     // BIKESTREETS DIRECTIONS
@@ -98,24 +99,34 @@ final class RouteRequester {
     components.host = "206.189.205.9"
     components.percentEncodedPath = getOSRMPath(startPoint: startPoint, endPoint: endPoint)
 
+    components.queryItems = [
+      URLQueryItem(name: "overview", value: "full"),
+      URLQueryItem(name: "geometries", value: "polyline"),
+      URLQueryItem(name: "steps", value: "true"),
+      URLQueryItem(name: "annotations", value: "true")
+    ]
+    if let bearing {
+      // if bearing is passed, we are rerouting: use bearing and don't request alternative routes
+      let bearingInteger = Int(bearing)
+      let searchRadius = 5
+      let bearingTolerance = 15
+      // if bearing is 90 with bearingTolerance of 15 and radius 10, then segments with bearings of 75-115 within 10 meters will be matched
+      components.queryItems?.append(contentsOf: [
+        URLQueryItem(name: "radiuses", value: "\(searchRadius);"),
+        URLQueryItem(name: "bearings", value: "\(bearingInteger),\(bearingTolerance);")
+      ])
+    } else {
+      // initial route request - find alternatives
+      components.queryItems?.append(contentsOf: [
+        URLQueryItem(name: "alternatives", value: "true")
+      ])
+    }
     print("""
     OSRM REQUEST:
 
     \(components.string ?? "ERROR EMPTY")
-
+    
     """)
-
-    components.queryItems = [
-      URLQueryItem(name: "overview", value: "full"),
-      URLQueryItem(name: "geometries", value: "polyline"),
-      URLQueryItem(name: "alternatives", value: "true"),
-      URLQueryItem(name: "steps", value: "true"),
-      URLQueryItem(name: "annotations", value: "true"),
-
-      // URLQueryItem(name: "voice_instructions", value: String(true)),
-      // let distanceMeasurementSystem: MeasurementSystem = Locale.current.usesMetricSystem ? .metric : .imperial
-      // URLQueryItem(name: "voice_units", value: distanceMeasurementSystem.rawValue),
-    ]
 
     let session = URLSession.shared
     let request = URLRequest(url: components.url!)

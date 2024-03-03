@@ -238,7 +238,8 @@ final class DefaultMapsViewController: MapsViewController {
   private func requestRoute(request: StateManager.RouteRequest) {
     RouteRequester.getOSRMDirections(
       startPoint: request.origin.coordinate,
-      endPoint: request.destination.coordinate
+      endPoint: request.destination.coordinate,
+      bearing: request.bearing
     ) { [weak self] result in
       DispatchQueue.main.async {
         self?.handleRouteResponse(result, forRequest: request)
@@ -290,17 +291,23 @@ final class DefaultMapsViewController: MapsViewController {
 
 extension DefaultMapsViewController: NavigationViewControllerDelegate {
   func navigationViewController(_ navigationViewController: NavigationViewController, shouldRerouteFrom location: CLLocation) -> Bool {
-    guard rerouteManager.canRequestReroute, case .routing(let routing) = stateManager.state else { return false }
+    // Location passed here does not contain course (direction) info. Use location stashed by progressDidChange.
+    guard rerouteManager.canRequestReroute, let activeLocation = rerouteManager.location, case .routing(let routing) = stateManager.state else { return false }
     
     let request = StateManager.RouteRequest(
-      origin: .currentLocation(coordinate: location.coordinate),
-      destination: routing.request.destination
+      origin: .currentLocation(coordinate: activeLocation.coordinate),
+      destination: routing.request.destination,
+      bearing: activeLocation.course
     )
     
     rerouteManager.state = .rerouting
     requestRoute(request: request)
     
     return false
+  }
+  
+  func navigationViewController(_ navigationViewController: NavigationViewController, didRerouteAlong route: MapboxDirections.Route) {
+    rerouteManager.playRerouteSound()
   }
 
   func navigationViewControllerDidDismiss(
@@ -563,6 +570,8 @@ extension DefaultMapsViewController: StateListener {
     let activeLocation = notification.userInfo?[RouteController.NotificationUserInfoKey.locationKey] as? CLLocation
     let routeProgress = notification.userInfo?[RouteController.NotificationUserInfoKey.routeProgressKey] as? RouteProgress
     
+    rerouteManager.location = activeLocation
+    
     if let navigationMapView = navigationViewController?.navigationMapView,
        let navigationViewportDataSource = navigationMapView.navigationCamera.viewportDataSource as? NavigationViewportDataSource {
 
@@ -570,7 +579,6 @@ extension DefaultMapsViewController: StateListener {
       var overridePitch = false
       let overridePitchDistanceThreshold: Double = 75.0
       if let distanceToNextManeuver = routeProgress?.currentLegProgress.currentStepProgress.distanceRemaining {
-        print(distanceToNextManeuver)
         if distanceToNextManeuver < overridePitchDistanceThreshold { overridePitch = true }
       }
       if overridePitch {
