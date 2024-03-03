@@ -45,6 +45,13 @@ final class StateManager {
 
     let origin: Location
     let destination: Location
+    let bearing: CLLocationDirection?
+    
+    init(origin: Location, destination: Location, bearing: CLLocationDirection? = nil) {
+      self.origin = origin
+      self.destination = destination
+      self.bearing = bearing
+    }
   }
 
   struct DirectionsPreview {

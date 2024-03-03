@@ -61,6 +61,7 @@
 		35FE5FF62B486792002A4472 /* GlobalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FE5FF52B486792002A4472 /* GlobalSettings.swift */; };
 		441308452B902AFE0002E1BB /* West Wash Park Headed N - Denver, CO.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 441308442B902AFE0002E1BB /* West Wash Park Headed N - Denver, CO.gpx */; };
 		44C20FFB2B89965100E48870 /* dakota-marion.txt in Resources */ = {isa = PBXBuildFile; fileRef = 44C20FFA2B89965100E48870 /* dakota-marion.txt */; };
+		44C8BF162B94DAA100F48FC9 /* reroute.wav in Resources */ = {isa = PBXBuildFile; fileRef = 44C8BF152B94DAA100F48FC9 /* reroute.wav */; };
 		44D9AD472B6C391800D33DD8 /* InstructionGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D9AD462B6C391800D33DD8 /* InstructionGenerator.swift */; };
 		44D9AD4C2B818E9500D33DD8 /* UIViewController+DismissButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D9AD4B2B818E9500D33DD8 /* UIViewController+DismissButton.swift */; };
 		44D9AD4E2B82BA4100D33DD8 /* RecentLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D9AD4D2B82BA4100D33DD8 /* RecentLocationManager.swift */; };
@@ -117,6 +118,7 @@
 		35FE5FF52B486792002A4472 /* GlobalSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSettings.swift; sourceTree = "<group>"; };
 		441308442B902AFE0002E1BB /* West Wash Park Headed N - Denver, CO.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "West Wash Park Headed N - Denver, CO.gpx"; sourceTree = "<group>"; };
 		44C20FFA2B89965100E48870 /* dakota-marion.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "dakota-marion.txt"; sourceTree = "<group>"; };
+		44C8BF152B94DAA100F48FC9 /* reroute.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = reroute.wav; sourceTree = "<group>"; };
 		44D9AD462B6C391800D33DD8 /* InstructionGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionGenerator.swift; sourceTree = "<group>"; };
 		44D9AD4B2B818E9500D33DD8 /* UIViewController+DismissButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+DismissButton.swift"; sourceTree = "<group>"; };
 		44D9AD4D2B82BA4100D33DD8 /* RecentLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentLocationManager.swift; sourceTree = "<group>"; };
@@ -220,6 +222,7 @@
 		350BDE392A7007F900D4DE31 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				44C8BF172B94DAA700F48FC9 /* Sounds */,
 				44C20FF92B89965100E48870 /* FixedRoutes */,
 				350BDE3A2A7007F900D4DE31 /* 1-bikestreets-master-v0.3.geojson */,
 				350BDE3C2A7007F900D4DE31 /* 2-trails-master-v0.3.geojson */,
@@ -333,9 +336,9 @@
 		35F04BCC2A61C5C1008083A1 /* GPX */ = {
 			isa = PBXGroup;
 			children = (
-				441308442B902AFE0002E1BB /* West Wash Park Headed N - Denver, CO.gpx */,
 				35FE5FF42B485FE3002A4472 /* Sloan's Neighborhood - Denver, CO.gpx */,
 				35FE5FF32B485FE3002A4472 /* Washington Park - Denver, CO.gpx */,
+				441308442B902AFE0002E1BB /* West Wash Park Headed N - Denver, CO.gpx */,
 			);
 			path = GPX;
 			sourceTree = "<group>";
@@ -354,6 +357,14 @@
 				44C20FFA2B89965100E48870 /* dakota-marion.txt */,
 			);
 			path = FixedRoutes;
+			sourceTree = "<group>";
+		};
+		44C8BF172B94DAA700F48FC9 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				44C8BF152B94DAA100F48FC9 /* reroute.wav */,
+			);
+			path = Sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -435,6 +446,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				350BDE3F2A7007FF00D4DE31 /* 2-trails-master-v0.3.geojson in Resources */,
+				44C8BF162B94DAA100F48FC9 /* reroute.wav in Resources */,
 				350BDE422A7007FF00D4DE31 /* 5-walk-master-v0.3.geojson in Resources */,
 				350BDE412A7007FF00D4DE31 /* 4-bikesidewalks-master-v0.3.geojson in Resources */,
 				350BDE402A7007FF00D4DE31 /* 3-bikelanes-master-v0.3.geojson in Resources */,
