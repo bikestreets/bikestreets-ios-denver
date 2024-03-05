@@ -126,6 +126,13 @@ class MapsViewController: UIViewController {
 
     present(alertController, animated: true, completion: nil)
   }
+  
+  // MARK: -- Layer Placement
+  
+  private lazy var roadLabelLayerId: String? = {
+    let id = "road-label"
+    return mapView.mapboxMap.style.styleManager.styleLayerExists(forLayerId: id) ? id : nil
+  }()
 }
 
 // MARK: -- Dark Mode
@@ -199,7 +206,12 @@ extension MapsViewController {
         geoJSONSource,
         id: spec.identifier
       )
-      try! mapView.mapboxMap.style.addPersistentLayer(lineLayer)
+      
+      if let roadLabelLayerId {
+        try! mapView.mapboxMap.style.addPersistentLayer(lineLayer, layerPosition: .below(roadLabelLayerId))
+      } else {
+        try! mapView.mapboxMap.style.addPersistentLayer(lineLayer)
+      }
     }
   }
 }
