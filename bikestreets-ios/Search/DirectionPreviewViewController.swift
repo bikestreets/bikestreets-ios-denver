@@ -170,7 +170,7 @@ extension DirectionPreviewViewController: RoutePlaceRowViewDelegate {
     switch stateManager.state {
     case .previewDirections(let preview):
       stateManager.state = .updateOrigin(preview: preview)
-    case .updateOrigin:
+    case .updateOrigin, .requestingRoutes:
       break
     default:
       fatalError("Unexpected state")
@@ -182,7 +182,7 @@ extension DirectionPreviewViewController: RoutePlaceRowViewDelegate {
     switch stateManager.state {
     case .previewDirections(let preview):
       stateManager.state = .updateDestination(preview: preview)
-    case .updateDestination:
+    case .updateDestination, .requestingRoutes:
       break
     default:
       fatalError("Unexpected state")
