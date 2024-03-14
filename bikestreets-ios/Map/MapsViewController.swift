@@ -7,14 +7,18 @@
 
 import MapboxMaps
 import MapboxSearch
+import MapboxNavigation
 import MapKit
 
 class MapsViewController: UIViewController {
-  private(set) lazy var mapView: MapView = {
-    return MapView(
-      frame: .zero,
-      mapInitOptions: .init(styleURI: currentMapboxStyle)
+  internal lazy var navigationMapView: NavigationMapView = {
+    return NavigationMapView(
+      frame: .zero
     )
+  }()
+  
+  internal lazy var mapView: MapView = {
+    return navigationMapView.mapView
   }()
 
   lazy var polylineAnnotationManager = mapView.annotations.makePolylineAnnotationManager()
@@ -38,7 +42,7 @@ class MapsViewController: UIViewController {
 
     view.addSubview(mapView)
 
-    mapView.disableTranslatesAutoresizingMaskIntoConstraints()
+    navigationMapView.disableTranslatesAutoresizingMaskIntoConstraints()
     [
       view.leftAnchor.constraint(equalTo: mapView.leftAnchor),
       view.rightAnchor.constraint(equalTo: mapView.rightAnchor),

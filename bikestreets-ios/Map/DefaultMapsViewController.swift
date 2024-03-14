@@ -35,10 +35,16 @@ final class DefaultMapsViewController: MapsViewController {
   private let screenManager: ScreenManager
   private var viewportTransitionFailureCount = 0
   private let rerouteManager = RerouteManager()
+  // Debounce syncCameraState calls when didChangeFrame gets repeatedly called on sheet transitions/resizes
+  private var syncCameraStateTask: DispatchWorkItem?
 
   /// Camera bottom inset based on the presented sheet height.
   private var cameraBottomInset: CGFloat {
     (sheetHeightInspectionView.lastFrameBroadcast?.height ?? 0) + 24
+  }
+  
+  private var cameraTopInset: CGFloat {
+    self.view.safeAreaInsets.top
   }
 
   override init() {
@@ -83,7 +89,7 @@ final class DefaultMapsViewController: MapsViewController {
 
     locationManager.delegate = self
     sheetManager.delegate = self
-
+    navigationMapView.delegate = self
     sheetHeightInspectionView.delegate = self
     view.addSubview(self.sheetHeightInspectionView)
 
@@ -164,8 +170,28 @@ final class DefaultMapsViewController: MapsViewController {
     heightInspectionViewController = viewController
   }
 
-  // MARK: - Map Movement
+  // MARK: - Route Preview
+  private func showRoutePreview(_ preview: StateManager.DirectionsPreview?) {
+    navigationMapView.removeRoutes()
+    navigationMapView.removeRouteDurations()
+    
+    // If the cameraBottomInset is most of the screen, don't redraw preview since the map will zoom way out to fit the geometry, requiring a long animated zoom in when the cameraBottomInset returns to a more usable size
+    guard let preview, cameraBottomInset < UIScreen.main.bounds.size.height * 0.9 else { return }
+    
+    // Move the selected route to first in the list so that it appears selected
+    var prioritizedRoutes = preview.routes
+    prioritizedRoutes.insert(prioritizedRoutes.remove(at: preview.selectedRouteIndex),
+                             at: 0)
+    
+    let options = CameraOptions(padding: UIEdgeInsets(top: cameraTopInset, left: 24, bottom: cameraBottomInset, right: 24))
 
+    navigationMapView.showcase(prioritizedRoutes, routesPresentationStyle: .all(shouldFit: true, cameraOptions: options), animated: true, duration: 1.0) { [weak self] _ in
+      guard let self else { return }
+      // Waiting until the animation is complete to show the route durations generally provides better framing of the duration annotations since the viewable map rectangle will be done moving.
+      navigationMapView.showRouteDurations(along: prioritizedRoutes)
+    }
+  }
+  
   // TODO: Make this smarter using approach from https://docs.mapbox.com/ios/maps/examples/line-gradient/
   private func updateMapAnnotations(routes: [MapboxDirections.Route]?) {
     let geoJSONDataSourceIdentifier = "current-route"
@@ -331,6 +357,19 @@ extension DefaultMapsViewController: NavigationViewControllerDelegate {
   }
   
 }
+extension DefaultMapsViewController: NavigationMapViewDelegate {
+  func navigationMapView(_ navigationMapView: NavigationMapView, didSelect route: MapboxDirections.Route) {
+    switch stateManager.state {
+    case .previewDirections(var preview):
+      if let selectedRouteIndex = preview.routes.firstIndex(of: route) {
+        preview.selectedRouteIndex = selectedRouteIndex
+        showRoutePreview(preview)
+      }
+    default:
+      return
+    }
+  }
+}
 // MARK: - State Management
 
 extension DefaultMapsViewController: StateListener {
@@ -414,6 +453,7 @@ extension DefaultMapsViewController: StateListener {
 
       // Clean any annotations.
       updateMapAnnotations(routes: nil)
+      showRoutePreview(nil)
     case .searchDestination:
       let searchViewController = SearchViewController(
         configuration: .initialDestination,
@@ -436,8 +476,9 @@ extension DefaultMapsViewController: StateListener {
       // Potentially shift to smaller sheet presentation
       // sheetNavigationController.sheetPresentationController?.selectedDetentIdentifier = UISheetPresentationController.Detent.small().identifier
       requestRoute(request: request)
-    case .previewDirections(let preview):
-      updateMapAnnotations(routes: preview.routes)
+    case .previewDirections:
+      // syncCameraState will handle the camera transition for the preview
+      break
     case .updateDestination:
       let searchViewController = SearchViewController(
         configuration: .newDestination,
@@ -548,15 +589,17 @@ extension DefaultMapsViewController: StateListener {
           .requestingLocationPermissions,
           .insufficientLocationPermissions:
         return .showDenver
+      case .searchDestination,
+          .requestingRoutes:
+        // Camera does not need to transition for these states; no need to return to initial camera state
+        return mapCameraManager.state
       case .initial,
-          .searchDestination,
-          .requestingRoutes,
           .routingFeedback:
         return .followUserHeading
       case .previewDirections(let preview),
           .updateOrigin(let preview),
           .updateDestination(let preview):
-        return .showRoute(routes: preview.routes)
+        return .showRoute(preview: preview)
       case .routing:
         switch GlobalSettings.liveRoutingConfiguration {
         case .mapbox: return .followUserHeading
@@ -615,17 +658,35 @@ extension DefaultMapsViewController: SizeTrackingListener {
 
     // Ensure the sheet size isn't hiding most of the screen.
     let screenHeight = UIScreen.main.bounds.size.height
-    guard frame.height < screenHeight * 0.8 else { return }
+    let frameHeight = frame.height
 
-    // Update map camera.
-    syncCameraState(bottomInset: frame.height)
+    guard frameHeight < (screenHeight * 0.8) else { return }
+           
+    // Ignore frame change during route request because it will be adjusted when the route is ready for preview
+    guard stateManager.state.allowCameraSync else { return }
+    
+    self.syncCameraStateTask?.cancel()
+    
+    let task = DispatchWorkItem { [weak self] in
+      DispatchQueue.main.async { [weak self] in
+        guard let self = self else { return }
+        
+        // Update map camera.
+        self.syncCameraState(bottomInset: frameHeight)
+        
+        // Update Mapbox ornaments. Mapbox insets the ornaments by the safe
+        // area so include that in our ornament offset calculations.
+        let safeAreaBottomPadding = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
+        let mapboxOrnamentYInset = frameHeight + 8 - safeAreaBottomPadding
+        self.mapView.ornaments.options.logo.margins = .init(x: 8.0, y: mapboxOrnamentYInset)
+        self.mapView.ornaments.options.compass.margins = .init(x: 8.0, y: mapboxOrnamentYInset)
+      }
+    }
+    self.syncCameraStateTask = task
 
-    // Update Mapbox ornaments. Mapbox insets the ornaments by the safe
-    // area so include that in our ornament offset calculations.
-    let safeAreaBottomPadding = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
-    let mapboxOrnamentYInset = frame.height + 8 - safeAreaBottomPadding
-    mapView.ornaments.options.logo.margins = .init(x: 8.0, y: mapboxOrnamentYInset)
-    mapView.ornaments.options.compass.margins = .init(x: 8.0, y: mapboxOrnamentYInset)
+    // Wait 0.1 seconds before executing to debounce syncCameraState calls
+    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1, execute: task)
+    
   }
 }
 
@@ -765,20 +826,10 @@ extension DefaultMapsViewController: MapCameraStateListener {
           pitch: 0
         )
       )
-    case .showRoute(let routes):
-      // Zoom to show a single route or all routes.
-      let cameraTopInset: CGFloat = self.view.safeAreaInsets.top
-
-      let coordinates: [CLLocationCoordinate2D] = {
-        return routes.flatMap { $0.coordinates }
-      }()
-
-      newState = mapView.viewport.makeOverviewViewportState(
-        options: .init(
-          geometry: LineString(coordinates),
-          padding: .init(top: cameraTopInset, left: 24, bottom: cameraBottomInset, right: 24)
-        )
-      )
+    case .showRoute(let preview):
+      // showRoutePreview uses NavigationMapView.showcase() which handles the camera movement. Return a StaticViewportState that has no camera movement here, so that we can pick up viewport transitions when user moves map to idle. If we used OverviewViewportState, then we'd get additional, undesired camera movement
+      showRoutePreview(preview)
+      newState = StaticViewportState()
     case .followUserHeading:
       newState = mapView.viewport.makeFollowPuckViewportState(
         options: FollowPuckViewportStateOptions(
