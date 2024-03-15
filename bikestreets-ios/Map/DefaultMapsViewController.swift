@@ -44,7 +44,7 @@ final class DefaultMapsViewController: MapsViewController {
   }
   
   private var cameraTopInset: CGFloat {
-    self.view.safeAreaInsets.top
+    view.safeAreaInsets.top
   }
 
   override init() {
