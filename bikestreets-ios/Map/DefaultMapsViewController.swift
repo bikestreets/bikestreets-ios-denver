@@ -361,7 +361,7 @@ extension DefaultMapsViewController: NavigationMapViewDelegate {
   func navigationMapView(_ navigationMapView: NavigationMapView, didSelect route: MapboxDirections.Route) {
     switch stateManager.state {
     case .previewDirections(let preview):
-      if let selectedRouteIndex = preview.routes.firstIndex(of: route) {
+      if let selectedRouteIndex = preview.routes.firstIndex(of: route), selectedRouteIndex != preview.selectedRouteIndex {
         stateManager.state = .previewDirections(preview: .init(
           request: preview.request,
           response: preview.response,

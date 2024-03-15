@@ -196,6 +196,7 @@ extension DirectionPreviewViewController: RouteSelectable {
   func didSelect(routeIndex: Int) {
     switch stateManager.state {
     case .previewDirections(let preview):
+      guard routeIndex != preview.selectedRouteIndex else { return }
       stateManager.state = .previewDirections(preview: .init(
         request: preview.request, 
         response: preview.response,
