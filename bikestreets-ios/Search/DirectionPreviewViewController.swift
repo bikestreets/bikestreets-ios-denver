@@ -79,7 +79,6 @@ final class DirectionPreviewViewController: UIViewController {
     possibleRoutesView.delegate = self
     possibleRoutesView.layer.cornerRadius = 16
     possibleRoutesView.clipsToBounds = true
-    possibleRoutesView.backgroundColor = .tertiarySystemBackground
 
     let spacerView = UIView()
     let stackView = UIStackView(arrangedSubviews: [

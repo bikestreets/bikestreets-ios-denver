@@ -59,7 +59,6 @@ final class PossibleRoutesView: UIStackView {
     }
     guard let preview else { return }
     
-    let routeCount = preview.routes.count
     for (index, route) in preview.routes.enumerated() {
       let expectedTimeLabel = UILabel()
       expectedTimeLabel.text = expectedTimeString(for: route.expectedTravelTime)
@@ -127,23 +126,6 @@ final class PossibleRoutesView: UIStackView {
       // Add support for tapping on the route stack.
       let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapRouteStack(recognizer:)))
       routeStack.addGestureRecognizer(tapGestureRecognizer)
-
-      // Update rounded corners based on position and count
-      routeStack.layer.cornerRadius = 16
-      routeStack.clipsToBounds = true
-      
-      if routeCount == 1 {
-        // Single view, all corners rounded
-      } else if index == 0 {
-        // First view, top corners rounded
-        routeStack.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-      } else if index == routeCount - 1 {
-        // Last view, bottom corners rounded
-        routeStack.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-      } else {
-        // Middle view, no corners rounded
-        routeStack.layer.cornerRadius = 0
-      }
       
       addArrangedSubview(routeStack)
     }
