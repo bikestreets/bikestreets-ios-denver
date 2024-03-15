@@ -360,10 +360,13 @@ extension DefaultMapsViewController: NavigationViewControllerDelegate {
 extension DefaultMapsViewController: NavigationMapViewDelegate {
   func navigationMapView(_ navigationMapView: NavigationMapView, didSelect route: MapboxDirections.Route) {
     switch stateManager.state {
-    case .previewDirections(var preview):
+    case .previewDirections(let preview):
       if let selectedRouteIndex = preview.routes.firstIndex(of: route) {
-        preview.selectedRouteIndex = selectedRouteIndex
-        stateManager.state = .previewDirections(preview: preview)
+        stateManager.state = .previewDirections(preview: .init(
+          request: preview.request,
+          response: preview.response,
+          selectedRouteIndex: selectedRouteIndex
+        ))
       }
     default:
       return

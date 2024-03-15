@@ -57,11 +57,18 @@ final class StateManager {
   struct DirectionsPreview {
     let request: RouteRequest
     let response: CustomRouteResponse
+    let selectedRouteIndex: Int
+    
+    init(request: RouteRequest, response: CustomRouteResponse, selectedRouteIndex: Int = 0) {
+      self.request = request
+      self.response = response
+      self.selectedRouteIndex = selectedRouteIndex
+    }
+    
     var routes: [Route] {
       guard let routes = response.routes else { return [] }
       return routes
     }
-    var selectedRouteIndex: Int = 0
   }
 
   struct Routing {

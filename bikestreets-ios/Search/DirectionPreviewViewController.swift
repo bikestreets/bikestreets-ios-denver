@@ -195,9 +195,12 @@ extension DirectionPreviewViewController: RoutePlaceRowViewDelegate {
 extension DirectionPreviewViewController: RouteSelectable {
   func didSelect(routeIndex: Int) {
     switch stateManager.state {
-    case .previewDirections(var preview):
-      preview.selectedRouteIndex = routeIndex
-      stateManager.state = .previewDirections(preview: preview)
+    case .previewDirections(let preview):
+      stateManager.state = .previewDirections(preview: .init(
+        request: preview.request, 
+        response: preview.response,
+        selectedRouteIndex: routeIndex
+      ))
     default:
       fatalError("State must be preview directions when route is selected")
     }
