@@ -11,11 +11,7 @@ import MapboxNavigation
 import MapKit
 
 class MapsViewController: UIViewController {
-  internal lazy var navigationMapView: NavigationMapView = {
-    return NavigationMapView(
-      frame: .zero
-    )
-  }()
+  internal let navigationMapView = NavigationMapView(frame: .zero)
   
   internal lazy var mapView: MapView = {
     return navigationMapView.mapView
