@@ -185,7 +185,7 @@ final class DefaultMapsViewController: MapsViewController {
     
     let options = CameraOptions(padding: UIEdgeInsets(top: cameraTopInset, left: 24, bottom: cameraBottomInset, right: 24))
 
-    navigationMapView.showcase(prioritizedRoutes, routesPresentationStyle: .all(shouldFit: true, cameraOptions: options), animated: true, duration: 1.0) { [weak self] _ in
+    navigationMapView.showcase(prioritizedRoutes, routesPresentationStyle: .all(shouldFit: true, cameraOptions: options), animated: true, duration: 0.8) { [weak self] _ in
       guard let self else { return }
       // Waiting until the animation is complete to show the route durations generally provides better framing of the duration annotations since the viewable map rectangle will be done moving.
       navigationMapView.showRouteDurations(along: prioritizedRoutes)
@@ -363,7 +363,7 @@ extension DefaultMapsViewController: NavigationMapViewDelegate {
     case .previewDirections(var preview):
       if let selectedRouteIndex = preview.routes.firstIndex(of: route) {
         preview.selectedRouteIndex = selectedRouteIndex
-        showRoutePreview(preview)
+        stateManager.state = .previewDirections(preview: preview)
       }
     default:
       return
