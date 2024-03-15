@@ -151,7 +151,7 @@ final class PossibleRoutesView: UIStackView {
     updateRouteStackBackgrounds(routeIndex: preview.selectedRouteIndex)
   }
   
-  func updateRouteStackBackgrounds(routeIndex: Int?) {
+  private func updateRouteStackBackgrounds(routeIndex: Int?) {
     let count = arrangedSubviews.count
     for (index, view) in arrangedSubviews.enumerated() {
       let isSelected = index == routeIndex
