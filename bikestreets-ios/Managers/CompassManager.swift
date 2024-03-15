@@ -27,8 +27,8 @@ final class MapCameraManager {
     case routing
     case routingIdle
     /// Not oriented to anything. User could be free-scrolling the map.
-    case showRoute(routes: [Route])
-    case showRouteIdle(routes: [Route])
+    case showRoute(preview: StateManager.DirectionsPreview)
+    case showRouteIdle(preview: StateManager.DirectionsPreview)
   }
 
   var state: State = .showDenver {
@@ -84,8 +84,8 @@ final class MapCameraManager {
       state = .followUserHeadingIdle
     case .routing:
       state = .routingIdle
-    case .showRoute(let routes):
-      state = .showRouteIdle(routes: routes)
+    case .showRoute(let preview):
+      state = .showRouteIdle(preview: preview)
     case .followUserPositionIdle,
         .followUserHeadingIdle,
         .routingIdle,
@@ -107,8 +107,8 @@ final class MapCameraManager {
       state = .followUserHeading
     case .routingIdle:
       state = .routing
-    case .showRouteIdle(let routes):
-      state = .showRoute(routes: routes)
+    case .showRouteIdle(let preview):
+      state = .showRoute(preview: preview)
     case .followUserPosition,
         .followUserHeading,
         .routing,

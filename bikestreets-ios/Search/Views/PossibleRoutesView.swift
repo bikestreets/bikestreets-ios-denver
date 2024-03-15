@@ -17,7 +17,7 @@ protocol RouteSelectable: AnyObject {
 final class PossibleRoutesView: UIStackView {
   weak var delegate: RouteSelectable?
 
-  private let routes: [MapboxDirections.Route]
+  private let preview: StateManager.DirectionsPreview?
 
   private let distanceFormatter: MeasurementFormatter = {
     let formatter = MeasurementFormatter()
@@ -34,18 +34,16 @@ final class PossibleRoutesView: UIStackView {
     return formatter
   }()
 
-  init(routes: [MapboxDirections.Route]) {
-    self.routes = routes
+  init(preview: StateManager.DirectionsPreview?) {
+    self.preview = preview
 
     super.init(frame: .zero)
 
     configureSubviews()
 
     axis = .vertical
-    spacing = 16
-
-    layoutMargins = UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
-    isLayoutMarginsRelativeArrangement = true
+    spacing = 0
+    distribution = .fillEqually
   }
 
   required init(coder: NSCoder) {
@@ -59,8 +57,9 @@ final class PossibleRoutesView: UIStackView {
     for subview in arrangedSubviews {
       removeArrangedSubview(subview)
     }
-
-    for (index, route) in routes.enumerated() {
+    guard let preview else { return }
+    
+    for (index, route) in preview.routes.enumerated() {
       let expectedTimeLabel = UILabel()
       expectedTimeLabel.text = expectedTimeString(for: route.expectedTravelTime)
       expectedTimeLabel.font = .preferredFont(forTextStyle: .title3, weight: .bold)
@@ -82,11 +81,10 @@ final class PossibleRoutesView: UIStackView {
       let spacerView = UIView()
 
       let button = UIButton(type: .roundedRect)
-      button.backgroundColor = .systemGreen
       button.layer.cornerRadius = 8
       button.clipsToBounds = true
       button.setTitle("GO", for: .normal)
-      button.setTitleColor(.white, for: .normal)
+      button.setTitleColor(UIColor(named: "RouteGoButtonTintColor"), for: .normal)
       button.titleLabel?.font = .preferredFont(forTextStyle: .body, weight: .bold)
       // Used to identify the tapped on route index.
       button.tag = index
@@ -121,14 +119,28 @@ final class PossibleRoutesView: UIStackView {
       routeStack.axis = .horizontal
       routeStack.spacing = 0
       routeStack.alignment = .center
-
+      routeStack.layoutMargins = UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
+      routeStack.isLayoutMarginsRelativeArrangement = true
       // Used to identify the tapped on route index.
       routeStack.tag = index
       // Add support for tapping on the route stack.
       let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapRouteStack(recognizer:)))
       routeStack.addGestureRecognizer(tapGestureRecognizer)
-
+      
       addArrangedSubview(routeStack)
+    }
+    
+    updateRouteStackBackgrounds(routeIndex: preview.selectedRouteIndex)
+  }
+  
+  private func updateRouteStackBackgrounds(routeIndex: Int?) {
+    let count = arrangedSubviews.count
+    for (index, view) in arrangedSubviews.enumerated() {
+      let isSelected = index == routeIndex
+      view.backgroundColor = (isSelected && count > 1) ? UIColor(named: "RouteRowSelectedBackgroundColor") : UIColor(named: "RouteRowBackgroundColor")
+      if let button = view.subviews.compactMap({ $0 as? UIButton }).first {
+        button.backgroundColor = isSelected ? UIColor(named: "RouteGoButtonSelectedBackgroundColor") : UIColor(named: "RouteGoButtonBackgroundColor")
+      }
     }
   }
 
@@ -151,6 +163,7 @@ final class PossibleRoutesView: UIStackView {
     guard let routeIndex = recognizer.view?.tag else {
       return
     }
+    updateRouteStackBackgrounds(routeIndex: routeIndex)
     delegate?.didSelect(routeIndex: routeIndex)
   }
 

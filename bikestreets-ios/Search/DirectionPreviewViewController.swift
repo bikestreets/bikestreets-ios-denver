@@ -75,11 +75,10 @@ final class DirectionPreviewViewController: UIViewController {
     placesStackView.clipsToBounds = true
     placesStackView.backgroundColor = .tertiarySystemBackground
 
-    let possibleRoutesView = PossibleRoutesView(routes: routes)
+    let possibleRoutesView = PossibleRoutesView(preview: preview)
     possibleRoutesView.delegate = self
     possibleRoutesView.layer.cornerRadius = 16
     possibleRoutesView.clipsToBounds = true
-    possibleRoutesView.backgroundColor = .tertiarySystemBackground
 
     let spacerView = UIView()
     let stackView = UIStackView(arrangedSubviews: [
@@ -115,12 +114,12 @@ final class DirectionPreviewViewController: UIViewController {
 
   // MARK: -- Helpers
 
-  private var routes: [MapboxDirections.Route] {
+  private var preview: StateManager.DirectionsPreview? {
     switch stateManager.state {
     case .previewDirections(let preview):
-      return preview.response.routes ?? []
+      return preview
     case .requestingRoutes:
-      return []
+      return nil
     default:
       fatalError("Unsupported state")
     }
@@ -194,7 +193,17 @@ extension DirectionPreviewViewController: RoutePlaceRowViewDelegate {
 
 extension DirectionPreviewViewController: RouteSelectable {
   func didSelect(routeIndex: Int) {
-    // TODO: Add route selection support.
+    switch stateManager.state {
+    case .previewDirections(let preview):
+      guard routeIndex != preview.selectedRouteIndex else { return }
+      stateManager.state = .previewDirections(preview: .init(
+        request: preview.request, 
+        response: preview.response,
+        selectedRouteIndex: routeIndex
+      ))
+    default:
+      fatalError("State must be preview directions when route is selected")
+    }
   }
 
   func didStart(routeIndex: Int) {

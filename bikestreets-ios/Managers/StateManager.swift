@@ -57,6 +57,14 @@ final class StateManager {
   struct DirectionsPreview {
     let request: RouteRequest
     let response: CustomRouteResponse
+    let selectedRouteIndex: Int
+    
+    init(request: RouteRequest, response: CustomRouteResponse, selectedRouteIndex: Int = 0) {
+      self.request = request
+      self.response = response
+      self.selectedRouteIndex = selectedRouteIndex
+    }
+    
     var routes: [Route] {
       guard let routes = response.routes else { return [] }
       return routes
@@ -90,31 +98,40 @@ final class StateManager {
     
     // Allows for easier printing of state w/o associated values.
     var name: String {
-        switch self {
-        case .initialTerms:
-          return "initialTerms"
-        case .requestingLocationPermissions:
-          return "requestingLocationPermissions"
-        case .insufficientLocationPermissions:
-          return "insufficientLocationPermissions"
-        case .initial:
-          return "initial"
-        case .searchDestination:
-          return "searchDestination"
-        case .requestingRoutes:
-          return "requestingRoutes"
-        case .previewDirections:
-          return "previewDirections"
-        case .updateOrigin:
-          return "updateOrigin"
-        case .updateDestination:
-          return "updateDestination"
-        case .routing:
-          return "routing"
-        case .routingFeedback:
-          return "routingFeedback"
-        }
+      switch self {
+      case .initialTerms:
+        return "initialTerms"
+      case .requestingLocationPermissions:
+        return "requestingLocationPermissions"
+      case .insufficientLocationPermissions:
+        return "insufficientLocationPermissions"
+      case .initial:
+        return "initial"
+      case .searchDestination:
+        return "searchDestination"
+      case .requestingRoutes:
+        return "requestingRoutes"
+      case .previewDirections:
+        return "previewDirections"
+      case .updateOrigin:
+        return "updateOrigin"
+      case .updateDestination:
+        return "updateDestination"
+      case .routing:
+        return "routing"
+      case .routingFeedback:
+        return "routingFeedback"
       }
+    }
+    
+    var allowCameraSync: Bool {
+      switch self {
+      case .requestingRoutes:
+        return false
+      default:
+        return true
+      }
+    }
   }
 
   var state: State = .initial {
