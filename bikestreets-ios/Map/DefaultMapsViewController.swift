@@ -598,7 +598,7 @@ extension DefaultMapsViewController: StateListener {
         return mapCameraManager.state
       case .initial,
           .routingFeedback:
-        return .followUserHeading
+        return .followUserPosition
       case .previewDirections(let preview),
           .updateOrigin(let preview),
           .updateDestination(let preview):
