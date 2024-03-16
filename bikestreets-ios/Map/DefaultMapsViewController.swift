@@ -187,6 +187,7 @@ final class DefaultMapsViewController: MapsViewController {
   private func showRoutePreview(_ preview: StateManager.DirectionsPreview?) {
     navigationMapView.removeRoutes()
     navigationMapView.removeRouteDurations()
+    navigationMapView.removeWaypoints()
     
     // If the cameraBottomInset is most of the screen, don't redraw preview since the map will zoom way out to fit the geometry, requiring a long animated zoom in when the cameraBottomInset returns to a more usable size
     guard let preview, cameraBottomInset < UIScreen.main.bounds.size.height * 0.9 else { return }
