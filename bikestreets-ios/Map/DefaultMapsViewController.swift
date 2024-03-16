@@ -169,6 +169,19 @@ final class DefaultMapsViewController: MapsViewController {
 
     heightInspectionViewController = viewController
   }
+  
+  // MARK: - Force Portrait Orientation
+  override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+    return .portrait
+  }
+  
+  override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+    return .portrait
+  }
+  
+  override var shouldAutorotate: Bool {
+    return false
+  }
 
   // MARK: - Route Preview
   private func showRoutePreview(_ preview: StateManager.DirectionsPreview?) {
