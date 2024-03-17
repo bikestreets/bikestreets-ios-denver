@@ -74,6 +74,16 @@ final class DirectionPreviewViewController: UIViewController {
     placesStackView.layer.cornerRadius = 16
     placesStackView.clipsToBounds = true
     placesStackView.backgroundColor = .tertiarySystemBackground
+    
+    let flipRouteButton = UIButton(type: .system)
+    let flipRouteImage = UIImage(systemName: "arrow.triangle.swap", withConfiguration: UIImage.SymbolConfiguration(pointSize: 22.0, weight: .light, scale: .small))
+    flipRouteButton.setImage(flipRouteImage, for: .normal)
+    flipRouteButton.backgroundColor = .white
+    flipRouteButton.tintColor = UIColor.init(rgb: 0x9E9E9E)
+    flipRouteButton.layer.borderColor = UIColor.init(rgb: 0xF0EFEF).cgColor
+    flipRouteButton.layer.cornerRadius = 8
+    flipRouteButton.layer.borderWidth = 1
+    flipRouteButton.addTarget(self, action: #selector(flipRouteButtonClicked(_:)), for: .touchUpInside)
 
     let possibleRoutesView = PossibleRoutesView(preview: preview)
     possibleRoutesView.delegate = self
@@ -91,11 +101,13 @@ final class DirectionPreviewViewController: UIViewController {
     stackView.spacing = 16
 
     scrollView.addSubview(stackView)
+    scrollView.addSubview(flipRouteButton)
 
     [
       titleLabel,
       spacerView,
       stackView,
+      flipRouteButton
     ].disableTranslatesAutoresizingMaskIntoConstraints()
 
     [
@@ -104,6 +116,10 @@ final class DirectionPreviewViewController: UIViewController {
       stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
       stackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 16),
       stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+      flipRouteButton.centerYAnchor.constraint(equalTo: placesStackView.centerYAnchor),
+      flipRouteButton.heightAnchor.constraint(equalToConstant: 35.0),
+      flipRouteButton.widthAnchor.constraint(equalToConstant: 28.0),
+      flipRouteButton.centerXAnchor.constraint(equalTo: placesStackView.leadingAnchor)
     ].activate()
   }
   
@@ -144,6 +160,19 @@ final class DirectionPreviewViewController: UIViewController {
       return request.destination.name
     default:
       fatalError("Unsupported state")
+    }
+  }
+  
+  // MARK: Flip Route
+  
+  @objc func flipRouteButtonClicked(_ sender: UIButton) {
+    switch stateManager.state {
+    case .previewDirections(let preview):
+      stateManager.state = .requestingRoutes(request: .init(origin: preview.request.destination, destination: preview.request.origin))
+    case .updateOrigin, .updateDestination, .requestingRoutes:
+      break
+    default:
+      fatalError("Unexpected state")
     }
   }
 }
