@@ -34,9 +34,6 @@
 		351645262A86DAC2001EDC99 /* BikeStreetsColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 351645252A86DAC2001EDC99 /* BikeStreetsColors.swift */; };
 		353497AD2B3726FF00DFB05B /* MapLayerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 353497AC2B3726FF00DFB05B /* MapLayerSpec.swift */; };
 		353497AF2B3DB5F000DFB05B /* SearchLegendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 353497AE2B3DB5F000DFB05B /* SearchLegendViewController.swift */; };
-		3547E64B2AB7D0AC004FA7F7 /* DebugTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3547E64A2AB7D0AC004FA7F7 /* DebugTableViewController.swift */; };
-		3547E64D2AB7D209004FA7F7 /* DebugTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3547E64C2AB7D209004FA7F7 /* DebugTableViewCell.swift */; };
-		3547E64F2AB88E8A004FA7F7 /* DebugLogHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3547E64E2AB88E8A004FA7F7 /* DebugLogHandler.swift */; };
 		3550D9682A98ECC200C70EE5 /* SearchConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3550D9672A98ECC200C70EE5 /* SearchConfiguration.swift */; };
 		3550D96B2A9CFBAC00C70EE5 /* MapControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3550D96A2A9CFBAC00C70EE5 /* MapControlView.swift */; };
 		3550D96E2A9D002E00C70EE5 /* SheetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3550D96D2A9D002E00C70EE5 /* SheetManager.swift */; };
@@ -59,6 +56,7 @@
 		35F8C19A2B238C34007AF870 /* Bundle+AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F8C1992B238C34007AF870 /* Bundle+AppVersion.swift */; };
 		35F8C19D2B2396B8007AF870 /* FeedbackEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F8C19C2B2396B8007AF870 /* FeedbackEmailViewController.swift */; };
 		35FE5FF62B486792002A4472 /* GlobalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FE5FF52B486792002A4472 /* GlobalSettings.swift */; };
+		440295612BA677AF007003D2 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 440295602BA677AF007003D2 /* PrivacyInfo.xcprivacy */; };
 		441308452B902AFE0002E1BB /* West Wash Park Headed N - Denver, CO.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 441308442B902AFE0002E1BB /* West Wash Park Headed N - Denver, CO.gpx */; };
 		44602B5A2BA287D60000399F /* StaticViewportState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44602B592BA287D60000399F /* StaticViewportState.swift */; };
 		44C20FFB2B89965100E48870 /* dakota-marion.txt in Resources */ = {isa = PBXBuildFile; fileRef = 44C20FFA2B89965100E48870 /* dakota-marion.txt */; };
@@ -99,9 +97,6 @@
 		351645252A86DAC2001EDC99 /* BikeStreetsColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BikeStreetsColors.swift; sourceTree = "<group>"; };
 		353497AC2B3726FF00DFB05B /* MapLayerSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLayerSpec.swift; sourceTree = "<group>"; };
 		353497AE2B3DB5F000DFB05B /* SearchLegendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchLegendViewController.swift; sourceTree = "<group>"; };
-		3547E64A2AB7D0AC004FA7F7 /* DebugTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugTableViewController.swift; sourceTree = "<group>"; };
-		3547E64C2AB7D209004FA7F7 /* DebugTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugTableViewCell.swift; sourceTree = "<group>"; };
-		3547E64E2AB88E8A004FA7F7 /* DebugLogHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogHandler.swift; sourceTree = "<group>"; };
 		3550D9672A98ECC200C70EE5 /* SearchConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchConfiguration.swift; sourceTree = "<group>"; };
 		3550D96A2A9CFBAC00C70EE5 /* MapControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapControlView.swift; sourceTree = "<group>"; };
 		3550D96D2A9D002E00C70EE5 /* SheetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetManager.swift; sourceTree = "<group>"; };
@@ -118,6 +113,7 @@
 		35FE5FF32B485FE3002A4472 /* Washington Park - Denver, CO.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Washington Park - Denver, CO.gpx"; sourceTree = "<group>"; };
 		35FE5FF42B485FE3002A4472 /* Sloan's Neighborhood - Denver, CO.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Sloan's Neighborhood - Denver, CO.gpx"; sourceTree = "<group>"; };
 		35FE5FF52B486792002A4472 /* GlobalSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSettings.swift; sourceTree = "<group>"; };
+		440295602BA677AF007003D2 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = "bikestreets-ios/PrivacyInfo.xcprivacy"; sourceTree = SOURCE_ROOT; };
 		441308442B902AFE0002E1BB /* West Wash Park Headed N - Denver, CO.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "West Wash Park Headed N - Denver, CO.gpx"; sourceTree = "<group>"; };
 		44602B592BA287D60000399F /* StaticViewportState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticViewportState.swift; sourceTree = "<group>"; };
 		44C20FFA2B89965100E48870 /* dakota-marion.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "dakota-marion.txt"; sourceTree = "<group>"; };
@@ -266,16 +262,6 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		3547E6492AB7D090004FA7F7 /* Debug */ = {
-			isa = PBXGroup;
-			children = (
-				3547E64A2AB7D0AC004FA7F7 /* DebugTableViewController.swift */,
-				3547E64C2AB7D209004FA7F7 /* DebugTableViewCell.swift */,
-				3547E64E2AB88E8A004FA7F7 /* DebugLogHandler.swift */,
-			);
-			path = Debug;
-			sourceTree = "<group>";
-		};
 		3550D9692A9CFB9E00C70EE5 /* Controls */ = {
 			isa = PBXGroup;
 			children = (
@@ -314,12 +300,12 @@
 			children = (
 				35065C9B2A7C69E600C7CCAF /* AppDelegate.swift */,
 				35A4829A2A37B1E6001035BB /* Assets.xcassets */,
-				3547E6492AB7D090004FA7F7 /* Debug */,
 				35065CB82A803A3000C7CCAF /* Extensions */,
 				35F8C19B2B2395FF007AF870 /* Feedback */,
 				35A482AF2A37C02E001035BB /* Info.plist */,
 				35065CC02A8043D100C7CCAF /* Managers */,
 				35065CA92A7D45D000C7CCAF /* Map */,
+				440295602BA677AF007003D2 /* PrivacyInfo.xcprivacy */,
 				350BDE392A7007F900D4DE31 /* Resources */,
 				35AEFC132B22DCAD00234813 /* RoadBlocks */,
 				35065CBB2A803BE800C7CCAF /* Routing */,
@@ -457,6 +443,7 @@
 				350BDE422A7007FF00D4DE31 /* 5-walk-master-v0.3.geojson in Resources */,
 				350BDE412A7007FF00D4DE31 /* 4-bikesidewalks-master-v0.3.geojson in Resources */,
 				350BDE402A7007FF00D4DE31 /* 3-bikelanes-master-v0.3.geojson in Resources */,
+				440295612BA677AF007003D2 /* PrivacyInfo.xcprivacy in Resources */,
 				350BDE432A7007FF00D4DE31 /* 1-bikestreets-master-v0.3.geojson in Resources */,
 				35A4829B2A37B1E6001035BB /* Assets.xcassets in Resources */,
 				44C20FFB2B89965100E48870 /* dakota-marion.txt in Resources */,
@@ -481,7 +468,6 @@
 				3516451A2A81CC73001EDC99 /* UIView+Constraints.swift in Sources */,
 				35F8C19A2B238C34007AF870 /* Bundle+AppVersion.swift in Sources */,
 				44FDF2B42B914A0C003C9420 /* RerouteManager.swift in Sources */,
-				3547E64B2AB7D0AC004FA7F7 /* DebugTableViewController.swift in Sources */,
 				35065CBD2A803BFC00C7CCAF /* RoutingViewController.swift in Sources */,
 				35065C9C2A7C69E600C7CCAF /* AppDelegate.swift in Sources */,
 				3550D96B2A9CFBAC00C70EE5 /* MapControlView.swift in Sources */,
@@ -495,7 +481,6 @@
 				35065CA82A7D451B00C7CCAF /* MKPlacemark+PrettyAddress.swift in Sources */,
 				351645262A86DAC2001EDC99 /* BikeStreetsColors.swift in Sources */,
 				35065CAD2A7D9A8F00C7CCAF /* StateManager.swift in Sources */,
-				3547E64F2AB88E8A004FA7F7 /* DebugLogHandler.swift in Sources */,
 				35065CAF2A7D9B8300C7CCAF /* RouteRequester.swift in Sources */,
 				3550D96E2A9D002E00C70EE5 /* SheetManager.swift in Sources */,
 				3516451E2A81D826001EDC99 /* RoutePlaceRowView.swift in Sources */,
@@ -510,7 +495,6 @@
 				353497AD2B3726FF00DFB05B /* MapLayerSpec.swift in Sources */,
 				353497AF2B3DB5F000DFB05B /* SearchLegendViewController.swift in Sources */,
 				35065CB22A7D9E5700C7CCAF /* PolylineAnnotation+ActiveRoute.swift in Sources */,
-				3547E64D2AB7D209004FA7F7 /* DebugTableViewCell.swift in Sources */,
 				3550D9702A9D351300C70EE5 /* CompassManager.swift in Sources */,
 				35065CBF2A803C1900C7CCAF /* UINavigationController+Sheet.swift in Sources */,
 			);
