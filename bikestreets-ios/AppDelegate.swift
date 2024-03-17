@@ -21,21 +21,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     window?.rootViewController = mainViewController
     window?.makeKeyAndVisible()
 
-    DispatchQueue.main.async {
-      try? self.cleanUpDebugFiles()
-    }
-
     return true
-  }
-
-  // MARK: -- Clean Up
-
-  private func cleanUpDebugFiles() throws {
-    try DebugLogHandler().files().forEach { (path, entry) in
-      // Clean up if more than a week old.
-      if entry.date.timeIntervalSinceNow < -60*60*24*7 {
-        try FileManager.default.removeItem(at: path)
-      }
-    }
   }
 }
