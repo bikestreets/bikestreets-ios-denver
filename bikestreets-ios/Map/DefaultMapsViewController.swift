@@ -43,6 +43,11 @@ final class DefaultMapsViewController: MapsViewController {
     (sheetHeightInspectionView.lastFrameBroadcast?.height ?? 0) + 24
   }
   
+  /// If the camera bottom inset is too small when using overview viewport during route preview, the map zooms way out to accommodate the route geometry. Setting a minimum value avoids this.
+  private var minCameraBottomInsetForPreview: CGFloat {
+    return min(cameraBottomInset, UIScreen.main.bounds.size.height * 0.8)
+  }
+  
   private var cameraTopInset: CGFloat {
     view.safeAreaInsets.top
   }
@@ -189,20 +194,16 @@ final class DefaultMapsViewController: MapsViewController {
     navigationMapView.removeRouteDurations()
     navigationMapView.removeWaypoints()
     
-    // If the cameraBottomInset is most of the screen, don't redraw preview since the map will zoom way out to fit the geometry, requiring a long animated zoom in when the cameraBottomInset returns to a more usable size
-    guard let preview, cameraBottomInset < UIScreen.main.bounds.size.height * 0.9 else { return }
+    guard let preview else { return }
     
     // Move the selected route to first in the list so that it appears selected
     var prioritizedRoutes = preview.routes
     prioritizedRoutes.insert(prioritizedRoutes.remove(at: preview.selectedRouteIndex),
                              at: 0)
-    
-    let options = CameraOptions(padding: UIEdgeInsets(top: cameraTopInset, left: 24, bottom: cameraBottomInset, right: 24))
 
-    navigationMapView.showcase(prioritizedRoutes, routesPresentationStyle: .all(shouldFit: true, cameraOptions: options), animated: true, duration: 0.8) { [weak self] _ in
-      guard let self else { return }
-      // Waiting until the animation is complete to show the route durations generally provides better framing of the duration annotations since the viewable map rectangle will be done moving.
-      navigationMapView.showRouteDurations(along: prioritizedRoutes)
+    navigationMapView.show(prioritizedRoutes, layerPosition: belowRoadLabelLayer)
+    if let selectedRoute = prioritizedRoutes.first {
+      navigationMapView.showWaypoints(on: selectedRoute)
     }
   }
   
@@ -845,8 +846,18 @@ extension DefaultMapsViewController: MapCameraStateListener {
       )
     case .showRoute(let preview):
       // showRoutePreview uses NavigationMapView.showcase() which handles the camera movement. Return a StaticViewportState that has no camera movement here, so that we can pick up viewport transitions when user moves map to idle. If we used OverviewViewportState, then we'd get additional, undesired camera movement
+      let coordinates: [CLLocationCoordinate2D] = {
+        return preview.routes.flatMap { $0.coordinates }
+      }()
+
+      newState = mapView.viewport.makeOverviewViewportState(
+        options: .init(
+          geometry: LineString(coordinates),
+          padding: .init(top: cameraTopInset, left: 24, bottom: minCameraBottomInsetForPreview, right: 24),
+          animationDuration: 0.0
+        )
+      )
       showRoutePreview(preview)
-      newState = StaticViewportState()
     case .followUserHeading:
       newState = mapView.viewport.makeFollowPuckViewportState(
         options: FollowPuckViewportStateOptions(
@@ -914,6 +925,13 @@ extension DefaultMapsViewController: ViewportStatusObserver {
       }
     case .transitionSucceeded:
       viewportTransitionFailureCount = 0
+      // Duration annotation drawing for previewDirections is based on the visible viewport.
+      // Wait until the transition is complete to start drawing or else the annotation(s) will not use the entire route for determining a good placement spot
+      switch stateManager.state {
+      case .previewDirections(let preview):
+        navigationMapView.showRouteDurations(along: preview.routes)
+      default: break
+      }
     default: break
     }
 
