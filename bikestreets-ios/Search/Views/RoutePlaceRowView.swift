@@ -45,10 +45,10 @@ final class RoutePlaceRowView: UIStackView {
     super.init(frame: .zero)
 
     addArrangedSubviews(
-      .init(insetView: fromTitle, insets: .init(top: 0, left: 16, bottom: 0, right: 16)),
-      .init(insetView: fromName, insets: .init(top: 0, left: 16, bottom: 0, right: 16)),
-      .init(insetView: toTitle, insets: .init(top: 0, left: 16, bottom: 0, right: 16)),
-      .init(insetView: toName, insets: .init(top: 0, left: 16, bottom: 0, right: 16))
+      .init(insetView: fromTitle, insets: .init(top: 0, left: 22, bottom: 0, right: 16)),
+      .init(insetView: fromName, insets: .init(top: 0, left: 22, bottom: 0, right: 16)),
+      .init(insetView: toTitle, insets: .init(top: 0, left: 22, bottom: 0, right: 16)),
+      .init(insetView: toName, insets: .init(top: 0, left: 22, bottom: 0, right: 16))
     )
 
     axis = .vertical

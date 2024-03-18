@@ -129,10 +129,13 @@ class MapsViewController: UIViewController {
   
   // MARK: -- Layer Placement
   
-  private lazy var roadLabelLayerId: String? = {
+  internal var belowRoadLabelLayer: LayerPosition? {
     let id = "road-label"
-    return mapView.mapboxMap.style.styleManager.styleLayerExists(forLayerId: id) ? id : nil
-  }()
+    let roadLabelId =  mapView.mapboxMap.style.styleManager.styleLayerExists(forLayerId: id) ? id : nil
+    
+    guard let roadLabelId else { return nil }
+    return .below(roadLabelId)
+  }
 }
 
 // MARK: -- Dark Mode
@@ -207,11 +210,7 @@ extension MapsViewController {
         id: spec.identifier
       )
       
-      if let roadLabelLayerId {
-        try! mapView.mapboxMap.style.addPersistentLayer(lineLayer, layerPosition: .below(roadLabelLayerId))
-      } else {
-        try! mapView.mapboxMap.style.addPersistentLayer(lineLayer)
-      }
+      try! mapView.mapboxMap.style.addPersistentLayer(lineLayer, layerPosition: belowRoadLabelLayer)
     }
   }
 }

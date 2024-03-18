@@ -58,7 +58,7 @@
 		35FE5FF62B486792002A4472 /* GlobalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FE5FF52B486792002A4472 /* GlobalSettings.swift */; };
 		440295612BA677AF007003D2 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 440295602BA677AF007003D2 /* PrivacyInfo.xcprivacy */; };
 		441308452B902AFE0002E1BB /* West Wash Park Headed N - Denver, CO.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 441308442B902AFE0002E1BB /* West Wash Park Headed N - Denver, CO.gpx */; };
-		44602B5A2BA287D60000399F /* StaticViewportState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44602B592BA287D60000399F /* StaticViewportState.swift */; };
+		443BB58F2BA7C9510053F934 /* FlipRouteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443BB58E2BA7C9510053F934 /* FlipRouteButton.swift */; };
 		44C20FFB2B89965100E48870 /* dakota-marion.txt in Resources */ = {isa = PBXBuildFile; fileRef = 44C20FFA2B89965100E48870 /* dakota-marion.txt */; };
 		44C8BF162B94DAA100F48FC9 /* reroute.wav in Resources */ = {isa = PBXBuildFile; fileRef = 44C8BF152B94DAA100F48FC9 /* reroute.wav */; };
 		44C8BF192B9542B500F48FC9 /* 1655 Filbert Ct - Denver, CO.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 44C8BF182B9542B500F48FC9 /* 1655 Filbert Ct - Denver, CO.gpx */; };
@@ -115,7 +115,7 @@
 		35FE5FF52B486792002A4472 /* GlobalSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSettings.swift; sourceTree = "<group>"; };
 		440295602BA677AF007003D2 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = "bikestreets-ios/PrivacyInfo.xcprivacy"; sourceTree = SOURCE_ROOT; };
 		441308442B902AFE0002E1BB /* West Wash Park Headed N - Denver, CO.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "West Wash Park Headed N - Denver, CO.gpx"; sourceTree = "<group>"; };
-		44602B592BA287D60000399F /* StaticViewportState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticViewportState.swift; sourceTree = "<group>"; };
+		443BB58E2BA7C9510053F934 /* FlipRouteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlipRouteButton.swift; sourceTree = "<group>"; };
 		44C20FFA2B89965100E48870 /* dakota-marion.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "dakota-marion.txt"; sourceTree = "<group>"; };
 		44C8BF152B94DAA100F48FC9 /* reroute.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = reroute.wav; sourceTree = "<group>"; };
 		44C8BF182B9542B500F48FC9 /* 1655 Filbert Ct - Denver, CO.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "1655 Filbert Ct - Denver, CO.gpx"; sourceTree = "<group>"; };
@@ -150,6 +150,7 @@
 		35065CA42A7D44B900C7CCAF /* Search */ = {
 			isa = PBXGroup;
 			children = (
+				443BB58D2BA7C9260053F934 /* Controls */,
 				3516451C2A81D813001EDC99 /* Extensions */,
 				3516451B2A81D80C001EDC99 /* Views */,
 				35065CA22A7D2EB400C7CCAF /* SearchViewController.swift */,
@@ -168,7 +169,6 @@
 				35A2F0BE2A4F7957002BF520 /* MapsViewController.swift */,
 				35065CA02A7D24AD00C7CCAF /* DefaultMapsViewController.swift */,
 				35065CAA2A7D45E400C7CCAF /* SizeTrackingView.swift */,
-				44602B592BA287D60000399F /* StaticViewportState.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -343,6 +343,14 @@
 			path = Feedback;
 			sourceTree = "<group>";
 		};
+		443BB58D2BA7C9260053F934 /* Controls */ = {
+			isa = PBXGroup;
+			children = (
+				443BB58E2BA7C9510053F934 /* FlipRouteButton.swift */,
+			);
+			path = Controls;
+			sourceTree = "<group>";
+		};
 		44C20FF92B89965100E48870 /* FixedRoutes */ = {
 			isa = PBXGroup;
 			children = (
@@ -478,6 +486,7 @@
 				44D9AD4C2B818E9500D33DD8 /* UIViewController+DismissButton.swift in Sources */,
 				35A2F0BF2A4F7957002BF520 /* MapsViewController.swift in Sources */,
 				35065CC22A8043E900C7CCAF /* ScreenManager.swift in Sources */,
+				443BB58F2BA7C9510053F934 /* FlipRouteButton.swift in Sources */,
 				35065CA82A7D451B00C7CCAF /* MKPlacemark+PrettyAddress.swift in Sources */,
 				351645262A86DAC2001EDC99 /* BikeStreetsColors.swift in Sources */,
 				35065CAD2A7D9A8F00C7CCAF /* StateManager.swift in Sources */,
@@ -491,7 +500,6 @@
 				35F8C19D2B2396B8007AF870 /* FeedbackEmailViewController.swift in Sources */,
 				35AEFC122B22D92000234813 /* CLLocationManager+AuthorizationState.swift in Sources */,
 				35065CAB2A7D45E400C7CCAF /* SizeTrackingView.swift in Sources */,
-				44602B5A2BA287D60000399F /* StaticViewportState.swift in Sources */,
 				353497AD2B3726FF00DFB05B /* MapLayerSpec.swift in Sources */,
 				353497AF2B3DB5F000DFB05B /* SearchLegendViewController.swift in Sources */,
 				35065CB22A7D9E5700C7CCAF /* PolylineAnnotation+ActiveRoute.swift in Sources */,
