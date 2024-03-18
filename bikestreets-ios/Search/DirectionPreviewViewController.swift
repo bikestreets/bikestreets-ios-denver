@@ -35,7 +35,7 @@ final class DirectionPreviewViewController: UIViewController {
     super.viewDidLoad()
     
     isModalInPresentation = true
-    updateColors()
+    view.backgroundColor = UIColor(named: "DirectionPreviewBackgroundColor")
 
     view.addSubview(scrollView)
     view.matchAutolayoutSize(scrollView)
@@ -43,15 +43,6 @@ final class DirectionPreviewViewController: UIViewController {
     stateManager.add(listener: self)
     configureDismissButton(action: #selector(dismissButtonClicked))
     configureViews()
-  }
-  
-  private func updateColors() {
-    view.backgroundColor = .directionsPreviewBackgroundColor
-  }
-  
-  override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-    super.traitCollectionDidChange(previousTraitCollection)
-    updateColors()
   }
 
   /// Remove any past views and then re-add all the views based on the current state.
@@ -73,16 +64,9 @@ final class DirectionPreviewViewController: UIViewController {
     placesStackView.delegate = self
     placesStackView.layer.cornerRadius = 16
     placesStackView.clipsToBounds = true
-    placesStackView.backgroundColor = .tertiarySystemBackground
+    placesStackView.backgroundColor = UIColor(named: "PlacesStackViewBackgroundColor")
     
-    let flipRouteButton = UIButton(type: .system)
-    let flipRouteImage = UIImage(systemName: "arrow.triangle.swap", withConfiguration: UIImage.SymbolConfiguration(pointSize: 22.0, weight: .light, scale: .small))
-    flipRouteButton.setImage(flipRouteImage, for: .normal)
-    flipRouteButton.backgroundColor = .white
-    flipRouteButton.tintColor = UIColor.init(rgb: 0x9E9E9E)
-    flipRouteButton.layer.borderColor = UIColor.init(rgb: 0xF0EFEF).cgColor
-    flipRouteButton.layer.cornerRadius = 8
-    flipRouteButton.layer.borderWidth = 1
+    let flipRouteButton = FlipRouteButton()
     flipRouteButton.addTarget(self, action: #selector(flipRouteButtonClicked(_:)), for: .touchUpInside)
 
     let possibleRoutesView = PossibleRoutesView(preview: preview)

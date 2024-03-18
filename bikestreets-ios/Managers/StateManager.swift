@@ -127,6 +127,7 @@ final class StateManager {
     var allowCameraSync: Bool {
       switch self {
       case .requestingRoutes:
+        // Avoid moving the camera unnecessarily during route request because it will be reframed during route preview
         return false
       default:
         return true

@@ -81,6 +81,7 @@ final class DefaultMapsViewController: MapsViewController {
                                               object: nil)
   }
 
+  // MARK: - View Controller Lifecycle
   override func viewDidLoad() {
     super.viewDidLoad()
 
@@ -164,6 +165,8 @@ final class DefaultMapsViewController: MapsViewController {
     )
   }
 
+  // MARK: - Size and Orientation
+  
   private var heightInspectionConstraint: NSLayoutConstraint?
   private weak var heightInspectionViewController: UIViewController?
   private func inspectHeight(of viewController: UIViewController) {
@@ -175,7 +178,6 @@ final class DefaultMapsViewController: MapsViewController {
     heightInspectionViewController = viewController
   }
   
-  // MARK: - Force Portrait Orientation
   override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
     return .portrait
   }
@@ -188,7 +190,10 @@ final class DefaultMapsViewController: MapsViewController {
     return false
   }
 
-  // MARK: - Route Preview
+  // MARK: - Routing
+  
+  // MARK: -- Route Preview
+  
   private func showRoutePreview(_ preview: StateManager.DirectionsPreview?) {
     navigationMapView.removeRoutes()
     navigationMapView.removeRouteDurations()
@@ -275,7 +280,8 @@ final class DefaultMapsViewController: MapsViewController {
     }
   }
   
-  // MARK: - Route Requests
+  // MARK: -- Route Requests
+  
   private func requestRoute(request: StateManager.RouteRequest) {
     RouteRequester.getOSRMDirections(
       startPoint: request.origin.coordinate,
@@ -372,6 +378,9 @@ extension DefaultMapsViewController: NavigationViewControllerDelegate {
   }
   
 }
+
+// MARK: - NavigationMapViewDelegate
+
 extension DefaultMapsViewController: NavigationMapViewDelegate {
   func navigationMapView(_ navigationMapView: NavigationMapView, didSelect route: MapboxDirections.Route) {
     switch stateManager.state {
@@ -388,6 +397,7 @@ extension DefaultMapsViewController: NavigationMapViewDelegate {
     }
   }
 }
+
 // MARK: - State Management
 
 extension DefaultMapsViewController: StateListener {
@@ -600,6 +610,8 @@ extension DefaultMapsViewController: StateListener {
       present(vc, animated: true)
     }
 
+    guard stateManager.state.allowCameraSync else { return }
+    
     // Sync up camera position/focus.
     mapCameraManager.state = {
       switch newState {
@@ -609,7 +621,7 @@ extension DefaultMapsViewController: StateListener {
         return .showDenver
       case .searchDestination,
           .requestingRoutes:
-        // Camera does not need to transition for these states; no need to return to initial camera state
+        // No new transition state needed
         return mapCameraManager.state
       case .initial,
           .routingFeedback:
@@ -678,10 +690,7 @@ extension DefaultMapsViewController: SizeTrackingListener {
     let screenHeight = UIScreen.main.bounds.size.height
     let frameHeight = frame.height
 
-    guard frameHeight < (screenHeight * 0.8) else { return }
-           
-    // Ignore frame change during route request because it will be adjusted when the route is ready for preview
-    guard stateManager.state.allowCameraSync else { return }
+    guard stateManager.state.allowCameraSync, frameHeight < (screenHeight * 0.8) else { return }
     
     self.syncCameraStateTask?.cancel()
     
@@ -802,7 +811,7 @@ extension DefaultMapsViewController: LocationSearchDelegate {
   }
 }
 
-// MARK: -- CompassStateListener
+// MARK: -- MapCameraStateListener
 
 extension DefaultMapsViewController: MapCameraStateListener {
   func didUpdate(from oldState: MapCameraManager.State, to newState: MapCameraManager.State) {
