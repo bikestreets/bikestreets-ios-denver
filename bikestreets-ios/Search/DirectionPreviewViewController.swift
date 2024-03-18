@@ -149,7 +149,7 @@ final class DirectionPreviewViewController: UIViewController {
   
   // MARK: Flip Route
   
-  @objc func flipRouteButtonClicked(_ sender: UIButton) {
+  @objc private func flipRouteButtonClicked(_ sender: UIButton) {
     switch stateManager.state {
     case .previewDirections(let preview):
       stateManager.state = .requestingRoutes(request: .init(origin: preview.request.destination, destination: preview.request.origin))
