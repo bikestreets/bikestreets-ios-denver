@@ -43,7 +43,9 @@ final class DefaultMapsViewController: MapsViewController {
     (sheetHeightInspectionView.lastFrameBroadcast?.height ?? 0) + 24
   }
   
-  /// If the camera bottom inset is too small when using overview viewport during route preview, the map zooms way out to accommodate the route geometry. Setting a minimum value avoids this.
+  /// If the camera bottom inset is too large when using overview viewport during route preview,
+  /// available map space is too small and the map zooms way out to accommodate the route geometry.
+  /// Setting a min value avoids this and ensures the effective cameraBottomInset gets no larger than 80% of the screen height
   private var minCameraBottomInsetForPreview: CGFloat {
     return min(cameraBottomInset, UIScreen.main.bounds.size.height * 0.8)
   }
