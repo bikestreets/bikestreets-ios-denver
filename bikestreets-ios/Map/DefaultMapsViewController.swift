@@ -35,6 +35,7 @@ final class DefaultMapsViewController: MapsViewController {
   private let screenManager: ScreenManager
   private var viewportTransitionFailureCount = 0
   private let rerouteManager = RerouteManager()
+  private var routeAudioManager: RouteAudioManager?
   // Debounce syncCameraState calls when didChangeFrame gets repeatedly called on sheet transitions/resizes
   private var syncCameraStateTask: DispatchWorkItem?
 
@@ -356,7 +357,7 @@ extension DefaultMapsViewController: NavigationViewControllerDelegate {
   }
   
   func navigationViewController(_ navigationViewController: NavigationViewController, didRerouteAlong route: MapboxDirections.Route) {
-    rerouteManager.playRerouteSound()
+    routeAudioManager?.playRerouteSound()
   }
 
   func navigationViewControllerDidDismiss(
@@ -364,7 +365,7 @@ extension DefaultMapsViewController: NavigationViewControllerDelegate {
     byCanceling canceled: Bool
   ) {
     self.navigationViewController = nil
-
+    routeAudioManager = nil
     // If still in routing state, transition back to initial.
     if case .routing = stateManager.state {
       stateManager.state = .initial
@@ -579,6 +580,10 @@ extension DefaultMapsViewController: StateListener {
         /// Disable "Report Problem" sheet that shows while navigating.
         navigationViewController?.showsReportFeedback = false
         navigationViewController?.showsEndOfRouteFeedback = false
+
+        if let speechSynthesizer = navigationViewController?.voiceController.speechSynthesizer {
+          routeAudioManager = RouteAudioManager(speechSynthesizer: speechSynthesizer)
+        }
         if let viewportDataSource = navigationViewController?.navigationMapView?.navigationCamera.viewportDataSource as? NavigationViewportDataSource {
           // Based on some experimentation, lowering the pitch for cycling seems appropriate compared to automobile, as speeds are lower and horizon doesn't need to be quite so far.
           viewportDataSource.options.followingCameraOptions.defaultPitch = 35.0
