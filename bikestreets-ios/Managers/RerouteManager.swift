@@ -7,8 +7,8 @@
 
 import Foundation
 import CoreLocation
-import AVFoundation
 
+// TODO: Encapsulate RerouteManager inside StateManager
 final class RerouteManager {
   enum State {
     case idle
@@ -16,7 +16,6 @@ final class RerouteManager {
   }
   
   var location: CLLocation?
-  private var audioPlayer: AVAudioPlayer?
   private var lastRerouteCompletionTime: Date? = Date()
   private let cooldownInterval: TimeInterval = 0.0 // initially thought we needed cooldown, but testing to see how this works with zero cooldown
   
@@ -35,26 +34,5 @@ final class RerouteManager {
     
     return Date().timeIntervalSince(lastRerouteCompletionTime) > cooldownInterval
   }
-  
-  init() {
-    preloadAudioPlayer()
-  }
-  
-  private func preloadAudioPlayer() {
-    guard let soundURL = Bundle.main.url(forResource: "reroute", withExtension: "wav") else {
-      print("Unable to locate audio file.")
-      return
-    }
-    
-    do {
-      audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
-      audioPlayer?.prepareToPlay()
-    } catch {
-      print("Failed to initialize the audio player: \(error.localizedDescription)")
-    }
-  }
-  
-  func playRerouteSound() {
-    audioPlayer?.play()
-  }
 }
+
