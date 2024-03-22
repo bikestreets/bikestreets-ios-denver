@@ -68,6 +68,8 @@ final class DirectionPreviewViewController: UIViewController {
     
     let flipRouteButton = FlipRouteButton()
     flipRouteButton.addTarget(self, action: #selector(flipRouteButtonClicked(_:)), for: .touchUpInside)
+    // FlipRouteButton is hidden for release, but leaving it here to be shown, as it can be handy for testing
+    flipRouteButton.isHidden = true
 
     let possibleRoutesView = PossibleRoutesView(preview: preview)
     possibleRoutesView.delegate = self

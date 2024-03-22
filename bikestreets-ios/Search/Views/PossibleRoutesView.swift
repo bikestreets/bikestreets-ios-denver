@@ -101,7 +101,7 @@ final class PossibleRoutesView: UIStackView {
       ].disableTranslatesAutoresizingMaskIntoConstraints()
 
       [
-        leftInsetView.widthAnchor.constraint(equalToConstant: 22),
+        leftInsetView.widthAnchor.constraint(equalToConstant: 16),
 
         button.heightAnchor.constraint(equalToConstant: 60),
         button.widthAnchor.constraint(equalToConstant: 60),
