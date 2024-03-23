@@ -7,6 +7,7 @@
 
 import Foundation
 import MapboxMaps
+import MapboxNavigation
 import UIKit
 
 // MARK: - Map Styles
@@ -14,9 +15,41 @@ import UIKit
 extension StyleURI {
   /// Avi's custom map style designed to minimize highway prevalence.
   /// This style started out as `.streets` with customizations.
+  /// Testing the new Light and Dark styles below. Leaving this here for debug comparisons during testing period.
   static let vamosStreets = StyleURI(
     rawValue: "mapbox://styles/mkbitbucket/clqgwgexa007s01rjhxpwcpaw"
   )!
+  
+  static let vamosStreetsLight = StyleURI(
+    rawValue: "mapbox://styles/mkbitbucket/cltt4qtxa01lx01o80ujx0dvl"
+  )!
+  
+  static let vamosStreetsDark = StyleURI(
+    rawValue: "mapbox://styles/mkbitbucket/cltt4wy2g01l801oic0udggc7"
+  )!
+}
+
+/// Day style used by NavigationViewController for light mode and day hours.
+/// Will be used in day hours with dark mode enabled unless NavigationViewController.usesNightStyleInDarkMode is true
+/// Additional UIView.appearance modifications can be made in apply(). See CustomStyleUIElements class in Mapbox's Navigation-Examples project for extensive examples.
+final class VamosDayStyle: DayStyle {
+  required init() {
+    super.init()
+    mapStyleURL = URL(string: StyleURI.vamosStreetsLight.rawValue)!
+    styleType = .day
+  }
+  
+}
+
+/// Night style used by NavigationViewController for dark mode, night hours, and tunnels.
+/// Additional UIView.appearance modifications can be made in apply(). See CustomStyleUIElements class in Mapbox's Navigation-Examples project for extensive examples.
+final class VamosNightStyle: NightStyle {
+  required init() {
+    super.init()
+    mapStyleURL = URL(string: StyleURI.vamosStreetsDark.rawValue)!
+    styleType = .night
+  }
+  
 }
 
 // MARK: -

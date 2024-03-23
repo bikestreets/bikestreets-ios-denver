@@ -54,6 +54,8 @@ class MapsViewController: UIViewController {
     )
     mapView.mapboxMap.setCamera(to: cameraOptions)
 
+    // Load appropriate map style based on light/dark mode
+    updateMapStyle()
     // Hide Mapbox 'i' button
     mapView.ornaments.options.attributionButton.margins = .init(x: -10000, y: 0)
     // Move Mapbox compass
@@ -130,9 +132,10 @@ class MapsViewController: UIViewController {
   // MARK: -- Layer Placement
   
   internal var belowRoadLabelLayer: LayerPosition? {
-    let id = "road-label"
-    let roadLabelId =  mapView.mapboxMap.style.styleManager.styleLayerExists(forLayerId: id) ? id : nil
-    
+    // Either "road-label" or "road-label-simple" could be used as the road label layer
+    let roadLabelPrefix = "road-label"
+    let roadLabelLayer = mapView.mapboxMap.style.styleManager.getStyleLayers().first(where: { $0.id.hasPrefix(roadLabelPrefix) })
+    let roadLabelId =  roadLabelLayer?.id ?? nil
     guard let roadLabelId else { return nil }
     return .below(roadLabelId)
   }
@@ -151,9 +154,9 @@ extension MapsViewController {
 
   private var currentMapboxStyle: StyleURI {
     if traitCollection.userInterfaceStyle == .dark {
-      return .dark
+      return .vamosStreetsDark
     } else {
-      return .vamosStreets
+      return .vamosStreetsLight
     }
   }
 

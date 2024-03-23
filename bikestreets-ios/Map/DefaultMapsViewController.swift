@@ -570,14 +570,17 @@ extension DefaultMapsViewController: StateListener {
           navigationService.simulationSpeedMultiplier = 1.0
         #endif
         
-        let navigationOptions = NavigationOptions(navigationService: navigationService)
+        let navigationOptions = NavigationOptions(styles: [VamosDayStyle(), VamosNightStyle()], navigationService: navigationService)
         navigationViewController = NavigationViewController(
           for: indexedRouteResponse,
           navigationOptions: navigationOptions
         )
+        // usesNightStyleInDarkMode needs to be set before .showsReportFeedback/.showsEndOfRouteFeedback functions are called,
+        // else .night style won't be loaded correctly due to ordering of loading logic in NavigationViewController
+        navigationViewController?.usesNightStyleInDarkMode = true
         navigationViewController?.modalPresentationStyle = .fullScreen
         navigationViewController?.delegate = self
-        /// Disable "Report Problem" sheet that shows while navigating.
+        // Disable "Report Problem" sheet that shows while navigating.
         navigationViewController?.showsReportFeedback = false
         navigationViewController?.showsEndOfRouteFeedback = false
 
