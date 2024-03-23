@@ -254,6 +254,7 @@ enum InstructionGenerator {
     
     class DepartStep: StandardStep {
       let shortStepThresholdForDeparture: Double = 70
+      let minDistanceBetweenDepartAndAdvanceInstruction: Double = 60
 
       override func createAdvanceInstructions(currentStepInfo: StepInfo, nextStepInfo: StepInfo, nextNextStepInfo: StepInfo?) -> [Instruction] {
         var instructionList: [Instruction] = []
@@ -265,10 +266,14 @@ enum InstructionGenerator {
           
         } else if currentStepDistance > advanceStepThreshold {
           instructionList.append(Instruction(announcement: constructDepartAnnouncement(instructions: currentStepInfo.voiceInstructions, distanceString: DistanceConverter.convertToEnglishPhrase(from: currentStepDistance)), distanceAlongGeometry: currentStepDistance))
-          // Mapbox uses something approximate to this to scale the advance distance on the departure step when the departure step is in this intermediate length (between advanceStepThreshold and longStepThreshold).
+          // Mapbox uses something approximate to this to scale the advance distance on the departure step 
+          //   when the departure step is in this intermediate length (between advanceStepThreshold and longStepThreshold).
           let advanceDistance = (currentStepDistance * 0.5) + 50
-          instructionList.append(Instruction(announcement: constructAdvanceAnnouncement(instructions: nextStepInfo.voiceInstructionsAsFuture, distanceString: DistanceConverter.convertToEnglishPhrase(from: advanceDistance + instructionSpeakingDistance)), distanceAlongGeometry: advanceDistance))
-          
+          // In this range, we need to still ensure that there's a minimum distance between the depart announcement
+          //   and the advance announcement so it doesn't interrupt.
+          if (currentStepDistance - advanceDistance) > minDistanceBetweenDepartAndAdvanceInstruction {
+              instructionList.append(Instruction(announcement: constructAdvanceAnnouncement(instructions: nextStepInfo.voiceInstructionsAsFuture, distanceString: DistanceConverter.convertToEnglishPhrase(from: advanceDistance + instructionSpeakingDistance)), distanceAlongGeometry: advanceDistance))
+          }
         } else if currentStepDistance > shortStepThresholdForDeparture {
           instructionList.append(Instruction(announcement: constructLookAheadAnnouncement(firstInstructions: currentStepInfo.voiceInstructions, nextInstructions: nextStepInfo.voiceInstructionsAsFuture), distanceAlongGeometry: currentStepDistance))
         }
