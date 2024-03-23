@@ -713,7 +713,10 @@ extension DefaultMapsViewController: SizeTrackingListener {
         
         // Update Mapbox ornaments. Mapbox insets the ornaments by the safe
         // area so include that in our ornament offset calculations.
-        let safeAreaBottomPadding = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
+        let safeAreaBottomPadding = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .first?.windows
+            .first(where: { $0.isKeyWindow })?.safeAreaInsets.bottom ?? 0
         let mapboxOrnamentYInset = frameHeight + 8 - safeAreaBottomPadding
         self.mapView.ornaments.options.logo.margins = .init(x: 8.0, y: mapboxOrnamentYInset)
         self.mapView.ornaments.options.compass.margins = .init(x: 8.0, y: mapboxOrnamentYInset)
