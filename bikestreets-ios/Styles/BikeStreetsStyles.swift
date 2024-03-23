@@ -31,7 +31,7 @@ extension StyleURI {
 /// Day style used by NavigationViewController for light mode and day hours.
 /// Will be used in day hours with dark mode enabled unless NavigationViewController.usesNightStyleInDarkMode is true
 /// Additional UIView.appearance modifications can be made in apply(). See CustomStyleUIElements class in Mapbox's Navigation-Examples project for extensive examples.
-class VamosDayStyle: DayStyle {
+final class VamosDayStyle: DayStyle {
   required init() {
     super.init()
     mapStyleURL = URL(string: StyleURI.vamosStreetsLight.rawValue)!
