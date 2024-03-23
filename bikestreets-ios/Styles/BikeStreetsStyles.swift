@@ -42,7 +42,7 @@ final class VamosDayStyle: DayStyle {
 
 /// Night style used by NavigationViewController for dark mode, night hours, and tunnels.
 /// Additional UIView.appearance modifications can be made in apply(). See CustomStyleUIElements class in Mapbox's Navigation-Examples project for extensive examples.
-class VamosNightStyle: NightStyle {
+final class VamosNightStyle: NightStyle {
   required init() {
     super.init()
     mapStyleURL = URL(string: StyleURI.vamosStreetsDark.rawValue)!
