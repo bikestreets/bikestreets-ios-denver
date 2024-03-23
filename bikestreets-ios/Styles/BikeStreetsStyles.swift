@@ -38,9 +38,6 @@ class VamosDayStyle: DayStyle {
     styleType = .day
   }
   
-  override func apply() {
-    super.apply()
-  }
 }
 
 /// Night style used by NavigationViewController for dark mode, night hours, and tunnels.
