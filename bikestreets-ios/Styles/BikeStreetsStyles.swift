@@ -49,9 +49,6 @@ class VamosNightStyle: NightStyle {
     styleType = .night
   }
   
-  override func apply() {
-    super.apply()
-  }
 }
 
 // MARK: -
