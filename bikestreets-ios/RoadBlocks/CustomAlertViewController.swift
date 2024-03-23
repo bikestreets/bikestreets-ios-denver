@@ -52,7 +52,7 @@ final class CustomAlertViewController: UIViewController {
       // Allow the height to grow organically
     ].activate()
 
-    let image = UIImage(named: "vamos-logo")!
+    let image = UIImage.vamosLogo
     let imageView = UIImageView(image: image)
     imageView.disableTranslatesAutoresizingMaskIntoConstraints()
     imageView.heightAnchor.constraint(

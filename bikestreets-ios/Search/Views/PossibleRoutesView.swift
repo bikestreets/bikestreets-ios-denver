@@ -84,7 +84,7 @@ final class PossibleRoutesView: UIStackView {
       button.layer.cornerRadius = 8
       button.clipsToBounds = true
       button.setTitle("GO", for: .normal)
-      button.setTitleColor(UIColor(named: "RouteGoButtonTintColor"), for: .normal)
+      button.setTitleColor(UIColor.routeGoButtonTint, for: .normal)
       button.titleLabel?.font = .preferredFont(forTextStyle: .body, weight: .bold)
       // Used to identify the tapped on route index.
       button.tag = index
@@ -137,9 +137,9 @@ final class PossibleRoutesView: UIStackView {
     let count = arrangedSubviews.count
     for (index, view) in arrangedSubviews.enumerated() {
       let isSelected = index == routeIndex
-      view.backgroundColor = (isSelected && count > 1) ? UIColor(named: "RouteRowSelectedBackgroundColor") : UIColor(named: "RouteRowBackgroundColor")
+      view.backgroundColor = (isSelected && count > 1) ? UIColor.routeRowSelectedBackground : UIColor.routeRowBackground
       if let button = view.subviews.compactMap({ $0 as? UIButton }).first {
-        button.backgroundColor = isSelected ? UIColor(named: "RouteGoButtonSelectedBackgroundColor") : UIColor(named: "RouteGoButtonBackgroundColor")
+        button.backgroundColor = isSelected ? UIColor.routeGoButtonSelectedBackground : UIColor.routeGoButtonBackground
       }
     }
   }

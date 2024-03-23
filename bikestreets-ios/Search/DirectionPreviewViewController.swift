@@ -35,7 +35,7 @@ final class DirectionPreviewViewController: UIViewController {
     super.viewDidLoad()
     
     isModalInPresentation = true
-    view.backgroundColor = UIColor(named: "DirectionPreviewBackgroundColor")
+    view.backgroundColor = UIColor.directionPreviewBackground
 
     view.addSubview(scrollView)
     view.matchAutolayoutSize(scrollView)
@@ -64,7 +64,7 @@ final class DirectionPreviewViewController: UIViewController {
     placesStackView.delegate = self
     placesStackView.layer.cornerRadius = 16
     placesStackView.clipsToBounds = true
-    placesStackView.backgroundColor = UIColor(named: "PlacesStackViewBackgroundColor")
+    placesStackView.backgroundColor = UIColor.placesStackViewBackground
     
     let flipRouteButton = FlipRouteButton()
     flipRouteButton.addTarget(self, action: #selector(flipRouteButtonClicked(_:)), for: .touchUpInside)

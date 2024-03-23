@@ -14,8 +14,8 @@ final class FlipRouteButton: UIButton {
     
     let image = UIImage(systemName: "arrow.triangle.swap", withConfiguration: UIImage.SymbolConfiguration(pointSize: 24.0, weight: .light, scale: .small))
     setImage(image, for: .normal)
-    backgroundColor = UIColor(named: "FlipRouteButtonBackgroundColor")
-    tintColor = UIColor(named: "FlipRouteButtonTintColor")
+    backgroundColor = UIColor.flipRouteButtonBackground
+    tintColor = UIColor.flipRouteButtonTint
     layer.cornerRadius = 8
     layer.borderWidth = 1
   }
@@ -27,6 +27,6 @@ final class FlipRouteButton: UIButton {
   override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
     super.traitCollectionDidChange(previousTraitCollection)
     // Border colors use CALayer and do not pick up UIKit traitCollectionChanges using Assets.ColorSet automatically
-    layer.borderColor = UIColor(named: "FlipRouteButtonBorderColor", in: Bundle.main, compatibleWith: traitCollection)?.cgColor
+    layer.borderColor = UIColor.flipRouteButtonBorder.cgColor
   }
 }
