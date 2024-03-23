@@ -15,6 +15,7 @@ import UIKit
 extension StyleURI {
   /// Avi's custom map style designed to minimize highway prevalence.
   /// This style started out as `.streets` with customizations.
+  /// Testing the new Light and Dark styles below. Leaving this here for debug comparisons during testing period.
   static let vamosStreets = StyleURI(
     rawValue: "mapbox://styles/mkbitbucket/clqgwgexa007s01rjhxpwcpaw"
   )!

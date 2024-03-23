@@ -134,7 +134,7 @@ class MapsViewController: UIViewController {
   internal var belowRoadLabelLayer: LayerPosition? {
     // Either "road-label" or "road-label-simple" could be used as the road label layer
     let roadLabelPrefix = "road-label"
-    let roadLabelLayer = mapView.mapboxMap.style.styleManager.getStyleLayers().filter({ $0.id.hasPrefix(roadLabelPrefix) }).first ?? nil
+    let roadLabelLayer = mapView.mapboxMap.style.styleManager.getStyleLayers().first(where: { $0.id.hasPrefix(roadLabelPrefix) })
     let roadLabelId =  roadLabelLayer?.id ?? nil
     guard let roadLabelId else { return nil }
     return .below(roadLabelId)
